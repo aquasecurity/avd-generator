@@ -1,0 +1,106 @@
+################################# Default configuration ###################
+# provide your domain here
+baseURL = "https://aquasecurity.github.io/avd/"
+#baseURL = "/"
+
+# theme
+theme = "dot"
+# site title
+title = "Home"
+# google analytics
+googleAnalytics = "" # paste your analytics ID here. (Ex: UA-123-45)
+
+summaryLength = 15
+disableKinds = ["RSS", "taxonomy", "sitemap"]
+ignoreErrors = ["error-disable-taxonomy"]
+publishDir = "docs"
+
+[outputFormats]
+  [outputFormats.SearchIndex]
+    baseName = "searchindex"
+    isPlainText = true
+    mediaType = "application/json"
+    notAlternative = true
+
+[outputs]
+  home = ["HTML", "SearchIndex"]
+
+
+################################# navigation ################################
+[[menu.main]]
+name = "Aqua Blog"
+url = "https://blog.aquasec.com"
+weight = 1
+
+# Dropdown menu
+[[menu.main]]
+weight = 2
+name = "projects"
+hasChildren = true
+
+  [[menu.main]]
+  parent = "projects"
+  name = "Trivy"
+  url = "trivy"
+  weight = 1
+
+  [[menu.main]]
+  parent = "projects"
+  name = "Kube Hunter"
+  url = "kube-hunter"
+  weight = 2
+
+  [[menu.main]]
+  parent = "projects"
+  name = "Kube Bench"
+  url = "kube-bench"
+  weight = 3
+
+
+############################# Default Parameters ##########################
+[params]
+# logo is for all page
+logo = ""
+# logo white is for homepage logo, you can use colorful logo too...
+logo_white = ""
+# when logo is empty, it will shown your site title
+
+# customize color
+primary_color = "#08b1d5"
+body_color = "#f9f9f9"
+text_color = "#636363"
+text_color_dark = "#242738"
+white_color = "#ffffff"
+light_color = "#f8f9fa"
+
+# font family
+font_family = "lato" # Choose font family from : https://fonts.google.com/
+
+# contact form action
+contact_form_action = "#" # contact form works with : https://formspree.io
+
+
+############################## social links ##############################
+[[params.social]]
+icon = "ti-twitter-alt" # themify icon pack : https://themify.me/themify-icons
+link = "https://twitter.com/aquasecteam"
+  
+[[params.social]]
+icon = "ti-github" # themify icon pack : https://themify.me/themify-icons
+link = "https://github.com/aquasecurity"
+  
+[[params.social]]
+icon = "ti-linkedin" # themify icon pack : https://themify.me/themify-icons
+link = "https://www.linkedin.com/company/aquasecteam/"
+
+################################ English Language ######################
+[Languages.en]
+languageName = "En"
+languageCode = "en-us"
+weight = 1
+copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security 2020."
+
+# banner
+[Languages.en.params.banner]
+title = "Aqua Vulnerability Database"
+placeholder = "Search by Keyword or CVE-ID..."

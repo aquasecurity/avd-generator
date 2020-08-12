@@ -1,0 +1,7 @@
+http.access.log
+http.error.log
+generator
+vuln-list
+appshield-repo
+.idea
+.DS_Store
