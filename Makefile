@@ -8,7 +8,6 @@ md-clean:
 	rm -f ./generator
 
 clone-all:
-	git clone --depth 1 git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
 	git clone --depth 1 git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
 	rsync -av ./ avd-repo/ --exclude=avd-repo --exclude=.git --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
