@@ -46,6 +46,9 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/vuln-list
 
+      - name: Build generator
+        run: make md-clean md-build
+
       - name: Sync avd-repo with latest changes from generator
         run: make sync-all
 

@@ -10,7 +10,7 @@ md-clean:
 sync-all:
 	rsync -av ./ avd-repo/ --exclude=avd-repo --exclude=.git --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
-md-generate: md-clean md-build
+md-generate:
 	cd avd-repo && ./generator
 
 nginx-start:
