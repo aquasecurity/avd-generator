@@ -8,13 +8,17 @@ md-clean:
 	rm -f ./generator
 	#find content/nvd -name "*.md" | xargs rm
 
+clone-all:
+	git clone --depth 1 git@github.com:aquasecurity/avd.git avd-repo
+	git clone --depth 1 git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
+	git clone --depth 1 git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
+	rsync -av ./ avd-repo/ --exclude=avd-repo --exclude=.git --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
+
 md-generate: md-clean md-build
-	-git clone git@github.com:aquasecurity/appshield.git appshield-repo
-	-git clone git@github.com:aquasecurity/vuln-list.git vuln-list
-	./generator
+	cd avd-repo && ./generator
 
 nginx-start:
-	-cd docs; nginx -p . -c ../nginx.conf
+	-cd avd-repo/docs && nginx -p . -c ../nginx.conf
 
 nginx-stop:
 	-nginx -p . -s stop
@@ -23,10 +27,10 @@ nginx-restart:
 	make nginx-stop nginx-start
 
 hugo-devel:
-	hugo server -D
+	cd avd-repo && hugo server -D
 
 hugo-clean:
-	rm -rf docs
+	cd avd-repo && rm -rf docs
 
 hugo-generate: hugo-clean
-	hugo --minify --destination=docs
+	cd avd-repo && hugo --minify --destination=docs
