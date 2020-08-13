@@ -39,8 +39,15 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/appshield-repo
 
-      - name: Check out all other public repos
-        run: make clone-all
+      - name: Checkout public vuln-list-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/vuln-list
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/vuln-list
+
+      - name: Sync avd-repo with latest changes from generator
+        run: make sync-all
 
       - name: Build and Generate Markdown pages
         run: make md-generate

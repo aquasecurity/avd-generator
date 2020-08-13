@@ -7,8 +7,7 @@ md-test:
 md-clean:
 	rm -f ./generator
 
-clone-all:
-	git clone --depth 1 git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
+sync-all:
 	rsync -av ./ avd-repo/ --exclude=avd-repo --exclude=.git --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
 md-generate: md-clean md-build
