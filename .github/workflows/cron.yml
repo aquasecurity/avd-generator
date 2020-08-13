@@ -25,7 +25,14 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: Check out all repos
+      - name: Checkout avd-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/avd
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo
+
+      - name: Check out all other repos
         run: make clone-all
 
       - name: Build and Generate Markdown pages
