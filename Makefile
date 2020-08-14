@@ -8,7 +8,7 @@ md-clean:
 	rm -f ./generator
 
 sync-all:
-	rsync -av ./ avd-repo/ --exclude=avd-repo --exclude=.git --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
+	rsync -av ./ avd-repo/ --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
 md-generate:
 	cd avd-repo && ./generator
