@@ -23,7 +23,7 @@ nginx-restart:
 	make nginx-stop nginx-start
 
 hugo-devel:
-	cd avd-repo && hugo server -D
+	hugo server -D
 
 hugo-clean:
 	cd avd-repo && rm -rf docs
