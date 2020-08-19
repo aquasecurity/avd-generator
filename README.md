@@ -10,7 +10,10 @@ https://github.com/aquasecurity/avd
 ### Building
 Note: Set `baseURL="/"` [here](https://github.com/aquasecurity/avd-generator/blob/master/config.toml#L1-L4) before proceeding.
 
-#### tl;dr    
+#### tl;dr for just the UI
+`make hugo-devel` and then navigate to `http://localhost:1313` to view the site.
+
+#### tl;dr for the full build with real content  
 `make md-clean md-build sync-all md-generate hugo-generate nginx-restart`    
 then navigate to `http://localhost:9011` to view the pages.
 
