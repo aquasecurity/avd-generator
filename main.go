@@ -12,6 +12,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/leekchan/gtf"
 	"github.com/valyala/fastjson"
 )
 
@@ -55,6 +56,11 @@ draft: false
 | ------------- |:-------------| -----:|
 | V2      | {{.Vulnerability.CVSS.V2Vector}} | {{.Vulnerability.CVSS.V2Score}} |
 | V3      | {{.Vulnerability.CVSS.V3Vector}} | {{.Vulnerability.CVSS.V3Score}} |
+
+### Additional Information
+NVD: https://nvd.nist.gov/vuln/detail/{{.Title}}
+
+CWE: https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html
 
 ### Dates
 - Published: {{.Vulnerability.Dates.Published}}
@@ -237,7 +243,7 @@ func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 }
 
 func VulnerabilityPostToMarkdown(blog VulnerabilityPost, outputFile *os.File, customContent string) error {
-	t := template.Must(template.New("blog").Parse(vulnerabilityPostTemplate))
+	t := template.Must(template.New("blog").Funcs(gtf.GtfTextFuncMap).Parse(vulnerabilityPostTemplate))
 	err := t.Execute(outputFile, blog)
 	if err != nil {
 		return err

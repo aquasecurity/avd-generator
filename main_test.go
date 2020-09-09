@@ -128,6 +128,11 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 | V2      | AV:L/AC:L/Au:N/C:P/I:N/A:N | 2.1 |
 | V3      | CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N | 2.3 |
 
+### Additional Information
+NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-11932
+
+CWE: https://cwe.mitre.org/data/definitions/532.html
+
 ### Dates
 - Published: 2020-05-13T00:01Z
 - Modified: 2020-05-18T00:17Z
@@ -183,6 +188,11 @@ foo Description
 | ------------- |:-------------| -----:|
 | V2      | AV:L/AC:L/Au:N/C:C/I:C/A:C | 3.4 |
 | V3      | CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H | 4.5 |
+
+### Additional Information
+NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-1234
+
+CWE: https://cwe.mitre.org/data/definitions/269.html
 
 ### Dates
 - Published: 2020-01-08T19:15Z
@@ -291,6 +301,11 @@ An attacker may use the contents of error messages to help launch another, more 
 | V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 |
 | V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 |
 
+### Additional Information
+NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-0002
+
+CWE: https://cwe.mitre.org/data/definitions/416.html
+
 ### Dates
 - Published: 2020-01-08T00:19Z
 - Modified: 2020-01-29T00:21Z
@@ -367,6 +382,11 @@ An attacker may use the contents of error messages to help launch another, more 
 | ------------- |:-------------| -----:|
 | V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 |
 | V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 |
+
+### Additional Information
+NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-0002
+
+CWE: https://cwe.mitre.org/data/definitions/416.html
 
 ### Dates
 - Published: 2020-01-08T00:19Z
