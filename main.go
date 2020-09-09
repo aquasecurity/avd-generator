@@ -39,14 +39,6 @@ draft: false
 {{$ed}}{{end}}
 {{end}}
 
-{{- if .Vulnerability.CWEInfo.CommonConsequences.Consequence}}
-#### Common Consequences{{range $cons := .Vulnerability.CWEInfo.CommonConsequences.Consequence}}
-Scope: {{$cons.Scope}}
-
-Impact: {{$cons.Impact}}
-{{end}}
-{{end}}
-
 {{- if .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
 #### Potential Mitigations{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
 {{- if $mitigation.Description}}{{range $d := $mitigation.Description}}
