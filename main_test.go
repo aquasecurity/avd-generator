@@ -17,7 +17,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 		expectedBlogPost VulnerabilityPost
 	}{
 		{
-			fileName: "goldens/json/CVE-2020-0001.json",
+			fileName: "goldens/json/nvd/CVE-2020-0001.json",
 			expectedBlogPost: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-0001",
@@ -40,11 +40,13 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 						Published: "2020-01-08T00:19Z",
 						Modified:  "2020-01-14T00:21Z",
 					},
+					NVDSeverityV2: "HIGH",
+					NVDSeverityV3: "HIGH",
 				},
 			},
 		},
 		{
-			fileName: "goldens/json/CVE-2020-11932.json",
+			fileName: "goldens/json/nvd/CVE-2020-11932.json",
 			expectedBlogPost: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-11932",
@@ -67,14 +69,16 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 						Published: "2020-05-13T00:01Z",
 						Modified:  "2020-05-18T00:17Z",
 					},
+					NVDSeverityV2: "LOW",
+					NVDSeverityV3: "LOW",
 				},
 			},
 		},
 	}
 	for _, tc := range testCases {
 		actual, err := ParseVulnerabilityJSONFile(tc.fileName)
-		require.NoError(t, err)
-		assert.Equal(t, tc.expectedBlogPost, actual)
+		require.NoError(t, err, tc.fileName)
+		assert.Equal(t, tc.expectedBlogPost, actual, tc.fileName)
 	}
 }
 
@@ -109,6 +113,8 @@ func TestVulnerabilityPostToMarkdown(t *testing.T) {
 						Published: "2020-05-13T00:01Z",
 						Modified:  "2020-05-18T00:17Z",
 					},
+					NVDSeverityV2: "HIGH",
+					NVDSeverityV3: "LOW",
 				},
 			},
 			expectedOutput: `---
@@ -123,10 +129,13 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 
 
 ### CVSS
-| Version | Vector           | Score  |
-| ------------- |:-------------| -----:|
-| V2      | AV:L/AC:L/Au:N/C:P/I:N/A:N | 2.1 |
-| V3      | CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N | 2.3 |
+| Vendor/Version | Vector           | Score  | Severity |
+| ------------- |:-------------| -----:|----|
+| NVD/V2      | AV:L/AC:L/Au:N/C:P/I:N/A:N | 2.1 | HIGH |
+| NVD/V3      | CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N | 2.3 | LOW |
+| RedHat/V2      | - | 0 | - |
+| RedHat/V3      | - | 0 | - |
+| Ubuntu      | - | - | - |
 
 ### Additional Information
 NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-11932
@@ -167,6 +176,8 @@ CWE: https://cwe.mitre.org/data/definitions/532.html
 						Published: "2020-01-08T19:15Z",
 						Modified:  "2020-01-14T21:52Z",
 					},
+					NVDSeverityV2: "HIGH",
+					NVDSeverityV3: "LOW",
 				},
 			},
 			customContent: `---
@@ -184,10 +195,13 @@ foo Description
 
 
 ### CVSS
-| Version | Vector           | Score  |
-| ------------- |:-------------| -----:|
-| V2      | AV:L/AC:L/Au:N/C:C/I:C/A:C | 3.4 |
-| V3      | CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H | 4.5 |
+| Vendor/Version | Vector           | Score  | Severity |
+| ------------- |:-------------| -----:|----|
+| NVD/V2      | AV:L/AC:L/Au:N/C:C/I:C/A:C | 3.4 | HIGH |
+| NVD/V3      | CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H | 4.5 | LOW |
+| RedHat/V2      | - | 0 | - |
+| RedHat/V3      | - | 0 | - |
+| Ubuntu      | - | - | - |
 
 ### Additional Information
 NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-1234
@@ -233,14 +247,14 @@ bar content`, gotCustomContent)
 }
 
 func TestGetAllFiles(t *testing.T) {
-	actual, err := GetAllFiles("goldens/json")
+	actual, err := GetAllFiles("goldens/json/nvd")
 	require.NoError(t, err)
 	assert.Equal(t, []string{"CVE-2020-0001.json", "CVE-2020-0002.json", "CVE-2020-11932.json"}, actual)
 }
 
 func TestGenerateVulnerabilityPages(t *testing.T) {
 	t.Run("happy path no file with custom content", func(t *testing.T) {
-		nvdDir := "goldens/json"
+		nvdDir := "goldens/json/nvd"
 		postsDir, _ := ioutil.TempDir("", "TestGenerateVulnerabilityPages-*")
 		defer func() {
 			_ = os.RemoveAll(postsDir)
@@ -296,10 +310,13 @@ An attacker may use the contents of error messages to help launch another, more 
 
 
 ### CVSS
-| Version | Vector           | Score  |
-| ------------- |:-------------| -----:|
-| V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 |
-| V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 |
+| Vendor/Version | Vector           | Score  | Severity |
+| ------------- |:-------------| -----:|----|
+| NVD/V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 | HIGH |
+| NVD/V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 | HIGH |
+| RedHat/V2      | AV:N/AC:M/Au:N/C:P/I:N/A:N | 4.3 | MODERATE |
+| RedHat/V3      | - | 0 | MODERATE |
+| Ubuntu      | - | - | LOW |
 
 ### Additional Information
 NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-0002
@@ -319,7 +336,7 @@ CWE: https://cwe.mitre.org/data/definitions/416.html
 	})
 
 	t.Run("happy path, one file with existing custom content", func(t *testing.T) {
-		nvdDir := "goldens/json"
+		nvdDir := "goldens/json/nvd"
 		postsDir, _ := ioutil.TempDir("", "TestGenerate-*")
 		defer func() {
 			_ = os.RemoveAll(postsDir)
@@ -378,10 +395,13 @@ An attacker may use the contents of error messages to help launch another, more 
 
 
 ### CVSS
-| Version | Vector           | Score  |
-| ------------- |:-------------| -----:|
-| V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 |
-| V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 |
+| Vendor/Version | Vector           | Score  | Severity |
+| ------------- |:-------------| -----:|----|
+| NVD/V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 | HIGH |
+| NVD/V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 | HIGH |
+| RedHat/V2      | AV:N/AC:M/Au:N/C:P/I:N/A:N | 4.3 | MODERATE |
+| RedHat/V3      | - | 0 | MODERATE |
+| Ubuntu      | - | - | LOW |
 
 ### Additional Information
 NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-0002

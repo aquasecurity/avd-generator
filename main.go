@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"text/template"
@@ -52,10 +53,13 @@ draft: false
 {{end}}
 
 ### CVSS
-| Version | Vector           | Score  |
-| ------------- |:-------------| -----:|
-| V2      | {{.Vulnerability.CVSS.V2Vector}} | {{.Vulnerability.CVSS.V2Score}} |
-| V3      | {{.Vulnerability.CVSS.V3Vector}} | {{.Vulnerability.CVSS.V3Score}} |
+| Vendor/Version | Vector           | Score  | Severity |
+| ------------- |:-------------| -----:|----|
+| NVD/V2      | {{.Vulnerability.CVSS.V2Vector | default "-"}} | {{.Vulnerability.CVSS.V2Score}} | {{.Vulnerability.NVDSeverityV2 | upper | default "-"}} |
+| NVD/V3      | {{.Vulnerability.CVSS.V3Vector | default "-"}} | {{.Vulnerability.CVSS.V3Score}} | {{.Vulnerability.NVDSeverityV3 | upper | default "-"}} |
+| RedHat/V2      | {{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}} | {{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}} | {{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }} |
+| RedHat/V3      | {{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}} | {{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}} | {{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-"}} |
+| Ubuntu      | - | - | {{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}} |
 
 ### Additional Information
 NVD: https://nvd.nist.gov/vuln/detail/{{.Title}}
@@ -104,6 +108,15 @@ type CVSS struct {
 	V2Score  float64
 	V3Vector string
 	V3Score  float64
+}
+
+type RedHatCVSSInfo struct {
+	CVSS
+	Severity string
+}
+
+type UbuntuCVSSInfo struct {
+	Severity string
 }
 
 type RelatedAttackPattern struct {
@@ -164,13 +177,17 @@ type WeaknessType struct {
 }
 
 type Vulnerability struct {
-	ID          string
-	CWEID       string
-	CWEInfo     WeaknessType
-	Description string
-	References  []string
-	CVSS        CVSS
-	Dates       Dates
+	ID             string
+	CWEID          string
+	CWEInfo        WeaknessType
+	Description    string
+	References     []string
+	CVSS           CVSS
+	NVDSeverityV2  string
+	NVDSeverityV3  string
+	RedHatCVSSInfo RedHatCVSSInfo
+	UbuntuCVSSInfo UbuntuCVSSInfo
+	Dates          Dates
 }
 
 type VulnerabilityPost struct {
@@ -219,6 +236,9 @@ func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 		V3Vector: string(v.GetStringBytes("impact", "baseMetricV3", "cvssV3", "vectorString")),
 		V3Score:  v.GetFloat64("impact", "baseMetricV3", "cvssV3", "baseScore"),
 	}
+
+	vuln.NVDSeverityV2 = string(v.GetStringBytes("impact", "baseMetricV2", "severity"))
+	vuln.NVDSeverityV3 = string(v.GetStringBytes("impact", "baseMetricV3", "cvssV3", "baseSeverity"))
 
 	publishedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("publishedDate")))
 	modifiedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("lastModifiedDate")))
@@ -398,6 +418,10 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 
 		_ = AddCWEInformation(&bp, cweDir)
 
+		for _, vendor := range []string{"redhat", "ubuntu"} {
+			AddVendorInformation(&bp, vendor, filepath.Join(strings.ReplaceAll(nvdDir, "nvd", vendor)))
+		}
+
 		// check if file exists first, if does then open, if not create
 		f, err := os.OpenFile(filepath.Join(postsDir, fmt.Sprintf("%s.md", bp.Title)), os.O_RDWR|os.O_CREATE, 0644)
 		if err != nil {
@@ -429,6 +453,38 @@ func AddCWEInformation(bp *VulnerabilityPost, cweDir string) error {
 	}
 
 	bp.Vulnerability.CWEInfo = w
+	return nil
+}
+
+func AddVendorInformation(bp *VulnerabilityPost, vendor string, vendorDir string) error {
+	switch vendor {
+	case "redhat":
+		b, err := ioutil.ReadFile(filepath.Join(vendorDir, fmt.Sprintf("%s.json", bp.Vulnerability.ID)))
+		if err != nil {
+			return err
+		}
+		var p fastjson.Parser
+		v, err := p.ParseBytes(b)
+		if err != nil {
+			return err
+		}
+		bp.Vulnerability.RedHatCVSSInfo.Severity = string(v.GetStringBytes("threat_severity"))
+		bp.Vulnerability.RedHatCVSSInfo.V2Vector = string(v.GetStringBytes("cvss", "cvss_scoring_vector"))
+		bp.Vulnerability.RedHatCVSSInfo.V2Score, _ = strconv.ParseFloat(string(v.GetStringBytes("cvss", "cvss_base_score")), 64)
+		bp.Vulnerability.RedHatCVSSInfo.V3Vector = string(v.GetStringBytes("cvss3", "cvss3_scoring_vector"))
+		bp.Vulnerability.RedHatCVSSInfo.V3Score, _ = strconv.ParseFloat(string(v.GetStringBytes("cvss3", "cvss3_base_score")), 64)
+	case "ubuntu":
+		b, err := ioutil.ReadFile(filepath.Join(vendorDir, fmt.Sprintf("%s.json", bp.Vulnerability.ID)))
+		if err != nil {
+			return err
+		}
+		var p fastjson.Parser
+		v, err := p.ParseBytes(b)
+		if err != nil {
+			return err
+		}
+		bp.Vulnerability.UbuntuCVSSInfo.Severity = string(v.GetStringBytes("Priority"))
+	}
 	return nil
 }
 
