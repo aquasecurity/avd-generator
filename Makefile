@@ -14,7 +14,7 @@ md-generate:
 	cd avd-repo && ./generator
 
 nginx-start:
-	-cd avd-repo/docs && nginx -p . -c ../nginx.conf
+	-cd avd-repo/docs && nginx -p . -c ../../nginx.conf
 
 nginx-stop:
 	-nginx -p . -s stop
