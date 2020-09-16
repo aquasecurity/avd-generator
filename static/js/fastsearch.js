@@ -69,7 +69,7 @@ document.getElementById("searchInput").onkeyup = function(e) {
 //
 function loadMeiliSearch() {
     meilisearch = new MeiliSearch({
-        host: 'http://3.9.126.229',
+        host: 'https://avdsearch.aquasec.com',
         apiKey: "96c29e9ddef066567a2ab370fd175fd4951099df32860aaa2213eb818a090e89",
     })
     meilisearchIndex = meilisearch.getIndex('content');
