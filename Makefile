@@ -7,6 +7,11 @@ md-test:
 md-clean:
 	rm -f ./generator
 
+md-clone-all:
+	git clone git@github.com:aquasecurity/avd.git avd-repo/
+	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
+	git clone git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
+
 sync-all:
 	rsync -av ./ avd-repo/ --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
@@ -30,3 +35,6 @@ hugo-clean:
 
 hugo-generate: hugo-clean
 	cd avd-repo && hugo --minify --destination=docs
+
+build-all: md-clean md-build md-clone-all sync-all md-generate hugo-generate nginx-restart
+	echo "Build Done, navigate to http://localhost:9011/avd to browse"
