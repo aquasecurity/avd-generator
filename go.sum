@@ -7,6 +7,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd0=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/umisama/go-cpe v0.0.0-20190323060751-cdd6c3c28a23 h1:+168JmE638t0OxroPRx7BUbkB91hF3GWS1OkvITgdT0=
+github.com/umisama/go-cpe v0.0.0-20190323060751-cdd6c3c28a23/go.mod h1:Jv/KoYWD3+46wW8r3pEwISwtgv5Q8NTfFto2wFRKvoA=
 github.com/valyala/fastjson v1.5.3 h1:z4Z1Bll4WaXo+FXJoiCdW8ss7sKY2d/jYfE2ZzoT284=
 github.com/valyala/fastjson v1.5.3/go.mod h1:CLCAqky6SMuOcxStkYQvblddUtoRxhYMGLrsQns1aXY=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=

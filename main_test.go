@@ -42,6 +42,32 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 					},
 					NVDSeverityV2: "HIGH",
 					NVDSeverityV3: "HIGH",
+					AffectedSoftware: []AffectedSoftware{
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "8.0",
+							EndVersion:   "8.0",
+						},
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "8.1",
+							EndVersion:   "8.1",
+						},
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "9.0",
+							EndVersion:   "9.0",
+						},
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "10.0",
+							EndVersion:   "10.0",
+						},
+					},
 				},
 			},
 		},
@@ -71,6 +97,14 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 					},
 					NVDSeverityV2: "LOW",
 					NVDSeverityV3: "LOW",
+					AffectedSoftware: []AffectedSoftware{
+						{
+							Name:         "subiquity",
+							Vendor:       "canonical",
+							StartVersion: "*",
+							EndVersion:   "*",
+						},
+					},
 				},
 			},
 		},
@@ -290,6 +324,14 @@ Generation of Error Message Containing Sensitive Information
 #### Description
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
+#### Affected Software
+| Name | Vendor           | Start Version | End Version |
+| ------------- |-------------|-----|----|
+| Android | Google | 1.1.1 | 1.1.1c|
+| Android | Google | 8.1 | 8.1|
+| Android | Google | 9.0 | 9.0|
+| Android | Google | 10.0 | 10.0|
+
 #### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:
 
@@ -374,6 +416,14 @@ Generation of Error Message Containing Sensitive Information
 
 #### Description
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
+
+#### Affected Software
+| Name | Vendor           | Start Version | End Version |
+| ------------- |-------------|-----|----|
+| Android | Google | 1.1.1 | 1.1.1c|
+| Android | Google | 8.1 | 8.1|
+| Android | Google | 9.0 | 9.0|
+| Android | Google | 10.0 | 10.0|
 
 #### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:

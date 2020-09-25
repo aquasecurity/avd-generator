@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/leekchan/gtf"
+	"github.com/umisama/go-cpe"
 	"github.com/valyala/fastjson"
 )
 
@@ -34,6 +35,13 @@ draft: false
 {{- if .Vulnerability.CWEInfo.Description}}
 #### Description
 {{.Vulnerability.CWEInfo.Description}}
+{{end}}
+
+{{- if .Vulnerability.AffectedSoftware}}
+#### Affected Software
+| Name | Vendor           | Start Version | End Version |
+| ------------- |-------------|-----|----|{{range $s := .Vulnerability.AffectedSoftware}}
+| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}} | {{$s.EndVersion}}|{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.ExtendedDescription}}
@@ -176,18 +184,26 @@ type WeaknessType struct {
 	ExtendedDescription   StructuredTextType
 }
 
+type AffectedSoftware struct {
+	Name         string
+	Vendor       string
+	StartVersion string
+	EndVersion   string
+}
+
 type Vulnerability struct {
-	ID             string
-	CWEID          string
-	CWEInfo        WeaknessType
-	Description    string
-	References     []string
-	CVSS           CVSS
-	NVDSeverityV2  string
-	NVDSeverityV3  string
-	RedHatCVSSInfo RedHatCVSSInfo
-	UbuntuCVSSInfo UbuntuCVSSInfo
-	Dates          Dates
+	ID               string
+	CWEID            string
+	CWEInfo          WeaknessType
+	Description      string
+	References       []string
+	CVSS             CVSS
+	NVDSeverityV2    string
+	NVDSeverityV3    string
+	RedHatCVSSInfo   RedHatCVSSInfo
+	UbuntuCVSSInfo   UbuntuCVSSInfo
+	Dates            Dates
+	AffectedSoftware []AffectedSoftware
 }
 
 type VulnerabilityPost struct {
@@ -252,6 +268,32 @@ func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 		refs = append(refs, strings.ReplaceAll(r.Get("url").String(), `"`, ``))
 	}
 	vuln.References = refs
+
+	affectedSoftwares := v.GetArray("configurations", "nodes", "0", "cpe_match")
+	for _, as := range affectedSoftwares {
+		uri := string(as.GetStringBytes("cpe23Uri"))
+		item, err := cpe.NewItemFromFormattedString(uri)
+		if err != nil {
+			continue
+		}
+
+		startVersion := string(as.GetStringBytes("versionStartIncluding"))
+		if startVersion == "" {
+			startVersion = item.Version().String()
+		}
+
+		endVersion := string(as.GetStringBytes("versionEndIncluding"))
+		if endVersion == "" {
+			endVersion = item.Version().String()
+		}
+
+		vuln.AffectedSoftware = append(vuln.AffectedSoftware, AffectedSoftware{
+			Name:         item.Product().String(),
+			Vendor:       item.Vendor().String(),
+			StartVersion: startVersion,
+			EndVersion:   endVersion,
+		})
+	}
 
 	return VulnerabilityPost{
 		Layout:        "vulnerability",
