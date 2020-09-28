@@ -149,6 +149,14 @@ func TestVulnerabilityPostToMarkdown(t *testing.T) {
 					},
 					NVDSeverityV2: "HIGH",
 					NVDSeverityV3: "LOW",
+					AffectedSoftware: []AffectedSoftware{
+						{
+							Name:         "foo-software",
+							Vendor:       "foo-vendor",
+							StartVersion: "1.2.3",
+							EndVersion:   "4.5.6",
+						},
+					},
 				},
 			},
 			expectedOutput: `---
@@ -160,6 +168,11 @@ draft: false
 ### Description
 It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered.
 
+
+#### Affected Software
+| Name | Vendor           | Start Version | End Version |
+| ------------- |-------------|-----|----|
+| Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
 
 
 ### CVSS
@@ -212,6 +225,14 @@ CWE: https://cwe.mitre.org/data/definitions/532.html
 					},
 					NVDSeverityV2: "HIGH",
 					NVDSeverityV3: "LOW",
+					AffectedSoftware: []AffectedSoftware{
+						{
+							Name:         "foo-software",
+							Vendor:       "foo-vendor",
+							StartVersion: "1.2.3",
+							EndVersion:   "4.5.6",
+						},
+					},
 				},
 			},
 			customContent: `---
@@ -226,6 +247,11 @@ draft: false
 ### Description
 foo Description
 
+
+#### Affected Software
+| Name | Vendor           | Start Version | End Version |
+| ------------- |-------------|-----|----|
+| Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
 
 
 ### CVSS
