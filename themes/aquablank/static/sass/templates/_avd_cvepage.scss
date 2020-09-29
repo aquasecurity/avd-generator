@@ -18,6 +18,32 @@
 				p {
 					display: inline;
 				}
+
+				&.list_more_link {
+					padding-left: 0px;
+					color: $aq-royal-blue;
+					font-weight: $weight-bold;
+					font-size: 1rem;
+					display: inline-block;
+					margin-top: 8px;
+					cursor: pointer;
+
+					&:before {
+						display: none;
+					}
+
+					&:after {
+						content: "";
+						display: inline-block;
+						width: 0; 
+						height: 0; 
+						border-left: 6px solid transparent;
+						border-right: 6px solid transparent;
+						border-top: 6px solid $aq-royal-blue;
+						margin-left: 5px;
+						margin-bottom: 2px;
+					}
+				}
 			}
 		}
 

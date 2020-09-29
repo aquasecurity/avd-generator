@@ -56,8 +56,33 @@ $('[data-toggle="tooltip"]').each(function() {
 });
 
 
-
+//highlight.js init
 hljs.initHighlightingOnLoad();
 
 	//alert("ok");
+
+
+//hide list items after x items
+if ($(".vulnerability_content ul").length) {
+	$(".vulnerability_content ul").each(function() {
+		var max_items = 8;
+		var list_length = $(this).find("li").length;
+		if (list_length > max_items) {
+			$(this)
+			.find('li:gt(' + max_items + ')')
+			.hide()
+			.end()
+			.append(
+				$('<li class="list_more_link">Show ' + (list_length-max_items) + ' more</li>').click( function(){
+				$(this).siblings(':hidden').show().end().remove();
+				})
+			);
+		};
+
+	});
+}; //if
+
+
+
+
 });

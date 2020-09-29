@@ -11971,7 +11971,6 @@ figure.aligncenter {
 .tooltip {
   position: absolute;
   z-index: 9999;
-  max-width: 300px;
   padding: 15px;
   font-size: 0.875rem;
   color: #ffffff;
@@ -12111,6 +12110,32 @@ figure.aligncenter {
 
 .vulnerability_content_wrap .vulnerability_content ul li p {
   display: inline;
+}
+
+.vulnerability_content_wrap .vulnerability_content ul li.list_more_link {
+  padding-left: 0px;
+  color: #1904da;
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-block;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.vulnerability_content_wrap .vulnerability_content ul li.list_more_link:before {
+  display: none;
+}
+
+.vulnerability_content_wrap .vulnerability_content ul li.list_more_link:after {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #1904da;
+  margin-left: 5px;
+  margin-bottom: 2px;
 }
 
 .vulnerability_content_wrap .vulnerability_content h3.with_icon:before {
