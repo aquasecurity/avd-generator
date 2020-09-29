@@ -1,0 +1,85 @@
+/* -- Color Defaults -- */
+
+
+
+
+//aqua brand colors
+$aq-royal-blue: #1904da;
+$aq-legacy-blue: #08b1d5;
+$aq-coral-red: #ff445f;
+$aq-starfish-yellow: #ffc900;
+$aq-dark-abyss: #07242d;
+$aq-deep-sea-blue: #183278;
+$aq-ocean-ash: #405a75;
+$aq-sea-foam: #00ffe4;
+
+$aq-neo-background: #ebf3fa;
+$aq-neo-background-hover: #f0f8ff;
+
+
+$aq-royal-blue-dark: #1503ba;
+
+
+$aq-avd-red: #bb0505;
+$aq-avd-orange: #ff8e50;
+$aq-avd-yellow: #ffbf50;
+$aq-avd-green: #21d048;
+
+
+// Color Elements
+
+$white: #ffffff;
+//$black: $aq-dark-abyss; // hsl(0, 0%, 4%);
+//$light: $white-ter;
+//$dark: $grey-darker;
+$primary: $aq-royal-blue;
+
+$text: $aq-dark-abyss;
+
+
+$link: $aq-ocean-ash; //$aq-legacy-blue;
+$link-hover: $aq-royal-blue;
+
+
+
+// General colors
+
+$scheme-main: $aq-neo-background;
+//$scheme-main-bis: $white-bis;
+//$scheme-main-ter: $white-ter;
+//$scheme-invert: $black;
+//$scheme-invert-bis: $black-bis;
+//$scheme-invert-ter: $black-ter;
+
+//$background: $white-ter;
+
+//$border: $grey-lighter;
+//$border-hover: $grey-light;
+//$border-light: $grey-lightest;
+//$border-light-hover: $grey-light;
+
+// Text colors
+
+//$text: $grey-dark;
+//$text-invert: findColorInvert($text);
+//$text-light: $grey;
+//$text-strong: $grey-darker;
+
+
+
+//body
+
+$body-background-color: $aq-neo-background;
+$body-color: $text;
+
+
+//$hr-background-color: $background !default;
+
+
+
+$info: #00ffe4;
+/*
+$success: $green;
+$warning: $orange;
+$danger: $red;
+*/

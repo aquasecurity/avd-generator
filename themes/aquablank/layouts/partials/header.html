@@ -1,0 +1,59 @@
+<!-- avd header starts -->
+<div class="avd_header_wrap">
+	<div class="header_navbar_wrap">
+		<nav class="navbar">
+			<div class="container is-small">
+				<div class="navbar-brand">
+					<a class="navbar-item logo" href="{{ .Site.BaseURL }}" title="{{ .Site.Title }}">{{ .Site.Title }}</a>
+					<div role="button" tabindex="0" class="navbar-burger burger"><span></span><span></span><span></span></div>
+				</div>
+				<div id="main-navigation-navbar" class="navbar-menu">
+
+					<div class="navbar-start">
+
+					</div><!-- navbar-start -->
+
+
+					<div class="navbar-end">
+						<div class="navbar-item">
+							<!--<div class="field">
+								<p class="control">
+								  <input class="input" type="text" placeholder="Find a post">
+								</p>
+							</div>-->
+
+							{{ if not .IsHome }}
+							<input type="text" class="avd_header_search" /></div>
+							{{ end }}
+
+						<!--<a class="navbar-item search_box">Search</a>-->
+						<a class="navbar-item signin_link" href="https://cloud.aquasec.com/signup" target="_blank">Try Aqua</a>
+						<div class="navbar-item">
+							<div class="field is-grouped">
+								<p class="control"><a href="https://www.aquasec.com/demo/" target="_blank" class="button is-primary type_btn">Get Demo</a></p>		
+							</div>
+						</div><!-- navbar-item -->
+					</div><!-- navbar-end -->
+
+					<!--
+						<div class="search_box_wrap">
+							<div>**</div>
+							<div class="search_box_close"></div>
+						</div><!-- search_box_wrap -->
+
+					
+
+
+
+
+
+
+				</div>
+			</div>
+		</nav>
+	</div><!-- header_navbar_wrap -->
+
+
+
+</div><!-- avd_header_wrap -->
+<!-- avd header ends -->

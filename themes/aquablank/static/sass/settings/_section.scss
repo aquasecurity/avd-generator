@@ -1,0 +1,11 @@
+.section {
+  /*background: none;*/
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  &.no-padding-top {
+    padding-top: 0 !important;
+  }
+}

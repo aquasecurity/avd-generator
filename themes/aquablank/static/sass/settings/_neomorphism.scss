@@ -1,0 +1,165 @@
+/* neomorphism */
+
+@mixin neo_box_light-bg {
+	//used for images and areas
+	//border-radius: 6px;
+	background: $aq-neo-background;
+	box-shadow:  9px 9px 11px #c1c7cd, 
+				 -9px -9px 11px #ffffff;	
+}
+
+
+@mixin neo_linkbox_light-bg {
+	//used for ctasand links
+	//border-radius: 6px;
+	background: $aq-neo-background;
+	box-shadow:  9px 9px 11px #c1c7cd, 
+				 -9px -9px 11px #ffffff;
+	transition: all 0.2s ease;
+
+	&:hover {
+		/*
+		box-shadow:  11px 11px 13px #c8cfd5, 
+					-11px -11px 13px #ffffff;
+		*/
+		background: $aq-neo-background-hover;
+		box-shadow: 15px 15px 20px rgba(0,0,0,0.2),
+					-15px -15px 20px #ffffff;
+	}
+}
+
+
+@mixin neo_linkbox_subtle_light-bg {
+	//used for ctas, cards and links
+	//border-radius: 6px;
+	background: $aq-neo-background;
+	//box-shadow: rgba($aq-dark-abyss, 0.08) 0px 1px 2px, rgba(71, 63, 79, 0.08) 0px 2px 4px;
+	box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background: $aq-neo-background-hover;
+		//box-shadow: rgba($aq-dark-abyss, 0.08) 0px 4px 8px, rgba(71, 63, 79, 0.16) 0px 8px 16px;
+		box-shadow: 11px 11px 23px #d1d8df, -11px -11px 23px #ffffff;
+	}
+} //neo_linkbox_subtle_light-bg
+
+
+
+@mixin neo_box_subtle_light-bg {
+	//used for ctas, cards and links
+	//border-radius: 6px;
+	background: $aq-neo-background;
+	//box-shadow: rgba($aq-dark-abyss, 0.08) 0px 1px 2px, rgba(71, 63, 79, 0.08) 0px 2px 4px;
+	box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
+	transition: all 0.2s ease;
+
+} //neo_box_subtle_light-bg
+
+
+
+
+@mixin neo_linkbox_darkabyss-bg {
+	//used for research cards mostly
+	//border-radius: 6px;
+	background-color: $aq-dark-abyss;
+	box-shadow: 9px 9px 11px #061d24, 
+				-9px -9px 11px #082b36;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background-color: #0a272f; //$aq-dark-abyss; //#0a272f; = $aq-dark-abyss + 1% white;
+		box-shadow: 15px 15px 20px #051b22, 
+					-15px -15px 20px #092d38;
+	}
+} //neo_linkbox_darkabyss-bg
+
+
+@mixin neo_box_darkabyss-bg {
+	//used for cards and blocks
+	background-color: $aq-dark-abyss;
+	box-shadow: 9px 9px 11px #061d24, 
+				-9px -9px 11px #082b36;
+	transition: all 0.2s ease;
+
+} //neo_box_darkabyss-bg
+
+
+
+
+@mixin neo_small_block {
+		background-color: $aq-neo-background;
+		box-shadow: 4.95px 4.95px 5.6px 1.4px rgba(0, 0, 0, 0.25),
+					-4.95px -4.95px 5.95px 1.05px rgba(255, 255, 255, 0.6);
+}
+
+.neo_small_block {
+	@include neo_small_block;
+}
+
+@mixin neo_small {
+border-radius: 6px;
+background: $aq-neo-background;
+box-shadow:  7px 7px 8px #aeb4b9, 
+			 -7px -7px 8px #ffffff;
+}	 
+
+
+@mixin neo_medium {
+			 border-radius: 6px;
+			 background: $aq-neo-background;
+			 box-shadow:  9px 9px 11px #c1c7cd, 
+						  -9px -9px 11px #ffffff;			 
+}
+
+
+@mixin neo_large {
+	border-radius: 6px;
+background: $aq-neo-background;
+box-shadow:  20px 20px 60px #c8cfd5, 
+             -20px -20px 60px #ffffff;
+}
+
+
+
+.primary_neo_small {
+	border-radius: 6px;
+	background: #1904da;
+	box-shadow:  7px 7px 8px #1403ae, 
+				-7px -7px 8px #1e05ff;
+}
+
+
+.primary_dark_neo_small {
+	border-radius: 6px;
+	background: #1503ba;
+	box-shadow:  7px 7px 8px #110295, 
+				-7px -7px 8px #1904df;
+}
+
+
+.dark_abbys_neo_small {
+	border-radius: 6px;
+background: #07242d;
+box-shadow:  9px 9px 11px #051b21, 
+			 -9px -9px 11px #092d39;
+}
+
+
+
+
+@mixin neo_subtle_royal_dark-bg {
+	//used for ctas, cards and links
+	//border-radius: 6px;
+	background: $aq-royal-blue-dark;
+	box-shadow: 7px 7px 14px #110295, -7px -7px 14px #1904df;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background: $aq-royal-blue-dark;
+		box-shadow: 11px 11px 23px #0f0286, -11px -11px 23px #1e05ff;
+		//box-shadow: 11px 11px 23px #291aaf, -11px -11px 23px #6b5bf7;
+	}
+} //neo_linkbox_subtle_light-bg
+
+

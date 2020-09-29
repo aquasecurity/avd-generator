@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>{{ .Title }}</title>
+	<link rel="stylesheet" href="{{ "css/avdblank.css" | relURL }}">
+	<script type='text/javascript' src='{{ "js/avdblank.js" | relURL }}'></script>
+</head>
+<body>
+
+	{{ partial "header" . }}
+
+	{{ if .IsHome }}
+		{{ partial "home.html" . }}		
+	{{ else }}
+		{{ block "main" . }}{{ end }}
+	{{ end }}
+	
+	{{ partial "footer" . }}
+
+
+</body>
+</html>

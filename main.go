@@ -22,44 +22,73 @@ const vulnerabilityPostTemplate = `---
 title: "{{.Title}}"
 date: {{.Date}}
 draft: false
+
+avd_page_type: nvd_page
+
+date_published: {{.Vulnerability.Dates.Published}}
+date_modified: {{.Vulnerability.Dates.Modified}}
+
+sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
+sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"
+
+cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "-"}}"
+cvss_nvd_v3_score: "{{.Vulnerability.CVSS.V3Score}}"
+cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "-"}}"
+
+cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "-"}}"
+cvss_nvd_v2_score: "{{.Vulnerability.CVSS.V2Score}}"
+cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "-"}}"
+
+redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}}"
+redhat_v2_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}}"
+redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+
+redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}}"
+redhat_v3_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}}"
+redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+
+ubuntu_vector: "-"
+ubuntu_score: "-"
+ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}}"
+
 ---
 
 ### Description
 {{.Vulnerability.Description}}
 
 {{ if .Vulnerability.CWEInfo.Name}}
-#### Title
+### Title
 {{.Vulnerability.CWEInfo.Name}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.Description}}
-#### Description
+### Weakness {.with_icon .weakness}
 {{.Vulnerability.CWEInfo.Description}}
 {{end}}
 
 {{- if .Vulnerability.AffectedSoftware}}
-#### Affected Software
+### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|{{range $s := .Vulnerability.AffectedSoftware}}
 | {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}} | {{$s.EndVersion}}|{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.ExtendedDescription}}
-#### Extended Description{{range $ed := .Vulnerability.CWEInfo.ExtendedDescription}}
+### Extended Description{{range $ed := .Vulnerability.CWEInfo.ExtendedDescription}}
 {{$ed}}{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
-#### Potential Mitigations{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
+### Potential Mitigations {.with_icon .mitigations}{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
 {{- if $mitigation.Description}}{{range $d := $mitigation.Description}}
 - {{$d}}{{end}}{{end}}{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
-#### Related Attack Patterns{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
+### Related Attack Patterns {.with_icon .related_patterns}{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
 - https://cwe.mitre.org/data/definitions/{{$attack.CAPECID}}.html{{end}}
 {{end}}
-
+<!--
 ### CVSS
 | Vendor/Version | Vector           | Score  | Severity |
 | ------------- |:-------------| -----:|----|
@@ -77,8 +106,8 @@ CWE: https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CW
 ### Dates
 - Published: {{.Vulnerability.Dates.Published}}
 - Modified: {{.Vulnerability.Dates.Modified}}
-
-### References{{range $element := .Vulnerability.References}}
+-->
+### References  {.with_icon .references}{{range $element := .Vulnerability.References}}
 - {{$element}}{{end}}
 
 <!--- Add Aqua content below --->`
@@ -87,6 +116,9 @@ const regoPolicyPostTemplate = `---
 title: "{{.Title}}"
 date: {{.Date}}
 draft: false
+
+date_published:
+date_modified:
 ---
 
 ### {{.Rego.ID}}

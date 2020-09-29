@@ -1,0 +1,200 @@
+<!-- hero starts -->
+<div class="avd_hero_wrap animatable">
+	<div class="hero header_wrap is-primary"><!--  is-small -->
+		<!-- header starts -->
+		
+		<!--<div class="hero-head"></div>-->
+		<div class="hero-body">
+			<div class="clearboth container">
+				<div class="header_title_wrap">	
+					<div class="page_pretitle with_icon nvd fadeInUp">CVE Vulnerabilities</div>
+					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Title }}</h1>
+					<!--<h2 class="subtitle page_subtitle">AVD Hero Subtitle 012</h2>-->
+				</div><!-- header_title_wrap -->
+			</div><!-- container -->
+		</div><!-- hero-body -->
+
+
+		
+		{{ if or (.Params.date_published) (.Params.date_modified) }}
+		<div class="hero-foot">
+
+			<div class="container fadeInUp animationDelay_2">
+
+				{{ if .Params.date_published }}
+					<div class="pagetitle_metaitem"><strong>Published:</strong> {{ dateFormat "Jan 02, 2006" .Params.date_published }}</div>
+				{{ end }}
+				
+				{{ if .Params.date_modified }}
+					<div class="pagetitle_metaitem"><strong>Modified:</strong> {{ dateFormat "Jan 02, 2006" .Params.date_modified }}</div>
+				{{ end }}
+			</div>
+		</div><!-- hero-foot -->
+		{{ end }}
+
+	</div><!-- hero -->
+
+</div><!-- hero_wrap -->
+<!-- hero ends -->
+
+<!-- content starts -->
+
+<div class="section avdcve_wrap animatable">
+	<div class="clearboth container">
+
+
+			<div class="columns is-multiline reverse-columns">
+				
+				<div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_5">
+					<div class="avdcve_sidebar_wrap">
+
+						<div class="avd_sidebar_widget avdcve_scores_wrap">
+							
+							
+
+							<div class="avdcve_scores_cvss {{ if not (eq .Params.cvss_nvd_v3_score "-") }}cvss_{{ math.Round (float (.Params.cvss_nvd_v3_score)) }}{{ end }}">
+
+										<div class="large_score_wrap">
+
+											<div class="large_score_name">CVSS 3.x</div>
+									
+										
+											<div class="large_score_gauge_wrap">
+												<div class="large_score_gague">
+													<div class="score_gague_content">
+														<div class="score_value">{{ if not (eq .Params.cvss_nvd_v3_score "0") }}{{ .Params.cvss_nvd_v3_score }} {{ end }}</div>
+														<div class="score_label">{{ .Params.cvss_nvd_v3_severity }}</div>
+														</div><!-- large_score_gague -->
+														<div class="score_bg"></div>
+													</div>
+											</div><!-- large_score_gague_wrap -->
+									
+											<div class="large_score_source">Source: <div class="icon_source source_nvd">NVD</div></div>
+										
+										</div><!-- large_score_wrap -->
+
+										<div class="large_score_vector">{{ .Params.cvss_nvd_v3_vector }}</div>
+
+										<!--
+										<div class="score_bar redhat score_bar_7">
+											<div class="score_bar_name">CVSS 2.x</div>
+											<div class="score_bar_image"></div>
+											<div class="score_bar_label">7.8</div>
+											<div class="score_bar_vector">avcd:d/caF:dfafafs:fghfgh</div>
+										</div>--><!-- score_bar -->
+
+										<div class="score_bar {{ if not (eq .Params.cvss_nvd_v2_score "-") }}score_bar_{{ math.Round (float (.Params.cvss_nvd_v2_score)) }}{{ end }}">
+											<div class="score_bar_name">CVSS 2.x</div>
+											<div class="score_bar_image"></div>
+											<div class="score_bar_label">{{ if and (not (eq .Params.cvss_nvd_v2_score "0")) (not (eq .Params.cvss_nvd_v2_score "0")) }}{{ .Params.cvss_nvd_v2_score }} {{ end }}{{ .Params.cvss_nvd_v2_severity }}</div>
+											{{ if and (not (eq .Params.cvss_nvd_v2_vector "-")) (not (eq .Params.cvss_nvd_v2_vector "")) }}
+											<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.cvss_nvd_v2_vector }}">{{ .Params.cvss_nvd_v2_vector }}</div>
+											{{ else }}
+											<div class="score_bar_vector without_tooltip"></div>
+											{{ end }}
+										</div><!-- score_bar -->
+
+	
+							</div><!-- avdcve_scores_cvss -->
+
+							<div class="avdcve_scores_additional">
+		
+								<!--
+								<div class="score_bar redhat score_bar_7">
+									<div class="score_bar_name">Redhat***</div>
+									<div class="score_bar_image"></div>
+									<div class="score_bar_label">7.8</div>
+									<div class="score_bar_vector">avcd:d/caF:dfafafs:fghfgh</div>
+								</div>--><!-- score_bar -->
+
+
+								<div class="score_bar redhat {{ if not (eq .Params.redhat_v2_score "-") }}score_bar_{{ math.Round (float (.Params.redhat_v2_score)) }}{{ end }}">
+									<div class="score_bar_name">RedHat/V2</div>
+									<div class="score_bar_image"></div>
+									<div class="score_bar_label">{{ if and (not (eq .Params.redhat_v2_score "-")) (not (eq .Params.redhat_v2_score "0")) }}{{ .Params.redhat_v2_score }} {{ end }} {{ .Params.redhat_v2_severity }}</div>
+									{{ if and (not (eq .Params.redhat_v2_vector "-")) (not (eq .Params.redhat_v2_vector "")) }}
+										<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.redhat_v2_vector }}">{{ .Params.redhat_v2_vector }}</div>
+									{{ else }}
+										<div class="score_bar_vector without_tooltip"></div>
+									{{ end }}
+
+								</div><!-- score_bar -->
+
+								<div class="score_bar redhat {{ if not (eq .Params.redhat_v3_score "-") }}score_bar_{{ math.Round (float (.Params.redhat_v3_score)) }}{{ end }}">
+									<div class="score_bar_name">RedHat/V3</div>
+									<div class="score_bar_image"></div>
+									<div class="score_bar_label">{{ if and (not (eq .Params.redhat_v3_score "-")) (not (eq .Params.redhat_v3_score "0")) }}{{ .Params.redhat_v3_score }} {{ end }}{{ .Params.redhat_v3_severity }}</div>
+									{{ if and (not (eq .Params.redhat_v3_vector "-")) (not (eq .Params.redhat_v3_vector "")) }}
+									<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.redhat_v3_vector }}">{{ .Params.redhat_v3_vector }}</div>
+									{{ else }}
+									<div class="score_bar_vector without_tooltip"></div>
+									{{ end }}
+
+								</div><!-- score_bar -->
+
+								<div class="score_bar ubuntu {{ if not (eq .Params.ubuntu_score "-") }}score_bar_{{ math.Round (float (.Params.ubuntu_score)) }}{{ end }}">
+									<div class="score_bar_name">Ubuntu</div>
+									<div class="score_bar_image"></div>
+									<div class="score_bar_label">{{ if and (not (eq .Params.ubuntu_score "-")) (not (eq .Params.ubuntu_score "0")) }}{{ .Params.ubuntu_score }} {{ end }}{{ .Params.ubuntu_severity }}</div>
+									{{ if and (not (eq .Params.ubuntu_vector "-")) (not (eq .Params.ubuntu_vector "")) }}
+										<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.ubuntu_vector }}">{{ .Params.ubuntu_vector }}</div>
+									{{ else }}
+										<div class="score_bar_vector without_tooltip"></div>
+									{{ end }}
+
+								</div><!-- score_bar -->
+								
+
+
+											
+
+							</div><!-- avdcve_scores_additional -->				
+
+						</div><!-- avdcve_scores_wrap -->
+
+
+						{{ if or (.Params.sidebar_additional_info_nvd) (.Params.sidebar_additional_info_cwe) }}
+							<div class="avd_sidebar_widget avdcve_info_wrap">
+								<div class="sidebar_widget_title">Additional information</div>
+									<table class="table sidebar_links_table">
+									{{ if .Params.sidebar_additional_info_nvd }}
+										<tr><th>NVD</th><td><a href="{{ .Params.sidebar_additional_info_nvd }}">{{ .Params.sidebar_additional_info_nvd }}</a></td></tr>
+									{{ end }}
+
+									{{ if .Params.sidebar_additional_info_cwe }}
+										<tr><th>CWE</th><td><a href="{{ .Params.sidebar_additional_info_cwe }}">{{ .Params.sidebar_additional_info_cwe }}</a></td></tr>
+									{{ end }}
+									</table>
+							</div><!-- avdcve_info_wrap -->	
+						{{ end }}
+						
+
+					</div><!-- avdcve_sidebar_wrap -->
+
+				</div><!-- is-4 -->
+
+
+				
+				<div class="column is-8-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_4">
+
+
+					<div class="vulnerability_content_wrap fadeInUp">
+	
+						<!--<h4 class="vulnerability_content_title fadeInUp"></h4>-->
+						<div class="content vulnerability_content">
+							{{ .Content }}
+						</div><!-- vulnerability_content -->
+
+					</div><!-- vulnerability_content_wrap -->
+
+
+				</div><!-- column is-8 -->
+
+				
+			</div><!-- columns -->
+	
+	</div><!-- container -->
+</div>
+
+<!-- content ends -->
+

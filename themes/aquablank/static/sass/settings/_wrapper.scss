@@ -1,0 +1,7 @@
+.wrapper {
+  padding: 10px;
+  @media(min-width: $tablet) {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}
