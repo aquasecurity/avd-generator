@@ -88,25 +88,7 @@ ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"
 ### Related Attack Patterns {.with_icon .related_patterns}{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
 - https://cwe.mitre.org/data/definitions/{{$attack.CAPECID}}.html{{end}}
 {{end}}
-<!--
-### CVSS
-| Vendor/Version | Vector           | Score  | Severity |
-| ------------- |:-------------| -----:|----|
-| NVD/V2      | {{.Vulnerability.CVSS.V2Vector | default "-"}} | {{.Vulnerability.CVSS.V2Score}} | {{.Vulnerability.NVDSeverityV2 | upper | default "-"}} |
-| NVD/V3      | {{.Vulnerability.CVSS.V3Vector | default "-"}} | {{.Vulnerability.CVSS.V3Score}} | {{.Vulnerability.NVDSeverityV3 | upper | default "-"}} |
-| RedHat/V2      | {{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}} | {{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}} | {{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }} |
-| RedHat/V3      | {{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}} | {{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}} | {{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-"}} |
-| Ubuntu      | - | - | {{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}} |
 
-### Additional Information
-NVD: https://nvd.nist.gov/vuln/detail/{{.Title}}
-
-CWE: https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html
-
-### Dates
-- Published: {{.Vulnerability.Dates.Published}}
-- Modified: {{.Vulnerability.Dates.Modified}}
--->
 ### References  {.with_icon .references}{{range $element := .Vulnerability.References}}
 - {{$element}}{{end}}
 
@@ -291,8 +273,8 @@ func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	publishedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("publishedDate")))
 	modifiedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("lastModifiedDate")))
 	vuln.Dates = Dates{
-		Published: publishedDate.UTC().Format("2006-01-02T15:04Z"),
-		Modified:  modifiedDate.UTC().Format("2006-01-02T15:04Z"),
+		Published: publishedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
+		Modified:  modifiedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
 	}
 
 	var refs []string

@@ -37,8 +37,8 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 						V3Score:  7.8,
 					},
 					Dates: Dates{
-						Published: "2020-01-08T00:19Z",
-						Modified:  "2020-01-14T00:21Z",
+						Published: "2020-01-08 12:19:15 +0000",
+						Modified:  "2020-01-14 12:21:52 +0000",
 					},
 					NVDSeverityV2: "HIGH",
 					NVDSeverityV3: "HIGH",
@@ -92,8 +92,8 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 						V3Score:  2.3,
 					},
 					Dates: Dates{
-						Published: "2020-05-13T00:01Z",
-						Modified:  "2020-05-18T00:17Z",
+						Published: "2020-05-13 12:01:15 +0000",
+						Modified:  "2020-05-18 12:17:59 +0000",
 					},
 					NVDSeverityV2: "LOW",
 					NVDSeverityV3: "LOW",
@@ -163,37 +163,48 @@ func TestVulnerabilityPostToMarkdown(t *testing.T) {
 title: "CVE-2020-11932"
 date: 2020-05-13 12:01:15 +0000
 draft: false
+
+avd_page_type: nvd_page
+
+date_published: 2020-05-13T00:01Z
+date_modified: 2020-05-18T00:17Z
+
+sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
+sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
+
+cvss_nvd_v3_vector: "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N"
+cvss_nvd_v3_score: "2.3"
+cvss_nvd_v3_severity: "LOW"
+
+cvss_nvd_v2_vector: "AV:L/AC:L/Au:N/C:P/I:N/A:N"
+cvss_nvd_v2_score: "2.1"
+cvss_nvd_v2_severity: "HIGH"
+
+redhat_v2_vector: "-"
+redhat_v2_score: "0"
+redhat_v2_severity: "-"
+
+redhat_v3_vector: "-"
+redhat_v3_score: "0"
+redhat_v3_severity: "-"
+
+ubuntu_vector: "-"
+ubuntu_score: "-"
+ubuntu_severity: "-"
+
 ---
 
 ### Description
 It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered.
 
 
-#### Affected Software
+### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
 | Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
 
 
-### CVSS
-| Vendor/Version | Vector           | Score  | Severity |
-| ------------- |:-------------| -----:|----|
-| NVD/V2      | AV:L/AC:L/Au:N/C:P/I:N/A:N | 2.1 | HIGH |
-| NVD/V3      | CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N | 2.3 | LOW |
-| RedHat/V2      | - | 0 | - |
-| RedHat/V3      | - | 0 | - |
-| Ubuntu      | - | - | - |
-
-### Additional Information
-NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-11932
-
-CWE: https://cwe.mitre.org/data/definitions/532.html
-
-### Dates
-- Published: 2020-05-13T00:01Z
-- Modified: 2020-05-18T00:17Z
-
-### References
+### References  {.with_icon .references}
 - https://github.com/CanonicalLtd/subiquity/commit/7db70650feaf513d7fb6f1ca07f2d670a0890613
 
 <!--- Add Aqua content below --->`,
@@ -242,37 +253,48 @@ bar content`,
 title: "CVE-2020-1234"
 date: 2020-01-08 12:19:15 +0000
 draft: false
+
+avd_page_type: nvd_page
+
+date_published: 2020-01-08T19:15Z
+date_modified: 2020-01-14T21:52Z
+
+sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
+sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
+
+cvss_nvd_v3_vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+cvss_nvd_v3_score: "4.5"
+cvss_nvd_v3_severity: "LOW"
+
+cvss_nvd_v2_vector: "AV:L/AC:L/Au:N/C:C/I:C/A:C"
+cvss_nvd_v2_score: "3.4"
+cvss_nvd_v2_severity: "HIGH"
+
+redhat_v2_vector: "-"
+redhat_v2_score: "0"
+redhat_v2_severity: "-"
+
+redhat_v3_vector: "-"
+redhat_v3_score: "0"
+redhat_v3_severity: "-"
+
+ubuntu_vector: "-"
+ubuntu_score: "-"
+ubuntu_severity: "-"
+
 ---
 
 ### Description
 foo Description
 
 
-#### Affected Software
+### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
 | Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
 
 
-### CVSS
-| Vendor/Version | Vector           | Score  | Severity |
-| ------------- |:-------------| -----:|----|
-| NVD/V2      | AV:L/AC:L/Au:N/C:C/I:C/A:C | 3.4 | HIGH |
-| NVD/V3      | CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H | 4.5 | LOW |
-| RedHat/V2      | - | 0 | - |
-| RedHat/V3      | - | 0 | - |
-| Ubuntu      | - | - | - |
-
-### Additional Information
-NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-1234
-
-CWE: https://cwe.mitre.org/data/definitions/269.html
-
-### Dates
-- Published: 2020-01-08T19:15Z
-- Modified: 2020-01-14T21:52Z
-
-### References
+### References  {.with_icon .references}
 - https://foo.bar.baz.com
 - https://baz.bar.foo.org
 
@@ -338,19 +360,48 @@ func TestGenerateVulnerabilityPages(t *testing.T) {
 title: "CVE-2020-0002"
 date: 2020-01-08 12:19:15 +0000
 draft: false
+
+avd_page_type: nvd_page
+
+date_published: 2020-01-08 12:19:15 +0000
+date_modified: 2020-01-29 12:21:15 +0000
+
+sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
+sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
+
+cvss_nvd_v3_vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+cvss_nvd_v3_score: "8.8"
+cvss_nvd_v3_severity: "HIGH"
+
+cvss_nvd_v2_vector: "AV:N/AC:M/Au:N/C:C/I:C/A:C"
+cvss_nvd_v2_score: "9.3"
+cvss_nvd_v2_severity: "HIGH"
+
+redhat_v2_vector: "AV:N/AC:M/Au:N/C:P/I:N/A:N"
+redhat_v2_score: "4.3"
+redhat_v2_severity: "MODERATE"
+
+redhat_v3_vector: "-"
+redhat_v3_score: "0"
+redhat_v3_severity: "MODERATE"
+
+ubuntu_vector: "-"
+ubuntu_score: "-"
+ubuntu_severity: "LOW"
+
 ---
 
 ### Description
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
 
 
-#### Title
+### Title
 Generation of Error Message Containing Sensitive Information
 
-#### Description
+### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
-#### Affected Software
+### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
 | Android | Google | 1.1.1 | 1.1.1c|
@@ -358,18 +409,18 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 9.0 | 9.0|
 | Android | Google | 10.0 | 10.0|
 
-#### Extended Description
+### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:
 
                     
                 
 An attacker may use the contents of error messages to help launch another, more focused attack. For example, an attempt to exploit a path traversal weakness (CWE-22) might yield the full pathname of the installed application. In turn, this could be used to select the proper number of ".." sequences to navigate to the targeted file. An attack using SQL injection (CWE-89) might not initially succeed, but an error message could reveal the malformed query, which would expose query logic and possibly even passwords or other sensitive information used within the query.
 
-#### Potential Mitigations
+### Potential Mitigations {.with_icon .mitigations}
 - Ensure that error messages only contain minimal details that are useful to the intended audience, and nobody else. The messages need to strike the balance between being too cryptic and not being cryptic enough. They should not necessarily reveal the methods that were used to determine the error. Such detailed information can be used to refine the original attack to increase the chances of success.
 - If errors must be tracked in some detail, capture them in log messages - but consider what could occur if the log messages can be viewed by attackers. Avoid recording highly sensitive information such as passwords in any form. Avoid inconsistent messaging that might accidentally tip off an attacker about internal state, such as whether a username is valid or not.
 
-#### Related Attack Patterns
+### Related Attack Patterns {.with_icon .related_patterns}
 - https://cwe.mitre.org/data/definitions/214.html
 - https://cwe.mitre.org/data/definitions/215.html
 - https://cwe.mitre.org/data/definitions/463.html
@@ -377,25 +428,7 @@ An attacker may use the contents of error messages to help launch another, more 
 - https://cwe.mitre.org/data/definitions/7.html
 
 
-### CVSS
-| Vendor/Version | Vector           | Score  | Severity |
-| ------------- |:-------------| -----:|----|
-| NVD/V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 | HIGH |
-| NVD/V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 | HIGH |
-| RedHat/V2      | AV:N/AC:M/Au:N/C:P/I:N/A:N | 4.3 | MODERATE |
-| RedHat/V3      | - | 0 | MODERATE |
-| Ubuntu      | - | - | LOW |
-
-### Additional Information
-NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-0002
-
-CWE: https://cwe.mitre.org/data/definitions/416.html
-
-### Dates
-- Published: 2020-01-08T00:19Z
-- Modified: 2020-01-29T00:21Z
-
-### References
+### References  {.with_icon .references}
 - https://source.android.com/security/bulletin/2020-01-01
 
 <!--- Add Aqua content below --->`, string(b))
@@ -431,19 +464,48 @@ CWE: https://cwe.mitre.org/data/definitions/416.html
 title: "CVE-2020-0002"
 date: 2020-01-08 12:19:15 +0000
 draft: false
+
+avd_page_type: nvd_page
+
+date_published: 2020-01-08 12:19:15 +0000
+date_modified: 2020-01-29 12:21:15 +0000
+
+sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
+sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
+
+cvss_nvd_v3_vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+cvss_nvd_v3_score: "8.8"
+cvss_nvd_v3_severity: "HIGH"
+
+cvss_nvd_v2_vector: "AV:N/AC:M/Au:N/C:C/I:C/A:C"
+cvss_nvd_v2_score: "9.3"
+cvss_nvd_v2_severity: "HIGH"
+
+redhat_v2_vector: "AV:N/AC:M/Au:N/C:P/I:N/A:N"
+redhat_v2_score: "4.3"
+redhat_v2_severity: "MODERATE"
+
+redhat_v3_vector: "-"
+redhat_v3_score: "0"
+redhat_v3_severity: "MODERATE"
+
+ubuntu_vector: "-"
+ubuntu_score: "-"
+ubuntu_severity: "LOW"
+
 ---
 
 ### Description
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
 
 
-#### Title
+### Title
 Generation of Error Message Containing Sensitive Information
 
-#### Description
+### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
-#### Affected Software
+### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
 | Android | Google | 1.1.1 | 1.1.1c|
@@ -451,18 +513,18 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 9.0 | 9.0|
 | Android | Google | 10.0 | 10.0|
 
-#### Extended Description
+### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:
 
                     
                 
 An attacker may use the contents of error messages to help launch another, more focused attack. For example, an attempt to exploit a path traversal weakness (CWE-22) might yield the full pathname of the installed application. In turn, this could be used to select the proper number of ".." sequences to navigate to the targeted file. An attack using SQL injection (CWE-89) might not initially succeed, but an error message could reveal the malformed query, which would expose query logic and possibly even passwords or other sensitive information used within the query.
 
-#### Potential Mitigations
+### Potential Mitigations {.with_icon .mitigations}
 - Ensure that error messages only contain minimal details that are useful to the intended audience, and nobody else. The messages need to strike the balance between being too cryptic and not being cryptic enough. They should not necessarily reveal the methods that were used to determine the error. Such detailed information can be used to refine the original attack to increase the chances of success.
 - If errors must be tracked in some detail, capture them in log messages - but consider what could occur if the log messages can be viewed by attackers. Avoid recording highly sensitive information such as passwords in any form. Avoid inconsistent messaging that might accidentally tip off an attacker about internal state, such as whether a username is valid or not.
 
-#### Related Attack Patterns
+### Related Attack Patterns {.with_icon .related_patterns}
 - https://cwe.mitre.org/data/definitions/214.html
 - https://cwe.mitre.org/data/definitions/215.html
 - https://cwe.mitre.org/data/definitions/463.html
@@ -470,25 +532,7 @@ An attacker may use the contents of error messages to help launch another, more 
 - https://cwe.mitre.org/data/definitions/7.html
 
 
-### CVSS
-| Vendor/Version | Vector           | Score  | Severity |
-| ------------- |:-------------| -----:|----|
-| NVD/V2      | AV:N/AC:M/Au:N/C:C/I:C/A:C | 9.3 | HIGH |
-| NVD/V3      | CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H | 8.8 | HIGH |
-| RedHat/V2      | AV:N/AC:M/Au:N/C:P/I:N/A:N | 4.3 | MODERATE |
-| RedHat/V3      | - | 0 | MODERATE |
-| Ubuntu      | - | - | LOW |
-
-### Additional Information
-NVD: https://nvd.nist.gov/vuln/detail/CVE-2020-0002
-
-CWE: https://cwe.mitre.org/data/definitions/416.html
-
-### Dates
-- Published: 2020-01-08T00:19Z
-- Modified: 2020-01-29T00:21Z
-
-### References
+### References  {.with_icon .references}
 - https://source.android.com/security/bulletin/2020-01-01
 
 <!--- Add Aqua content below --->
