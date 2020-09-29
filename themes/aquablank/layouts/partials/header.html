@@ -22,7 +22,7 @@
 								</p>
 							</div>-->
 
-							{{ if not .IsHome }}
+							{{ if and (not .IsHome) (not (eq "search_page" .Params.avd_page_type)) }}
 							<input type="text" class="avd_header_search" /></div>
 							{{ end }}
 
