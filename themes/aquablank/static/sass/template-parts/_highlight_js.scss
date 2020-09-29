@@ -1,58 +1,9 @@
-@import "_bulma/utilities/_functions";
+/* highlight.js theme */
 
-// Import a Google Font
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-// Update Bulma's global variables
-$family-sans-serif: 'Inter', sans-serif;
-
-/*$weight-light: 300 !default;
-$weight-normal: 400 !default;
-$weight-medium: 500 !default;
-$weight-semibold: 600 !default;*/
-$weight-bold: 700;
-
-// 1440px container + 4rem
-$gap: 32px; //same as default
-$fullhd: 1440px + 2 * $gap;
-$fullhd-enabled: true;
-
-
-// -- Import Overrides Directory 
-// Example (Default Colors) 
-@import "overrides/_all";
-
-// -- Import Bulma Starts
-	//@import "_bulma/_bulma"; //ALL
-
-	//@import "_bulma/utilities/_all";
-	@import "_bulma/utilities/initial-variables";
-	//@import "_bulma/utilities/functions"; is loaded before
-	@import "_bulma/utilities/derived-variables";
-	//@import "_bulma/utilities/animations";
-	@import "_bulma/utilities/mixins";
-	@import "_bulma/utilities/controls";
-
-
-
-	@import "_bulma/base/_all";
-	@import "_bulma/elements/_all";
-
-	//@import "_bulma/form/_all";
-	@import "_bulma/form/_shared.scss";
-	@import "_bulma/form/_select.scss";
-
-	@import "_bulma/components/_all";
-	@import "_bulma/grid/_all";
-	@import "_bulma/layout/_all";
-
-// -- Import bulma Ends
-
-
-// -- Import Aqua3 Specific
-@import "settings/_all";
-@import "templates/_all";
-@import "template-parts/_all";
+.content pre {
+	padding: 0px;
+	border-radius: 4px;
+}
 
 /*
 
@@ -64,7 +15,7 @@ vim-hybrid theme by w0ng (https://github.com/w0ng/vim-hybrid)
 .hljs {
 	display: block;
 	overflow-x: auto;
-	padding: 0.5em;
+	padding: 1em; //0.5em;
 	background: #1d1f21;
   }
   

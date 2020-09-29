@@ -7,6 +7,8 @@
 		{{ partial "page_kube-hunter.html" . }}
 	{{ else if eq "appshield_page" .Params.avd_page_type }}
 		{{ partial "page_appshield.html" . }}
+	{{ else if eq "search_page" .Params.avd_page_type }}
+		{{ partial "page_search.html" . }}
 	{{else}}
 		<main>
 			<article>
