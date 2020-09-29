@@ -13,7 +13,7 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
 
 sync-all:
-	rsync -av ./ avd-repo/ --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
+	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
 md-generate:
 	cd avd-repo && ./generator
