@@ -364,6 +364,8 @@ func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 	return filteredFiles, nil
 }
 
+// FIXME: Currently if existing fields are removed from a markdown and pages are generated
+// this logic doesn't work as expected. Workaround is to follow steps in the README.
 func GetCustomContentFromMarkdown(fileName string) string {
 	b, _ := ioutil.ReadFile(fileName)
 

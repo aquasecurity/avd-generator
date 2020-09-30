@@ -17,6 +17,11 @@ Note: Set `baseURL="/"` [here](https://github.com/aquasecurity/avd-generator/blo
 `make md-clean md-build sync-all md-generate hugo-generate nginx-restart`    
 then navigate to `http://localhost:9011` to view the pages.
 
+If changes are made to the existing AVD page structure (removal of existing fields), the following must be done:
+1. AVD content must be regenerated (`rm -rf content/nvd && mkdir -p content/nvd`)
+2. Build must be done manually and pushed up to AVD repo (not through GitHub Actions)
+This is needed to avoid tripping the Aqua Custom content logic.
+
 #### To just build markdown pages:
 `make md-generate` markdowns will be generated in `avd-repo/content/`
 
