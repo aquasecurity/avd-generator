@@ -114,7 +114,7 @@ $aq-header-logo-width: 455px;
 			}
 
 
-			&.search_box {
+			/*&.search_box {
 				display:block;
 				overflow:hidden;
 				text-indent:-9999px;
@@ -131,7 +131,7 @@ $aq-header-logo-width: 455px;
 					background-position:left center;
 					background-repeat:no-repeat;
 				}
-			}
+			}*/
 
 
 			&:hover {
@@ -159,7 +159,7 @@ $aq-header-logo-width: 455px;
 
 	
 
-		.search_box_wrap {
+		/*.search_box_wrap {
 			display:none;
 			position: absolute;
 			top:20px;
@@ -169,7 +169,7 @@ $aq-header-logo-width: 455px;
 
 			//border:1px solid yellow;
 			
-		}
+		}*/
 	
 
 .navbar-item:hover .navbar-dropdown {
@@ -334,27 +334,6 @@ $aq-header-logo-width: 455px;
 
 
 
-/*
-body.navbar_is_fixed .header_navbar_wrap {
-
-
-	.navbar {
-		//background-color: #ffffff;
-		background-color: rgba($aq-neo-background,0.9);
-		//border-bottom: 1px solid red;
-
-		& > .container {
-
-			//min-height: 60px;
-
-
-		}
-	}
-
-}*/
-
-
-
 @include until($navbar-breakpoint) {
 //@media screen and (max-width: 1024px) {
 
@@ -428,11 +407,6 @@ body.navbar_is_fixed .header_navbar_wrap {
 	}
 	
 
-	.dropdown-is-visible {
-		//border:1px solid red;
-	}
-
-
 	.header_navbar_wrap {
 
 		.navbar {
@@ -470,19 +444,6 @@ body.navbar_is_fixed .header_navbar_wrap {
 					background-color: transparent;
 				}
 
-				&.has-dropdown {
-					background-color: #ffffff;
-					border-bottom: 1px solid #cccccc;
-
-					&:hover {
-						background-color: lightgrey;
-					}
-
-					&.is-active {
-						background-color: grey;
-					}
-				}
-
 				.navbar-link {
 
 					&:before {
@@ -491,66 +452,13 @@ body.navbar_is_fixed .header_navbar_wrap {
 
 				} //navbar-link
 
-				&.logo {
-					//background-image: url(../images/logo_aqua_white.svg);
-				}
-
-
+			
 				.control {
 					.button.is-primary {
 						//background-color: $aq-starfish-yellow;
 						//color: $aq-dark-abyss;
 					}
 				}
-
-
-
-
-								
-				.navbar-dropdown {
-					//display:none;
-					width: auto;
-					border-radius: 0px;
-
-					.column {
-
-						.primary_bg_wrap {
-							
-							background-color: transparent;
-
-							.nav_col_title {
-								color: $aq-ocean-ash;
-								background-color: transparent;
-							}
-
-							.nav_col_links_wrap {
-
-								ul.nav_col_links {
-
-									li {
-										a {
-											color: $aq-dark-abyss;
-
-											&:hover {
-												color: $aq-royal-blue;
-											}
-										} //a
-
-									} //li
-
-								} //nav_col_links
-
-
-							} //nav_col_links_wrap
-
-						} //primary_bg_wrap
-
-
-					} //column
-
-
-				} //navbar-dropdown
-
 
 
 		
@@ -560,27 +468,6 @@ body.navbar_is_fixed .header_navbar_wrap {
 		} //navbar
 
 	
-		.navbar-item.search_box {
-			display: none !important;
-		}
-		.search_box_wrap {
-			display:block;
-			position: relative;
-			//top:20px;
-			margin: 3%;
-			margin-top: 0px;
-			width: 94%;
-			left:auto;
-			right: auto;
-			min-height: 60px;
-
-			.search_box_close {
-				display: none;
-			}
-			
-		} //search_box_wrap
-
-
 		.navbar-divider {display: none;}
 
 		.control {

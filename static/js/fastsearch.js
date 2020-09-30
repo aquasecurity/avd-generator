@@ -5,7 +5,7 @@ var meilisearch;
 var meilisearchIndex;
 var searchVisible = true;
 var firstRun = true; // allow us to delay loading json data unless search activated
-var list = document.getElementById('searchResults'); // targets the <ul>
+var list = document.getElementById('search_results_list'); // targets the <ul>
 var first = list.firstChild; // first child of search list
 var last = list.lastChild; // last child of search list
 var maininput = document.getElementById('searchInput'); // input box for search
@@ -92,9 +92,9 @@ async function executeSearch(term) {
                 '<li><a href="'
                 + results.hits[item].permalink
                 + '" tabindex="0">'
-                + '<span class="title">'
+                + '<span class="result_title">'
                 + results.hits[item].title
-                + '<br>'
+                + '</span><br />'
                 + results.hits[item]._formatted.summary
                 + '</a>'
                 + '</li>';
@@ -102,7 +102,7 @@ async function executeSearch(term) {
         resultsAvailable = true;
     }
 
-    document.getElementById("searchResults").innerHTML = searchitems;
+    document.getElementById("search_results_list").innerHTML = searchitems;
     if (results.length > 0) {
         first = list.firstChild.firstElementChild; // first result container — used for checking against keyboard up/down location
         last = list.lastChild.firstElementChild; // last result container — used for checking against keyboard up/down location

@@ -9,7 +9,12 @@
 					<!--<div class="page_pretitle fadeInUp"><a href="#">Home Hero pre title link</a></div>-->
 					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Damet purus tinidunt, non dignissim arcu</h1>
 					<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Accumsan arcu et, gravida urna. Vestibulum in convallis leo sed elementum neque sit amet purus vamus feugiat egestas ante duis tincidunt the lastamus apla vulputate</h2>
-					<div class="fadeInUp fadeInUp animationDelay_3"><input type="text" /></div>
+					<div class="fadeInUp animationDelay_3">
+						<div id="fastSearch">
+							<input id="searchInput" class="avd_large_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
+							<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
+						</div>
+					</div>
 				</div><!-- header_title_wrap -->
 			</div><!-- container -->
 		</div><!-- hero-body -->
@@ -45,7 +50,7 @@
 					<div class="button arrowlinkbutton">Learn more</div>
 				</a>
 			</div>
-			
+
 			<div class="column is-4-desktop is-6-tablet">
 				<a href="https://github.com/aquasecurity/kube-hunter" target="_blank" class="project_item fadeInUp animationDelay_8">
 					<div class="project_icon" style="background-image:url('{{ "images/project_logo_kubehunter_color.png" | relURL }}');"></div>

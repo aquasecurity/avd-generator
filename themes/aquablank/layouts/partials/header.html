@@ -13,17 +13,23 @@
 
 					</div><!-- navbar-start -->
 
-
 					<div class="navbar-end">
+						<!--
 						<div class="navbar-item">
-							<!--<div class="field">
+								<div class="field">
 								<p class="control">
 								  <input class="input" type="text" placeholder="Find a post">
 								</p>
 							</div>-->
 
 							{{ if and (not .IsHome) (not (eq "search_page" .Params.avd_page_type)) }}
-							<input type="text" class="avd_header_search" /></div>
+							<!--<input type="text" class="avd_header_search" placeholder="{{ .Site.Params.banner.placeholder }}" />-->
+							<div class="navbar-item">
+								<div id="fastSearch" class="search_box_wrap">
+									<input id="searchInput" class="avd_header_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
+									<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
+								</div>
+							</div>
 							{{ end }}
 
 						<!--<a class="navbar-item search_box">Search</a>-->

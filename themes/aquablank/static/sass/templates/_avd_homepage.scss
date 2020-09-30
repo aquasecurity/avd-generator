@@ -1,6 +1,8 @@
 /* avd_homepage */
 
 .avd_hero_wrap.homepage_hero {
+	position: relative;
+	z-index: 10;
 
 	.hero {
 		background-image: url('../images/avd_homepage_hero_bg.jpg');
