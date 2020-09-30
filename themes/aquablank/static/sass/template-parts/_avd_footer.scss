@@ -1,0 +1,70 @@
+/* avd_footer_wrap */
+.avd_footer_wrap {
+    background-color: $aq-dark-abyss;
+	color: $white;
+	position: relative;
+	z-index: 8;
+	padding-top: 7.5rem;
+	padding-bottom: 5.5rem;
+	
+	& > .section {
+		padding-top: 1.5em;
+		padding-bottom: 1.5em;
+		position: relative;
+		z-index: 5;
+	}
+
+    .footer_logo {
+        display: block;
+        background-image: url(../images/logo_aqua_dark.svg);
+        background-repeat: no-repeat;
+        width: 230px;
+        height: 70px;
+        overflow: hidden;
+        text-indent: -9999px;
+	}
+	
+	a {
+		color: $aq-sea-foam;
+		transition: all 0.3s ease;
+		
+		&:hover {
+			color: #ffffff;
+		}
+
+	}
+
+	.footer_copyright {
+		font-size: 0.875rem;
+		padding-top:20px;
+
+		a {
+			color: #9ca7ab;
+			border-color: findDarkColor(#ffffff);
+
+			&:hover {
+				color: #ffffff;
+			}
+		}
+	}
+
+
+	.social_links_column {
+		align-self: flex-end;
+		//justify-content: right;
+		text-align: right;
+
+		.social_links_wrap {
+			margin-bottom: -$gap;
+		}
+	}
+	
+    
+}
+
+
+.avd_footer_cta_wrap + .avd_footer_wrap {
+	//remove the space when it's after the footer_cta_wrap
+		margin-top: 0em;
+} //footer-cap-cta + footer_wrap
+

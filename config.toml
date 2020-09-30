@@ -4,7 +4,9 @@ baseURL = "https://aquasecurity.github.io/avd/"
 #baseURL = "/"
 
 # theme
-theme = "dot"
+#theme = "dot"
+theme = "aquablank"
+
 # site title
 title = "Home"
 # google analytics

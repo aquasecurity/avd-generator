@@ -24,63 +24,74 @@ const vulnerabilityPostTemplate = `---
 title: "{{.Title}}"
 date: {{.Date}}
 draft: false
+
+avd_page_type: nvd_page
+
+date_published: {{.Vulnerability.Dates.Published}}
+date_modified: {{.Vulnerability.Dates.Modified}}
+
+sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
+sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"
+
+cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "-"}}"
+cvss_nvd_v3_score: "{{.Vulnerability.CVSS.V3Score}}"
+cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "-"}}"
+
+cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "-"}}"
+cvss_nvd_v2_score: "{{.Vulnerability.CVSS.V2Score}}"
+cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "-"}}"
+
+redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}}"
+redhat_v2_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}}"
+redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+
+redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}}"
+redhat_v3_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}}"
+redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+
+ubuntu_vector: "-"
+ubuntu_score: "-"
+ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}}"
+
 ---
 
 ### Description
 {{.Vulnerability.Description}}
 
 {{ if .Vulnerability.CWEInfo.Name}}
-#### Title
+### Title
 {{.Vulnerability.CWEInfo.Name}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.Description}}
-#### Description
+### Weakness {.with_icon .weakness}
 {{.Vulnerability.CWEInfo.Description}}
 {{end}}
 
 {{- if .Vulnerability.AffectedSoftware}}
-#### Affected Software
+### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|{{range $s := .Vulnerability.AffectedSoftware}}
 | {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}} | {{$s.EndVersion}}|{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.ExtendedDescription}}
-#### Extended Description{{range $ed := .Vulnerability.CWEInfo.ExtendedDescription}}
+### Extended Description{{range $ed := .Vulnerability.CWEInfo.ExtendedDescription}}
 {{$ed}}{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
-#### Potential Mitigations{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
+### Potential Mitigations {.with_icon .mitigations}{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
 {{- if $mitigation.Description}}{{range $d := $mitigation.Description}}
 - {{$d}}{{end}}{{end}}{{end}}
 {{end}}
 
 {{- if .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
-#### Related Attack Patterns{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
+### Related Attack Patterns {.with_icon .related_patterns}{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
 - https://cwe.mitre.org/data/definitions/{{$attack.CAPECID}}.html{{end}}
 {{end}}
 
-### CVSS
-| Vendor/Version | Vector           | Score  | Severity |
-| ------------- |:-------------| -----:|----|
-| NVD/V2      | {{.Vulnerability.CVSS.V2Vector | default "-"}} | {{.Vulnerability.CVSS.V2Score}} | {{.Vulnerability.NVDSeverityV2 | upper | default "-"}} |
-| NVD/V3      | {{.Vulnerability.CVSS.V3Vector | default "-"}} | {{.Vulnerability.CVSS.V3Score}} | {{.Vulnerability.NVDSeverityV3 | upper | default "-"}} |
-| RedHat/V2      | {{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}} | {{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}} | {{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }} |
-| RedHat/V3      | {{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}} | {{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}} | {{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-"}} |
-| Ubuntu      | - | - | {{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}} |
-
-### Additional Information
-NVD: https://nvd.nist.gov/vuln/detail/{{.Title}}
-
-CWE: https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html
-
-### Dates
-- Published: {{.Vulnerability.Dates.Published}}
-- Modified: {{.Vulnerability.Dates.Modified}}
-
-### References{{range $element := .Vulnerability.References}}
+### References  {.with_icon .references}{{range $element := .Vulnerability.References}}
 - {{$element}}{{end}}
 
 <!--- Add Aqua content below --->`
@@ -261,8 +272,8 @@ func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	publishedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("publishedDate")))
 	modifiedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("lastModifiedDate")))
 	vuln.Dates = Dates{
-		Published: publishedDate.UTC().Format("2006-01-02T15:04Z"),
-		Modified:  modifiedDate.UTC().Format("2006-01-02T15:04Z"),
+		Published: publishedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
+		Modified:  modifiedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
 	}
 
 	var refs []string
@@ -355,6 +366,8 @@ func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 	return filteredFiles, nil
 }
 
+// FIXME: Currently if existing fields are removed from a markdown and pages are generated
+// this logic doesn't work as expected. Workaround is to follow steps in the README.
 func GetCustomContentFromMarkdown(fileName string) string {
 	b, _ := ioutil.ReadFile(fileName)
 
@@ -463,7 +476,7 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 		_ = AddCWEInformation(&bp, cweDir)
 
 		for _, vendor := range []string{"redhat", "ubuntu"} {
-			AddVendorInformation(&bp, vendor, filepath.Join(strings.ReplaceAll(nvdDir, "nvd", vendor)))
+			_ = AddVendorInformation(&bp, vendor, filepath.Join(strings.ReplaceAll(nvdDir, "nvd", vendor)))
 		}
 
 		// check if file exists first, if does then open, if not create

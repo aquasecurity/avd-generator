@@ -1,0 +1,15 @@
+.spacer {
+  height: 20px;
+  &.is-medium {
+    height: 40px;
+  }
+  &.is-large {
+    height: 60px;
+  }
+}
+
+
+.hspacer {
+	width: 40px;
+	display: inline-block;
+}

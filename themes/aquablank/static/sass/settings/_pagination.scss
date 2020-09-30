@@ -1,0 +1,29 @@
+/* pagination */
+.pagination_wrap {
+	clear: both;
+	position: relative;
+	font-size: 1rem;
+	color: $aq-ocean-ash;
+
+	span, a {
+		display: block;
+		float: left;
+		margin: 0.25rem;
+		padding: 0.5rem 0.8rem;
+		text-decoration: none;
+		width: auto;
+		background: #ffffff;
+		border-radius: 4px;
+	} //span, a
+
+	a:hover {
+		color: #ffffff;
+		background: $link;
+	}
+	.current {
+		padding: 0.5rem 0.8rem;
+		background: $link;
+		color: #ffffff;
+	}
+
+} //pagination_wrap

@@ -1,0 +1,55 @@
+/* social links */
+.social_links_wrap {
+	display: inline-block;
+
+	.social_link {
+		display:inline-block;
+		width:84px;
+		height:84px;
+		position: relative;
+		float: left;
+	
+		&:before {
+			opacity:0.85;
+			content: "";
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 84px;
+			height: 84px;
+			background-image:url(../images/social_icon_bg.png);
+			background-repeat: no-repeat;
+			background-position: left top;
+			z-index: 1;
+		}
+	
+		&:after {
+			content: "";
+			position: absolute;
+			left: 22px;
+			top: 22px;
+			width: 30px;
+			height: 30px;
+			background-repeat: no-repeat;
+			background-position: center;
+			z-index: 2;
+		
+		}
+	
+		&:hover {
+	
+			&:before {
+				opacity:1;
+			}
+			
+		}
+	
+	
+	} //social_link
+	
+	.social_link.facebook:after {background-image:url(../images/icons/social/ico_facebook_white.svg);}
+	.social_link.git:after {background-image:url(../images/icons/social/ico_git_white.svg);}
+	.social_link.linkedin:after {background-image:url(../images/icons/social/ico_linkedin_white.svg);}
+	.social_link.twitter:after {background-image:url(../images/icons/social/ico_twitter_white.svg);}
+	.social_link.youtube:after {background-image:url(../images/icons/social/ico_youtube_white.svg);}
+}

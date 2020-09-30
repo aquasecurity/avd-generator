@@ -1,0 +1,10 @@
+.tooltip {
+	position: absolute;
+	z-index: 9999;
+	//max-width: 300px;
+	padding: 15px;
+	font-size: 0.875rem;
+	color: #ffffff;
+	background: $aq-ocean-ash;
+	border-radius: 4px;
+}

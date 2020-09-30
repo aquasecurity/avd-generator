@@ -1,0 +1,62 @@
+/* avd_homepage */
+
+.avd_hero_wrap.homepage_hero {
+	position: relative;
+	z-index: 10;
+
+	.hero {
+		background-image: url('../images/avd_homepage_hero_bg.jpg');
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: cover;
+
+		.hero-body {
+			padding: 9rem 1.5rem;
+			
+			@include until($tablet) {
+				padding: 3rem 1.5rem;
+			}
+			
+			.header_title_wrap {
+				max-width: 60%;
+				
+				@include until($tablet) {
+					max-width: 100%;
+				}
+
+			}
+		}
+	}
+}
+
+
+.projects_wrap {
+	position: relative;
+	z-index: 3;
+	padding-top: 100px;
+	padding-bottom: 100px;
+
+	.projects_title {
+		font-size: 3rem;
+		color: $aq-royal-blue;
+		margin-bottom: 40px;
+		font-weight: $weight-bold;
+	}
+	
+
+	@include until($tablet) {
+		.projects_title {
+			font-size: 2rem;
+		}
+	}
+
+	.project_item {
+		//moved to avd_project_cta.scss
+
+	}
+
+	
+
+
+} //projects_wrap
+
