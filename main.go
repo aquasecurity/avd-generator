@@ -98,6 +98,8 @@ const regoPolicyPostTemplate = `---
 title: "{{.Title}}"
 date: {{.Date}}
 draft: false
+
+avd_page_type: appshield_page
 ---
 
 ### {{.Rego.ID}}
