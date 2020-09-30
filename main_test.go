@@ -357,6 +357,16 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 8.1 | 8.1|
 | Android | Google | 9.0 | 9.0|
 | Android | Google | 10.0 | 10.0|
+| Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
+| Tar | Ubuntu | bionic | *|
+| Tar | Ubuntu | cosmic | *|
+| Tar | Ubuntu | devel | *|
+| Tar | Ubuntu | disco | *|
+| Tar | Ubuntu | eoan | *|
+| Tar | Ubuntu | focal | *|
+| Tar | Ubuntu | trusty | *|
+| Tar | Ubuntu | upstream | *|
+| Tar | Ubuntu | xenial | *|
 
 #### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:
@@ -450,6 +460,16 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 8.1 | 8.1|
 | Android | Google | 9.0 | 9.0|
 | Android | Google | 10.0 | 10.0|
+| Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
+| Tar | Ubuntu | bionic | *|
+| Tar | Ubuntu | cosmic | *|
+| Tar | Ubuntu | devel | *|
+| Tar | Ubuntu | disco | *|
+| Tar | Ubuntu | eoan | *|
+| Tar | Ubuntu | focal | *|
+| Tar | Ubuntu | trusty | *|
+| Tar | Ubuntu | upstream | *|
+| Tar | Ubuntu | xenial | *|
 
 #### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:
