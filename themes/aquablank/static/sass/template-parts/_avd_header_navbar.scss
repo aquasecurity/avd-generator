@@ -5,7 +5,7 @@
  /* navbar */
 
 
-$aq-header-logo-width: 455px;
+$aq-header-logo-width: 510px;
 
 
 .header_navbar_wrap {
@@ -23,16 +23,19 @@ $aq-header-logo-width: 455px;
 			
 			
 			a.navbar-item.logo {
+				position: relative;
 				margin-right: 38px;
 				display: block;
 				background-image: url(../images/logo_aqua_avd.svg);
 				background-repeat: no-repeat;
-				width: $aq-header-logo-width;
-				height: 39px;
+				width: 80vw;
+				max-width: $aq-header-logo-width;
+				height: 50px;
 				overflow: hidden;
 				text-indent: -9999px;
-				top: 33px;
-				left: 24px;
+				top: 28px;
+				left: 10px;
+				background-position: center left;
 			}
 
 

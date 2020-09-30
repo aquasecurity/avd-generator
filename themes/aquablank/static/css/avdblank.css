@@ -11441,22 +11441,22 @@ pre {
 .primary_neo_small {
   border-radius: 6px;
   background: #1904da;
-  -webkit-box-shadow: 7px 7px 8px #1403ae,  -7px -7px 8px #1e05ff;
-          box-shadow: 7px 7px 8px #1403ae,  -7px -7px 8px #1e05ff;
+  -webkit-box-shadow: 7px 7px 8px #1403ae,  -7px -7px 8px #1e05ff;
+          box-shadow: 7px 7px 8px #1403ae,  -7px -7px 8px #1e05ff;
 }
 
 .primary_dark_neo_small {
   border-radius: 6px;
   background: #1503ba;
-  -webkit-box-shadow: 7px 7px 8px #110295,  -7px -7px 8px #1904df;
-          box-shadow: 7px 7px 8px #110295,  -7px -7px 8px #1904df;
+  -webkit-box-shadow: 7px 7px 8px #110295,  -7px -7px 8px #1904df;
+          box-shadow: 7px 7px 8px #110295,  -7px -7px 8px #1904df;
 }
 
 .dark_abbys_neo_small {
   border-radius: 6px;
   background: #07242d;
-  -webkit-box-shadow: 9px 9px 11px #051b21,  -9px -9px 11px #092d39;
-          box-shadow: 9px 9px 11px #051b21,  -9px -9px 11px #092d39;
+  -webkit-box-shadow: 9px 9px 11px #051b21,  -9px -9px 11px #092d39;
+          box-shadow: 9px 9px 11px #051b21,  -9px -9px 11px #092d39;
 }
 
 .button {
@@ -11788,8 +11788,8 @@ pre {
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle {
-  font-size: 1.5rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.375rem;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon:before {
@@ -11802,7 +11802,7 @@ pre {
   background-position: center center;
   margin-right: 8px;
   margin-bottom: -7px;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.nvd:before {
@@ -12031,77 +12031,6 @@ figure.aligncenter {
   }
 }
 
-.projects_wrap .project_item {
-  display: block;
-  position: relative;
-  min-height: 220px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-  background: #ebf3fa;
-  -webkit-box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
-          box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-  background-color: #ffffff;
-  height: 100%;
-  padding: 40px;
-}
-
-.projects_wrap .project_item:hover {
-  background: #f0f8ff;
-  -webkit-box-shadow: 11px 11px 23px #d1d8df, -11px -11px 23px #ffffff;
-          box-shadow: 11px 11px 23px #d1d8df, -11px -11px 23px #ffffff;
-}
-
-.projects_wrap .project_item:hover {
-  background-color: #ffffff;
-}
-
-.projects_wrap .project_item .project_icon {
-  height: 90px;
-  width: 90px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  margin-top: 0px;
-  margin-bottom: 2px;
-  position: relative;
-  left: -4px;
-}
-
-.projects_wrap .project_item .project_title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #1904da;
-  margin-bottom: 10px;
-}
-
-.projects_wrap .project_item .project_subtitle {
-  font-size: 1.125rem;
-  font-weight: 400;
-  padding-bottom: 20px;
-  color: #07242d;
-}
-
-.projects_wrap .project_item .button.arrowlinkbutton {
-  font-size: 1.125rem;
-  position: absolute;
-  bottom: 30px;
-  left: 40px;
-}
-
-.projects_wrap .project_item .button.arrowlinkbutton:after {
-  border-color: #08b1d5;
-}
-
-.projects_wrap .project_item:hover .button.arrowlinkbutton {
-  color: #1904da;
-}
-
-.projects_wrap .project_item:hover .button.arrowlinkbutton:after {
-  border-color: #1904da;
-  margin-left: 8px;
-}
-
 /* avd cve page */
 .vulnerability_content_wrap .vulnerability_content_title {
   font-size: 1.625rem;
@@ -12179,8 +12108,8 @@ figure.aligncenter {
   margin-bottom: 32px;
   color: #07242d;
   background: #ebf3fa;
-  -webkit-box-shadow: 9px 9px 11px #c1c7cd,  -9px -9px 11px #ffffff;
-          box-shadow: 9px 9px 11px #c1c7cd,  -9px -9px 11px #ffffff;
+  -webkit-box-shadow: 9px 9px 11px #c1c7cd,  -9px -9px 11px #ffffff;
+          box-shadow: 9px 9px 11px #c1c7cd,  -9px -9px 11px #ffffff;
   border-radius: 4px;
 }
 
@@ -12973,16 +12902,19 @@ input.avd_large_search {
 }
 
 .header_navbar_wrap .navbar .navbar-brand a.navbar-item.logo {
+  position: relative;
   margin-right: 38px;
   display: block;
   background-image: url(../images/logo_aqua_avd.svg);
   background-repeat: no-repeat;
-  width: 455px;
-  height: 39px;
+  width: 80vw;
+  max-width: 510px;
+  height: 50px;
   overflow: hidden;
   text-indent: -9999px;
-  top: 33px;
-  left: 24px;
+  top: 28px;
+  left: 10px;
+  background-position: center left;
 }
 
 .header_navbar_wrap .navbar .navbar-brand .navbar-burger {
@@ -13349,6 +13281,78 @@ input.avd_large_search {
 
 .social_links_wrap .social_link.youtube:after {
   background-image: url(../images/icons/social/ico_youtube_white.svg);
+}
+
+/* project ctas - used in the homepage and on sidebars */
+.project_item {
+  display: block;
+  position: relative;
+  min-height: 220px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  background: #ebf3fa;
+  -webkit-box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
+          box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+  height: 100%;
+  padding: 40px 40px 60px 40px;
+}
+
+.project_item:hover {
+  background: #f0f8ff;
+  -webkit-box-shadow: 11px 11px 23px #d1d8df, -11px -11px 23px #ffffff;
+          box-shadow: 11px 11px 23px #d1d8df, -11px -11px 23px #ffffff;
+}
+
+.project_item:hover {
+  background-color: #ffffff;
+}
+
+.project_item .project_icon {
+  height: 90px;
+  width: 90px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin-top: 0px;
+  margin-bottom: 2px;
+  position: relative;
+  left: -4px;
+}
+
+.project_item .project_title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1904da;
+  margin-bottom: 10px;
+}
+
+.project_item .project_subtitle {
+  font-size: 1.125rem;
+  font-weight: 400;
+  padding-bottom: 10px;
+  color: #07242d;
+}
+
+.project_item .button.arrowlinkbutton {
+  font-size: 1.125rem;
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+}
+
+.project_item .button.arrowlinkbutton:after {
+  border-color: #08b1d5;
+}
+
+.project_item:hover .button.arrowlinkbutton {
+  color: #1904da;
+}
+
+.project_item:hover .button.arrowlinkbutton:after {
+  border-color: #1904da;
+  margin-left: 8px;
 }
 
 /* highlight.js theme */

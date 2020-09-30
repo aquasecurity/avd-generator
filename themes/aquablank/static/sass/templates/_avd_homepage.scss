@@ -51,68 +51,11 @@
 	}
 
 	.project_item {
-		display: block;
-		position: relative;
-		min-height:220px;
-		margin-bottom:20px;
-		border-radius: 4px;
-		@include neo_linkbox_subtle_light-bg;
-		background-color: #ffffff;
-		height: 100%;
-		padding: 40px;
+		//moved to avd_project_cta.scss
 
-		&:hover {
-			background-color: #ffffff;
-		}
+	}
 
-		.project_icon {
-			height:90px;
-			width:90px;
-			background-position:center center;
-			background-repeat:no-repeat;
-			margin-top:0px;
-			margin-bottom:2px;
-			position: relative;
-			left: -4px;
-		}
-
-		.project_title {
-			font-size: 1.75rem;
-			font-weight: $weight-bold;
-			color: $aq-royal-blue;
-			margin-bottom: 10px;
-		}
-
-		.project_subtitle {
-			font-size: 1.125rem;
-			font-weight: $weight-normal;
-			padding-bottom: 20px;
-			color: $aq-dark-abyss;
-		}
-
-		.button.arrowlinkbutton {
-			font-size: 1.125rem;
-			position: absolute;
-			bottom: 30px;
-			left: 40px;
-
-			&:after {
-				border-color: $aq-legacy-blue;
-			}
-		}
-
-		&:hover {
-			.button.arrowlinkbutton {
-				color: $aq-royal-blue;
-				
-				&:after {
-					border-color: $aq-royal-blue;
-					margin-left: 8px;
-				}
-			}
-		}
-
-	} //project_item
+	
 
 
 } //projects_wrap
