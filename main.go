@@ -98,9 +98,6 @@ const regoPolicyPostTemplate = `---
 title: "{{.Title}}"
 date: {{.Date}}
 draft: false
-
-date_published: ""
-date_modified: ""
 ---
 
 ### {{.Rego.ID}}
