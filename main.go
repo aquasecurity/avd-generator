@@ -472,7 +472,7 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 		_ = AddCWEInformation(&bp, cweDir)
 
 		for _, vendor := range []string{"redhat", "ubuntu"} {
-			AddVendorInformation(&bp, vendor, filepath.Join(strings.ReplaceAll(nvdDir, "nvd", vendor)))
+			_ = AddVendorInformation(&bp, vendor, filepath.Join(strings.ReplaceAll(nvdDir, "nvd", vendor)))
 		}
 
 		// check if file exists first, if does then open, if not create
