@@ -1,6 +1,6 @@
 ################################# Default configuration ###################
 # provide your domain here
-baseURL = "https://aquasecurity.github.io/avd/"
+baseURL = "https://avd.aquasec.com/"
 #baseURL = "/"
 
 # theme
