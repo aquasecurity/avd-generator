@@ -169,8 +169,8 @@ avd_page_type: nvd_page
 date_published: 2020-05-13T00:01Z
 date_modified: 2020-05-18T00:17Z
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N"
 cvss_nvd_v3_score: "2.3"
@@ -259,8 +259,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08T19:15Z
 date_modified: 2020-01-14T21:52Z
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
 cvss_nvd_v3_score: "4.5"
@@ -366,8 +366,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 cvss_nvd_v3_score: "8.8"
@@ -480,8 +480,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 cvss_nvd_v3_score: "8.8"
