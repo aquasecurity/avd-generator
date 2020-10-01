@@ -10,7 +10,7 @@ theme = "aquablank"
 # site title
 title = "Home"
 # google analytics
-googleAnalytics = "" # paste your analytics ID here. (Ex: UA-123-45)
+googleAnalytics = "UA-63272154-14" # paste your analytics ID here. (Ex: UA-123-45)
 
 summaryLength = 15
 disableKinds = ["RSS", "taxonomy", "sitemap"]
