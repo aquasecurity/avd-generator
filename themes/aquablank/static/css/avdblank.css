@@ -11441,22 +11441,28 @@ pre {
 .primary_neo_small {
   border-radius: 6px;
   background: #1904da;
-  -webkit-box-shadow: 7px 7px 8px #1403ae,  -7px -7px 8px #1e05ff;
-          box-shadow: 7px 7px 8px #1403ae,  -7px -7px 8px #1e05ff;
+  -webkit-box-shadow: 7px 7px 8px #1403ae, 
+ -7px -7px 8px #1e05ff;
+          box-shadow: 7px 7px 8px #1403ae, 
+ -7px -7px 8px #1e05ff;
 }
 
 .primary_dark_neo_small {
   border-radius: 6px;
   background: #1503ba;
-  -webkit-box-shadow: 7px 7px 8px #110295,  -7px -7px 8px #1904df;
-          box-shadow: 7px 7px 8px #110295,  -7px -7px 8px #1904df;
+  -webkit-box-shadow: 7px 7px 8px #110295, 
+ -7px -7px 8px #1904df;
+          box-shadow: 7px 7px 8px #110295, 
+ -7px -7px 8px #1904df;
 }
 
 .dark_abbys_neo_small {
   border-radius: 6px;
   background: #07242d;
-  -webkit-box-shadow: 9px 9px 11px #051b21,  -9px -9px 11px #092d39;
-          box-shadow: 9px 9px 11px #051b21,  -9px -9px 11px #092d39;
+  -webkit-box-shadow: 9px 9px 11px #051b21, 
+ -9px -9px 11px #092d39;
+          box-shadow: 9px 9px 11px #051b21, 
+ -9px -9px 11px #092d39;
 }
 
 .button {
@@ -11992,7 +11998,7 @@ figure.aligncenter {
 }
 
 .avd_hero_wrap.homepage_hero .hero .hero-body {
-  padding: 9rem 1.5rem;
+  /*padding: 9rem 1.5rem;*/
 }
 
 @media screen and (max-width: 768px) {
@@ -12108,8 +12114,10 @@ figure.aligncenter {
   margin-bottom: 32px;
   color: #07242d;
   background: #ebf3fa;
-  -webkit-box-shadow: 9px 9px 11px #c1c7cd,  -9px -9px 11px #ffffff;
-          box-shadow: 9px 9px 11px #c1c7cd,  -9px -9px 11px #ffffff;
+  -webkit-box-shadow: 9px 9px 11px #c1c7cd, 
+ -9px -9px 11px #ffffff;
+          box-shadow: 9px 9px 11px #c1c7cd, 
+ -9px -9px 11px #ffffff;
   border-radius: 4px;
 }
 
