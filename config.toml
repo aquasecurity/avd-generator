@@ -100,7 +100,7 @@ link = "https://www.linkedin.com/company/aquasecteam/"
 languageName = "En"
 languageCode = "en-us"
 weight = 1
-copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security 2020."
+copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security Software Ltd."
 
 # banner
 [Languages.en.params.banner]
