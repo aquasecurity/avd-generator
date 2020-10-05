@@ -11827,7 +11827,7 @@ pre {
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_subtitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle + .page_title {
@@ -11992,17 +11992,26 @@ figure.aligncenter {
 }
 
 .avd_hero_wrap.homepage_hero .hero .hero-body {
-  padding: 9rem 1.5rem;
+  padding: 3rem 1.5rem;
+}
+
+.avd_hero_wrap.homepage_hero .hero .hero-body .header_title_wrap .page_title {
+  margin-top: 0px;
+  font-size: 2.5rem;
+}
+
+.avd_hero_wrap.homepage_hero .hero .hero-body .header_title_wrap .page_subtitle {
+  font-size: 1.5rem;
 }
 
 @media screen and (max-width: 768px) {
   .avd_hero_wrap.homepage_hero .hero .hero-body {
-    padding: 3rem 1.5rem;
+    padding: 2.5rem 1.5rem;
   }
 }
 
 .avd_hero_wrap.homepage_hero .hero .hero-body .header_title_wrap {
-  max-width: 60%;
+  max-width: 65%;
 }
 
 @media screen and (max-width: 768px) {
@@ -12014,12 +12023,12 @@ figure.aligncenter {
 .projects_wrap {
   position: relative;
   z-index: 3;
-  padding-top: 100px;
+  padding-top: 60px;
   padding-bottom: 100px;
 }
 
 .projects_wrap .projects_title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #1904da;
   margin-bottom: 40px;
   font-weight: 700;
@@ -12240,6 +12249,7 @@ figure.aligncenter {
   background-repeat: no-repeat;
   background-position: 0px 0px;
   background-image: url("../images/gague_sprite.png");
+  pointer-events: none;
 }
 
 .avdcve_scores_cvss .large_score_wrap .large_score_source {
@@ -12253,6 +12263,7 @@ figure.aligncenter {
   background-position: 0px 0px;
   overflow: hidden;
   text-indent: -9999px;
+  margin-left: 4px;
 }
 
 .avdcve_scores_cvss .large_score_wrap .large_score_source .icon_source.source_nvd {
@@ -12542,6 +12553,26 @@ input.avd_large_search {
   width: 100%;
   max-width: 600px;
   color: #07242d;
+}
+
+/* 404 */
+.hero_404.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.hero_404.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_title {
+  color: #1904da;
+  font-weight: 700;
+  font-size: 4.5rem;
+}
+
+.hero_404.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_subtitle {
+  font-size: 1.75rem;
+}
+
+.hero_404.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_cta {
+  margin-top: 10px;
 }
 
 /*

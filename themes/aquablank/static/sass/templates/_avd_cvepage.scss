@@ -195,6 +195,7 @@
 					background-repeat: no-repeat;
 					background-position: 0px 0px;
 					background-image: url('../images/gague_sprite.png');
+					pointer-events: none;
 				} //score_bg
 
 			} //large_score_gauge
@@ -211,6 +212,7 @@
 				background-position: 0px 0px;
 				overflow: hidden;
 				text-indent: -9999px;
+				margin-left: 4px;
 
 				&.source_nvd {
 					background-image: url('../images/source_nvd.png');
