@@ -171,8 +171,8 @@ date_modified: 2020-05-18T00:17Z
 
 header_subtitle: ""
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N"
 cvss_nvd_v3_score: "2.3"
@@ -370,8 +370,8 @@ date_modified: 2020-01-29 12:21:15 +0000
 
 header_subtitle: "Generation of Error Message Containing Sensitive Information"
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 cvss_nvd_v3_score: "8.8"
