@@ -260,6 +260,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08T19:15Z
 date_modified: 2020-01-14T21:52Z
 
+header_subtitle: ""
+
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
 
