@@ -169,7 +169,7 @@ avd_page_type: nvd_page
 date_published: 2020-05-13T00:01Z
 date_modified: 2020-05-18T00:17Z
 
-header_subtitle: "It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered."
+header_subtitle: It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered.
 
 sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
 sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
@@ -367,7 +367,7 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
-header_subtitle: "Generation of Error Message Containing Sensitive Information"
+header_subtitle: Generation of Error Message Containing Sensitive Information
 
 sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
 sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
