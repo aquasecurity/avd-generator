@@ -216,8 +216,11 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 				By:     "baz source",
 				Date:   "2020-01-08 12:19:15 +0000",
 				Vulnerability: Vulnerability{
-					ID:          "CVE-2020-1234",
-					CWEID:       "CWE-269",
+					ID:    "CVE-2020-1234",
+					CWEID: "CWE-269",
+					CWEInfo: WeaknessType{
+						Name: "foo cwe info name",
+					},
 					Description: "foo Description",
 					References: []string{
 						"https://foo.bar.baz.com",
@@ -258,7 +261,7 @@ avd_page_type: nvd_page
 date_published: 2020-01-08T19:15Z
 date_modified: 2020-01-14T21:52Z
 
-header_subtitle: ""
+header_subtitle: "foo cwe info name"
 
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
