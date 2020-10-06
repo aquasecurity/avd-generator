@@ -197,8 +197,6 @@ ubuntu_severity: "-"
 ---
 
 It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered.
-
-
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
@@ -288,8 +286,6 @@ ubuntu_severity: "-"
 ---
 
 foo Description
-
-
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
@@ -396,11 +392,6 @@ ubuntu_severity: "LOW"
 ---
 
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
-
-
-### Title
-Generation of Error Message Containing Sensitive Information
-
 ### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
@@ -511,11 +502,6 @@ ubuntu_severity: "LOW"
 ---
 
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
-
-
-### Title
-Generation of Error Message Containing Sensitive Information
-
 ### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 

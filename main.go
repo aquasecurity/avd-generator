@@ -59,10 +59,6 @@ ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"
 
 {{.Vulnerability.Description}}
 
-{{ if .Vulnerability.CWEInfo.Name}}
-### Title
-{{.Vulnerability.CWEInfo.Name}}
-{{end}}
 
 {{- if .Vulnerability.CWEInfo.Description}}
 ### Weakness {.with_icon .weakness}
