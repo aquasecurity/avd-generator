@@ -559,10 +559,7 @@ An attacker may use the contents of error messages to help launch another, more 
 ### References  {.with_icon .references}
 - https://source.android.com/security/bulletin/2020-01-01
 
-<!--- Add Aqua content below --->
----
-### foo heading
-bar content`, string(b))
+<!--- Add Aqua content below --->`, string(b))
 			}
 		}
 	})
