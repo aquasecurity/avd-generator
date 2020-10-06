@@ -285,7 +285,6 @@ ubuntu_severity: "-"
 
 ---
 
-### Description
 foo Description
 
 
@@ -394,7 +393,6 @@ ubuntu_severity: "LOW"
 
 ---
 
-### Description
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
 
 
@@ -508,7 +506,6 @@ ubuntu_severity: "LOW"
 
 ---
 
-### Description
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
 
 
