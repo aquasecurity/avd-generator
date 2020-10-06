@@ -260,8 +260,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08T19:15Z
 date_modified: 2020-01-14T21:52Z
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
 cvss_nvd_v3_score: "4.5"
@@ -411,6 +411,16 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 8.1 | 8.1|
 | Android | Google | 9.0 | 9.0|
 | Android | Google | 10.0 | 10.0|
+| Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
+| Tar | Ubuntu | bionic | *|
+| Tar | Ubuntu | cosmic | *|
+| Tar | Ubuntu | devel | *|
+| Tar | Ubuntu | disco | *|
+| Tar | Ubuntu | eoan | *|
+| Tar | Ubuntu | focal | *|
+| Tar | Ubuntu | trusty | *|
+| Tar | Ubuntu | upstream | *|
+| Tar | Ubuntu | xenial | *|
 
 ### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:
@@ -473,8 +483,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
-sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
-sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
 
 cvss_nvd_v3_vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
 cvss_nvd_v3_score: "8.8"
@@ -515,6 +525,16 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 8.1 | 8.1|
 | Android | Google | 9.0 | 9.0|
 | Android | Google | 10.0 | 10.0|
+| Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
+| Tar | Ubuntu | bionic | *|
+| Tar | Ubuntu | cosmic | *|
+| Tar | Ubuntu | devel | *|
+| Tar | Ubuntu | disco | *|
+| Tar | Ubuntu | eoan | *|
+| Tar | Ubuntu | focal | *|
+| Tar | Ubuntu | trusty | *|
+| Tar | Ubuntu | upstream | *|
+| Tar | Ubuntu | xenial | *|
 
 ### Extended Description
 The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more serious attacks. The error message may be created in different ways:

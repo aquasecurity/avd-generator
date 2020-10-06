@@ -1,6 +1,6 @@
 ################################# Default configuration ###################
 # provide your domain here
-baseURL = "https://aquasecurity.github.io/avd/"
+baseURL = "https://avd.aquasec.com/"
 #baseURL = "/"
 
 # theme
@@ -8,9 +8,9 @@ baseURL = "https://aquasecurity.github.io/avd/"
 theme = "aquablank"
 
 # site title
-title = "Home"
+title = "Aqua Vulnerability Database"
 # google analytics
-googleAnalytics = "" # paste your analytics ID here. (Ex: UA-123-45)
+googleAnalytics = "UA-63272154-14" # paste your analytics ID here. (Ex: UA-123-45)
 
 summaryLength = 15
 disableKinds = ["RSS", "taxonomy", "sitemap"]
@@ -79,7 +79,7 @@ light_color = "#f8f9fa"
 font_family = "lato" # Choose font family from : https://fonts.google.com/
 
 # contact form action
-contact_form_action = "#" # contact form works with : https://formspree.io
+#contact_form_action = "#" # contact form works with : https://formspree.io
 
 
 ############################## social links ##############################
@@ -100,7 +100,7 @@ link = "https://www.linkedin.com/company/aquasecteam/"
 languageName = "En"
 languageCode = "en-us"
 weight = 1
-copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security 2020."
+copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security Software Ltd."
 
 # banner
 [Languages.en.params.banner]

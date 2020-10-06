@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode | default "en-us" }}">
 <head>
+	{{ "<!--Favicon-->" | safeHTML }}
+	<link rel="icon" href="{{ `images/favicon.png` | absURL }}" type="image/x-icon">
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}" />

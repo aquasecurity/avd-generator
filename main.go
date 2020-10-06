@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -283,7 +285,7 @@ func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	}
 	vuln.References = refs
 
-	affectedSoftwares := v.GetArray("configurations", "nodes", "0", "cpe_match")
+	affectedSoftwares := v.GetArray("configurations", "nodes", "0", "cpe_match") // TODO: This logic should be improved to iterate over list of lists
 	for _, as := range affectedSoftwares {
 		uri := string(as.GetStringBytes("cpe23Uri"))
 		item, err := cpe.NewItemFromFormattedString(uri)
@@ -514,6 +516,15 @@ func AddCWEInformation(bp *VulnerabilityPost, cweDir string) error {
 	return nil
 }
 
+func getAllMapKeys(a interface{}) []string {
+	keys := reflect.ValueOf(a).MapKeys()
+	strkeys := make([]string, len(keys))
+	for i := 0; i < len(keys); i++ {
+		strkeys[i] = keys[i].String()
+	}
+	return strkeys
+}
+
 func AddVendorInformation(bp *VulnerabilityPost, vendor string, vendorDir string) error {
 	switch vendor {
 	case "redhat":
@@ -531,6 +542,17 @@ func AddVendorInformation(bp *VulnerabilityPost, vendor string, vendorDir string
 		bp.Vulnerability.RedHatCVSSInfo.V2Score, _ = strconv.ParseFloat(string(v.GetStringBytes("cvss", "cvss_base_score")), 64)
 		bp.Vulnerability.RedHatCVSSInfo.V3Vector = string(v.GetStringBytes("cvss3", "cvss3_scoring_vector"))
 		bp.Vulnerability.RedHatCVSSInfo.V3Score, _ = strconv.ParseFloat(string(v.GetStringBytes("cvss3", "cvss3_base_score")), 64)
+
+		affectedReleases := v.GetArray("affected_release")
+		for _, ar := range affectedReleases {
+			bp.Vulnerability.AffectedSoftware = append(bp.Vulnerability.AffectedSoftware, AffectedSoftware{
+				Name:         string(ar.GetStringBytes("product_name")),
+				Vendor:       "RedHat",
+				StartVersion: string(ar.GetStringBytes("package")),
+				EndVersion:   "*",
+			})
+		}
+
 	case "ubuntu":
 		b, err := ioutil.ReadFile(filepath.Join(vendorDir, fmt.Sprintf("%s.json", bp.Vulnerability.ID)))
 		if err != nil {
@@ -542,6 +564,42 @@ func AddVendorInformation(bp *VulnerabilityPost, vendor string, vendorDir string
 			return err
 		}
 		bp.Vulnerability.UbuntuCVSSInfo.Severity = string(v.GetStringBytes("Priority"))
+
+		patchList := v.Get("Patches")
+		var patches map[string]map[string]struct {
+			Status string
+			Note   string
+		}
+
+		// get all patches
+		_ = json.Unmarshal([]byte(patchList.String()), &patches)
+
+		// get all packages
+		packages := getAllMapKeys(patches)
+		sort.Slice(packages, func(i, j int) bool {
+			return packages[i] < packages[j]
+		})
+
+		for _, p := range packages {
+			dists := getAllMapKeys(patches[p])
+			sort.Slice(dists, func(i, j int) bool {
+				return dists[i] < dists[j]
+			})
+
+			for _, d := range dists {
+				status := strings.ToLower(patches[p][d].Status)
+				switch status {
+				case "needed", "pending", "ignored", "released":
+					bp.Vulnerability.AffectedSoftware = append(bp.Vulnerability.AffectedSoftware, AffectedSoftware{
+						Name:         p,
+						Vendor:       "Ubuntu",
+						StartVersion: d,
+						EndVersion:   "*",
+					})
+				}
+			}
+		}
+
 	}
 	return nil
 }
