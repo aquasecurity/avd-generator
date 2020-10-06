@@ -367,7 +367,7 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
-header_subtitle: "pax_decode_header in sparse.c in GNU Tar before 1.32 had a NULL pointer dereference when parsing certain archives that have malformed extended headers."
+header_subtitle: "Generation of Error Message Containing Sensitive Information"
 
 sidebar_additiona_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
 sidebar_additiona_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
