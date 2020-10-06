@@ -11,14 +11,27 @@
 		background-size: cover;
 
 		.hero-body {
-			padding: 9rem 1.5rem;
+			padding: 3rem 1.5rem;
 			
+			.header_title_wrap {
+				.page_title {
+					margin-top: 0px;
+					font-size: 2.5rem;
+
+				}
+
+				.page_subtitle {
+					font-size: 1.5rem;
+				}
+			} //header_title_wrap
+
+
 			@include until($tablet) {
-				padding: 3rem 1.5rem;
+				padding: 2.5rem 1.5rem;
 			}
 			
 			.header_title_wrap {
-				max-width: 60%;
+				max-width: 65%;
 				
 				@include until($tablet) {
 					max-width: 100%;
@@ -33,11 +46,11 @@
 .projects_wrap {
 	position: relative;
 	z-index: 3;
-	padding-top: 100px;
+	padding-top: 60px;
 	padding-bottom: 100px;
 
 	.projects_title {
-		font-size: 3rem;
+		font-size: 2.5rem;
 		color: $aq-royal-blue;
 		margin-bottom: 40px;
 		font-weight: $weight-bold;

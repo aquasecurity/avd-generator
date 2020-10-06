@@ -169,6 +169,8 @@ avd_page_type: nvd_page
 date_published: 2020-05-13T00:01Z
 date_modified: 2020-05-18T00:17Z
 
+header_subtitle: ""
+
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-11932"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/532.html"
 
@@ -194,10 +196,7 @@ ubuntu_severity: "-"
 
 ---
 
-### Description
 It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered.
-
-
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
@@ -217,8 +216,11 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 				By:     "baz source",
 				Date:   "2020-01-08 12:19:15 +0000",
 				Vulnerability: Vulnerability{
-					ID:          "CVE-2020-1234",
-					CWEID:       "CWE-269",
+					ID:    "CVE-2020-1234",
+					CWEID: "CWE-269",
+					CWEInfo: WeaknessType{
+						Name: "foo cwe info name",
+					},
 					Description: "foo Description",
 					References: []string{
 						"https://foo.bar.baz.com",
@@ -259,6 +261,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08T19:15Z
 date_modified: 2020-01-14T21:52Z
 
+header_subtitle: "foo cwe info name"
+
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
 
@@ -284,10 +288,7 @@ ubuntu_severity: "-"
 
 ---
 
-### Description
 foo Description
-
-
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
@@ -366,6 +367,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
+header_subtitle: "Generation of Error Message Containing Sensitive Information"
+
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
 
@@ -391,13 +394,7 @@ ubuntu_severity: "LOW"
 
 ---
 
-### Description
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
-
-
-### Title
-Generation of Error Message Containing Sensitive Information
-
 ### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
@@ -480,6 +477,8 @@ avd_page_type: nvd_page
 date_published: 2020-01-08 12:19:15 +0000
 date_modified: 2020-01-29 12:21:15 +0000
 
+header_subtitle: "Generation of Error Message Containing Sensitive Information"
+
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-0002"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/416.html"
 
@@ -505,13 +504,7 @@ ubuntu_severity: "LOW"
 
 ---
 
-### Description
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
-
-
-### Title
-Generation of Error Message Containing Sensitive Information
-
 ### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
