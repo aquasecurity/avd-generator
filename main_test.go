@@ -322,11 +322,58 @@ bar content`,
 }
 
 func TestGetCustomContentFromMarkdown(t *testing.T) {
-	// TODO: Add more test cases
-	gotCustomContent := GetCustomContentFromMarkdown("goldens/markdown/CVE-2020-0002.md")
-	assert.Equal(t, `---
+	testCases := []struct {
+		name            string
+		inputContents   string
+		expectedContent string
+	}{
+		{
+			name: "happy path",
+			inputContents: `---
+title: "CVE-2020-0002"
+date: 2020-01-08 12:19:15 +0000
+draft: false
+---
+### Description
+In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
+<!--- Add Aqua content below --->
+---
 ### foo heading
-bar content`, gotCustomContent)
+bar content`,
+			expectedContent: `---
+### foo heading
+bar content`,
+		},
+		{
+			name: "sad path, no custom content",
+			inputContents: `---
+title: "CVE-2020-0002"
+date: 2020-01-08 12:19:15 +0000
+draft: false
+---
+### Description
+In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
+<!--- Add Aqua content below --->
+
+
+`,
+			expectedContent: ``,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			f, _ := ioutil.TempFile("", "TestGetCustomContentFromMarkdown-*")
+			defer func() {
+				_ = os.RemoveAll(f.Name())
+			}()
+
+			_, _ = f.WriteString(tc.inputContents)
+			gotCustomContent := GetCustomContentFromMarkdown(f.Name())
+			assert.Equal(t, tc.expectedContent, gotCustomContent, tc.name)
+		})
+	}
+
 }
 
 func TestGetAllFiles(t *testing.T) {
