@@ -486,8 +486,9 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 		}
 
 		customContent := GetCustomContentFromMarkdown(f.Name())
-		if customContent != "" {
-			_ = os.Truncate(f.Name(), 0) // truncate file if custom data was found
+		if customContent != "" { // truncate file if custom data was found
+			_ = f.Truncate(0)
+			_, _ = f.Seek(0, 0)
 		}
 		if err := VulnerabilityPostToMarkdown(bp, f, customContent); err != nil {
 			log.Printf("unable to write file: %s as markdown, err: %s, skipping...\n", file, err)
