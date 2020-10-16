@@ -504,6 +504,7 @@ func main() {
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
+	generateCloudSploitPages("cloudsploit-repo/en", "content/cloudsploit")
 }
 
 func generateVulnPages() {
@@ -700,6 +701,54 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 				EndVersion:   release.Package,
 			})
 			CVEMap[fKey][vendor] = rp
+		}
+	}
+}
+
+func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
+	var fileList []string
+	_ = filepath.Walk(inputPagesDir, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		fileList = append(fileList, path)
+		return nil
+	})
+
+	for _, file := range fileList {
+		fullPath := strings.Split(file, "en/")[1]
+		provider := strings.Split(fullPath, "/")[0]
+		service := strings.Split(fullPath, "/")[1]
+		fileName := strings.Split(fullPath, "/")[2]
+
+		b, err := ioutil.ReadFile(file)
+		if err != nil {
+			log.Println("unable to read cloudsploit file: ", err)
+			continue
+		}
+
+		fileContent := strings.Split(string(b), "## Quick Info")[1]
+
+		r := strings.NewReplacer("-", " ", ".md", "")
+		pageName := strings.Title(r.Replace(fileName))
+		splittedName := strings.Split(pageName, " ")
+		if len(splittedName[0]) <= 3 {
+			pageName = strings.ToUpper(splittedName[0]) + " " + strings.Join(splittedName[1:], " ")
+		}
+
+		err = os.MkdirAll(filepath.Join(outputPagesDir, provider, service), 0755)
+		if err != nil {
+			log.Fatal("unable to create cloudsploit directory ", err)
+		}
+
+		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
+title: %s
+avd_page_type: cloudsploit_page
+---
+## Quick Info`, pageName)), []byte(fileContent)...), 0600)
+		if err != nil {
+			log.Println("unable to write cloudsploit file: ", err)
+			continue
 		}
 	}
 }

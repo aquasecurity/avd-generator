@@ -846,3 +846,18 @@ QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugi
 
 `, string(got))
 }
+
+func TestGenerateCloudSploitPages(t *testing.T) {
+	pagesDir, _ := ioutil.TempDir("", "TestGenerateCloudSploitPages-*")
+	defer func() {
+		_ = os.RemoveAll(pagesDir)
+	}()
+
+	generateCloudSploitPages("avd-repo/cloudsploit-repo/en", pagesDir)
+	got, err := ioutil.ReadFile(filepath.Join(pagesDir, "aws/acm/acm-certificate-validation.md"))
+	require.NoError(t, err)
+
+	want, _ := ioutil.ReadFile("goldens/cloudsploit/acm-certificate-validation.avd.md")
+	assert.Equal(t, string(want), string(got))
+
+}

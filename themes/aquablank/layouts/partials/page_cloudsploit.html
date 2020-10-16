@@ -1,0 +1,69 @@
+<!-- hero starts -->
+<div class="avd_hero_wrap animatable">
+    <div class="hero header_wrap is-primary"><!--  is-small -->
+        <!-- header starts -->
+
+        <!--<div class="hero-head"></div>-->
+        <div class="hero-body">
+            <div class="clearboth container">
+                <div class="header_title_wrap">
+                    <div class="page_pretitle with_icon kube-hunter fadeInUp">CloudSploit</div>
+                    <h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Title }}</h1>
+                    <!--<h2 class="subtitle page_subtitle">AVD Hero Subtitle 012</h2>-->
+                </div><!-- header_title_wrap -->
+            </div><!-- container -->
+        </div><!-- hero-body -->
+
+
+
+        {{ if or (.Params.date_published) (.Params.date_modified) }}
+            <div class="hero-foot">
+                <div class="container fadeInUp animationDelay_2">
+
+                    {{ if .Params.date_published }}
+                        <div class="pagetitle_metaitem"><strong>Published:</strong> {{ dateFormat "Jan 02, 2006" .Params.date_published }}</div>
+                    {{ end }}
+
+                    {{ if .Params.date_modified }}
+                        <div class="pagetitle_metaitem"><strong>Modified:</strong> {{ dateFormat "Jan 02, 2006" .Params.date_modified }}</div>
+                    {{ end }}
+                </div>
+            </div><!-- hero-foot -->
+        {{ end }}
+
+    </div><!-- hero -->
+
+</div><!-- hero_wrap -->
+<!-- hero ends -->
+
+<!-- content starts -->
+
+<div class="section avdcve_wrap animatable">
+    <div class="clearboth container">
+
+        <div class="columns is-multiline rever*se-columns">
+            <div class="column is-8-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_4">
+                <div class="vulnerability_content_wrap fadeInUp">
+                    <!--<h4 class="vulnerability_content_title fadeInUp"></h4>-->
+                    <div class="content vulnerability_content">
+                        {{ .Content }}
+                    </div><!-- vulnerability_content -->
+                </div><!-- vulnerability_content_wrap -->
+            </div><!-- column is-8 -->
+
+            <div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_2">
+                <div class="avdcve_sidebar_wrap">
+                    <a href="https://github.com/aquasecurity/cloudsploit" target="_blank" class="project_item fadeInUp animationDelay_8">
+                        <div class="project_icon" style="background-image:url('{{ "images/project_logo_cloudsploit.png" | relURL }}');"></div>
+                        <h2 class="project_title">CloudSploit</h2>
+                        <div class="project_subtitle">Cloud Security Posture Management with hundreds of checks on cloud IaaS account and service configuration</div>
+                        <div class="button arrowlinkbutton">Learn more</div>
+                    </a>
+                </div>
+            </div><!-- column is-4 -->
+        </div><!-- columns -->
+
+    </div><!-- container -->
+</div>
+
+<!-- content ends -->
