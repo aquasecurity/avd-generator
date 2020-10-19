@@ -3,6 +3,7 @@ http.error.log
 generator
 vuln-list
 appshield-repo
+kube-hunter-repo
 .idea
 .DS_Store
 avd-repo
