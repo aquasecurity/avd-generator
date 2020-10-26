@@ -197,8 +197,6 @@ ubuntu_severity: "-"
 ---
 
 It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS full disk encryption password if one was entered.
-
-
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
@@ -218,8 +216,11 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 				By:     "baz source",
 				Date:   "2020-01-08 12:19:15 +0000",
 				Vulnerability: Vulnerability{
-					ID:          "CVE-2020-1234",
-					CWEID:       "CWE-269",
+					ID:    "CVE-2020-1234",
+					CWEID: "CWE-269",
+					CWEInfo: WeaknessType{
+						Name: "foo cwe info name",
+					},
 					Description: "foo Description",
 					References: []string{
 						"https://foo.bar.baz.com",
@@ -260,7 +261,7 @@ avd_page_type: nvd_page
 date_published: 2020-01-08T19:15Z
 date_modified: 2020-01-14T21:52Z
 
-header_subtitle: ""
+header_subtitle: "foo cwe info name"
 
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/CVE-2020-1234"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/269.html"
@@ -288,8 +289,6 @@ ubuntu_severity: "-"
 ---
 
 foo Description
-
-
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
@@ -323,11 +322,58 @@ bar content`,
 }
 
 func TestGetCustomContentFromMarkdown(t *testing.T) {
-	// TODO: Add more test cases
-	gotCustomContent := GetCustomContentFromMarkdown("goldens/markdown/CVE-2020-0002.md")
-	assert.Equal(t, `---
+	testCases := []struct {
+		name            string
+		inputContents   string
+		expectedContent string
+	}{
+		{
+			name: "happy path",
+			inputContents: `---
+title: "CVE-2020-0002"
+date: 2020-01-08 12:19:15 +0000
+draft: false
+---
+### Description
+In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
+<!--- Add Aqua content below --->
+---
 ### foo heading
-bar content`, gotCustomContent)
+bar content`,
+			expectedContent: `---
+### foo heading
+bar content`,
+		},
+		{
+			name: "sad path, no custom content",
+			inputContents: `---
+title: "CVE-2020-0002"
+date: 2020-01-08 12:19:15 +0000
+draft: false
+---
+### Description
+In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
+<!--- Add Aqua content below --->
+
+
+`,
+			expectedContent: ``,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			f, _ := ioutil.TempFile("", "TestGetCustomContentFromMarkdown-*")
+			defer func() {
+				_ = os.RemoveAll(f.Name())
+			}()
+
+			_, _ = f.WriteString(tc.inputContents)
+			gotCustomContent := GetCustomContentFromMarkdown(f.Name())
+			assert.Equal(t, tc.expectedContent, gotCustomContent, tc.name)
+		})
+	}
+
 }
 
 func TestGetAllFiles(t *testing.T) {
@@ -396,11 +442,6 @@ ubuntu_severity: "LOW"
 ---
 
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
-
-
-### Title
-Generation of Error Message Containing Sensitive Information
-
 ### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
@@ -511,11 +552,6 @@ ubuntu_severity: "LOW"
 ---
 
 In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write due to a use after free. This could lead to remote code execution with no additional execution privileges needed. User interaction is needed for exploitation Product: Android Versions: Android-8.0, Android-8.1, Android-9, and Android-10 Android ID: A-142602711
-
-
-### Title
-Generation of Error Message Containing Sensitive Information
-
 ### Weakness {.with_icon .weakness}
 The software generates an error message that includes sensitive information about its environment, users, or associated data.
 
@@ -559,7 +595,10 @@ An attacker may use the contents of error messages to help launch another, more 
 ### References  {.with_icon .references}
 - https://source.android.com/security/bulletin/2020-01-01
 
-<!--- Add Aqua content below --->`, string(b))
+<!--- Add Aqua content below --->
+---
+### foo heading
+bar content`, string(b))
 			}
 		}
 	})
@@ -726,4 +765,18 @@ func TestGenerateRegoPolicyPages(t *testing.T) {
 			}
 		}
 	})
+}
+
+func TestKubeHunterPages(t *testing.T) {
+	pagesDir, _ := ioutil.TempDir("", "TestKubeHunterPages-*")
+	defer func() {
+		_ = os.RemoveAll(pagesDir)
+	}()
+
+	generateKubeHunterPages("goldens/kube-hunter", pagesDir)
+	got, err := ioutil.ReadFile(filepath.Join(pagesDir, "KHV002-orig.md"))
+	require.NoError(t, err)
+
+	want, _ := ioutil.ReadFile("goldens/kube-hunter/KHV002-avd.md")
+	assert.Equal(t, string(want), string(got))
 }

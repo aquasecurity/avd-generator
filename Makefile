@@ -11,6 +11,7 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/avd.git avd-repo/
 	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
 	git clone git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
+	git clone git@github.com:aquasecurity/kube-hunter.git avd-repo/kube-hunter-repo
 
 sync-all:
 	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens

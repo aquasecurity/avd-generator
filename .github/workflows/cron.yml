@@ -46,6 +46,13 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/vuln-list
 
+      - name: Checkout public kube-hunter-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/kube-hunter
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/kube-hunter-repo
+
       - name: Build generator
         run: make md-clean md-build
 

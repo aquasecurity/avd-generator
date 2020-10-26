@@ -59,10 +59,6 @@ ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"
 
 {{.Vulnerability.Description}}
 
-{{ if .Vulnerability.CWEInfo.Name}}
-### Title
-{{.Vulnerability.CWEInfo.Name}}
-{{end}}
 
 {{- if .Vulnerability.CWEInfo.Description}}
 ### Weakness {.with_icon .weakness}
@@ -425,6 +421,7 @@ func ParseRegoPolicyFile(fileName string) (rp RegoPost, err error) {
 func main() {
 	generateVulnPages()
 	generateRegoPages()
+	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
 }
 
 func generateVulnPages() {
@@ -464,6 +461,37 @@ func generateRegoPages() {
 	}
 }
 
+func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
+	log.Printf("generating kube-hunter pages in: %s...", outputPagesDir)
+	pages, err := GetAllFiles(inputPagesDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, page := range pages {
+		b, err := ioutil.ReadFile(filepath.Join(inputPagesDir, page))
+		if err != nil {
+			log.Println("unable to read original kube hunter doc: ", err)
+			continue
+		}
+
+		newContent := strings.Replace(string(b), "---", `---
+avd_page_type: kube-hunter_page
+`, 1)
+		r := strings.NewReplacer(
+			"# {{ page.vid }} - {{ page.title }}", "",
+			"title", "description",
+			"vid", "title",
+			"categories: ", "types: ")
+		content := r.Replace(newContent)
+
+		err = ioutil.WriteFile(filepath.Join(outputPagesDir, page), []byte(content), 0644)
+		if err != nil {
+			log.Fatalln("unable to write kube hunter page: ", err)
+		}
+	}
+}
+
 func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 	files, err := GetAllFiles(nvdDir)
 	if err != nil {
@@ -490,8 +518,9 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 		}
 
 		customContent := GetCustomContentFromMarkdown(f.Name())
-		if customContent != "" {
-			_ = os.Truncate(f.Name(), 0) // truncate file if custom data was found
+		if customContent != "" { // truncate file if custom data was found
+			_ = f.Truncate(0)
+			_, _ = f.Seek(0, 0)
 		}
 		if err := VulnerabilityPostToMarkdown(bp, f, customContent); err != nil {
 			log.Printf("unable to write file: %s as markdown, err: %s, skipping...\n", file, err)
