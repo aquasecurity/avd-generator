@@ -804,14 +804,15 @@ draft: false
 avd_page_type: nvd_page
 ---
 
-
 # aws
 ## acm
 ### acm certificate validation
 ## elb
 ### elb logging enabled
-## elb
 ### insecure ciphers
+# google
+## dns
+### dns security enabled
 `, string(got))
 
 }
