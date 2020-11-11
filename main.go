@@ -138,13 +138,13 @@ draft: false
 avd_page_type: nvd_page
 ---
 
-{{range $key, $slice := .}}
-# {{ $key }}
-{{ range $v := .}}## {{ $v | findreplace ":" "\n### "}}
-{{ end }}{{end}}`
+{{range $provider, $serviceFile := .}}# {{ $provider }}
+{{ range $service, $files := .}}## {{ $service }}
+{{ range $file := .}}### {{ $file }}
+{{ end }}{{ end }}{{ end }}`
 
-// e.g: {aws:{"acm:foo1","acm:foo2","elb:bar1"},gcp:{"gcr:baz1"}}
-type CloudSploitIndexMap map[string][]string
+// {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
+type CloudSploitIndexMap map[string]map[string][]string
 
 const reservedPostTemplate = `---
 title: "{{.ID}}"
@@ -731,6 +731,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 	})
 
 	csIndexMap := make(CloudSploitIndexMap)
+
 	for _, file := range fileList {
 		fullPath := strings.Split(file, "en/")[1]
 		provider := strings.Split(fullPath, "/")[0]
@@ -740,9 +741,11 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 		r := strings.NewReplacer("-", " ", ".md", "")
 
 		if v, ok := csIndexMap[provider]; !ok {
-			csIndexMap[provider] = []string{fmt.Sprintf("%s:%s", service, r.Replace(fileName))}
+			csIndexMap[provider] = map[string][]string{
+				service: {r.Replace(fileName)},
+			}
 		} else {
-			csIndexMap[provider] = append(v, fmt.Sprintf("%s:%s", service, r.Replace(fileName)))
+			csIndexMap[provider][service] = append(v[service], r.Replace(fileName))
 		}
 
 		b, err := ioutil.ReadFile(file)

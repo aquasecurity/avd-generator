@@ -1,4 +1,7 @@
-[![CloudSploit](https://cloudsploit.com/img/logo-new-big-text-100.png "CloudSploit")](https://cloudsploit.com)
+---
+title: ACM Certificate Validation
+avd_page_type: cloudsploit_page
+---
 
 # AWS / ACM / ACM Certificate Validation
 
