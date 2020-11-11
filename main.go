@@ -118,6 +118,21 @@ avd_page_type: appshield_page
 - {{$element}}{{end}}
 `
 
+const cloudSploitTableOfContents = `---
+title: "CloudSploit Index"
+draft: false
+
+avd_page_type: nvd_page
+---
+
+{{range $key, $slice := .}}
+# {{ $key }}
+{{ range $v := .}}## {{ $v | findreplace ":" "\n### "}}
+{{ end }}{{end}}`
+
+// e.g: {aws:{"acm:foo1","acm:foo2","elb:bar1"},gcp:{"gcr:baz1"}}
+type CloudSploitIndexMap map[string][]string
+
 type Dates struct {
 	Published string
 	Modified  string
@@ -541,11 +556,20 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 		return nil
 	})
 
+	csIndexMap := make(CloudSploitIndexMap)
 	for _, file := range fileList {
 		fullPath := strings.Split(file, "en/")[1]
 		provider := strings.Split(fullPath, "/")[0]
 		service := strings.Split(fullPath, "/")[1]
 		fileName := strings.Split(fullPath, "/")[2]
+
+		r := strings.NewReplacer("-", " ", ".md", "")
+
+		if v, ok := csIndexMap[provider]; !ok {
+			csIndexMap[provider] = []string{fmt.Sprintf("%s:%s", service, r.Replace(fileName))}
+		} else {
+			csIndexMap[provider] = append(v, fmt.Sprintf("%s:%s", service, r.Replace(fileName)))
+		}
 
 		b, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -555,7 +579,6 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 
 		fileContent := strings.Split(string(b), "## Quick Info")[1]
 
-		r := strings.NewReplacer("-", " ", ".md", "")
 		pageName := strings.Title(r.Replace(fileName))
 		splittedName := strings.Split(pageName, " ")
 		if len(splittedName[0]) <= 3 {
@@ -576,6 +599,17 @@ avd_page_type: cloudsploit_page
 			log.Println("unable to write cloudsploit file: ", err)
 			continue
 		}
+	}
+
+	// generate a table of contents markdown
+	f, err := os.Create(filepath.Join(outputPagesDir, "index.md"))
+	if err != nil {
+		log.Fatal("unable to create a table of contents file: ", err)
+	}
+	t := template.Must(template.New("cloudSploitTableOfContents").Funcs(gtf.GtfTextFuncMap).Parse(cloudSploitTableOfContents))
+	err = t.Execute(f, csIndexMap)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 

@@ -794,4 +794,24 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 	want, _ := ioutil.ReadFile("goldens/cloudsploit/acm-certificate-validation.avd.md")
 	assert.Equal(t, string(want), string(got))
 
+	// check table of contents content
+	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "index.md"))
+	require.NoError(t, err)
+	assert.Equal(t, `---
+title: "CloudSploit Index"
+draft: false
+
+avd_page_type: nvd_page
+---
+
+
+# aws
+## acm
+### acm certificate validation
+## elb
+### elb logging enabled
+## elb
+### insecure ciphers
+`, string(got))
+
 }
