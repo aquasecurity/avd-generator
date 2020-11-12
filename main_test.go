@@ -806,13 +806,13 @@ avd_page_type: cloudsploit_page
 
 # aws
 ## acm
-### acm certificate validation
+### [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
 ## elb
-### elb logging enabled
-### insecure ciphers
+### [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
+### [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
 # google
 ## dns
-### dns security enabled
+### [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
 `, string(got))
 
 }
