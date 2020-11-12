@@ -30,7 +30,7 @@ nginx-restart:
 	make nginx-stop nginx-start
 
 hugo-devel:
-	hugo server -D
+	hugo server -D --debug
 
 hugo-clean:
 	cd avd-repo && rm -rf docs
@@ -38,6 +38,9 @@ hugo-clean:
 hugo-generate: hugo-clean
 	cd avd-repo && hugo --minify --destination=docs
 	echo "avd.aquasec.com" > avd-repo/docs/CNAME
+
+build-all-no-clone: md-clean md-build md-clone-all sync-all md-generate hugo-generate nginx-restart
+	echo "Build Done, navigate to http://localhost:9011/avd to browse"
 
 build-all: md-clean md-build md-clone-all sync-all md-generate hugo-generate nginx-restart
 	echo "Build Done, navigate to http://localhost:9011/avd to browse"
