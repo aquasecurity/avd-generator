@@ -801,7 +801,7 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 title: "CloudSploit Index"
 draft: false
 
-avd_page_type: nvd_page
+avd_page_type: cloudsploit_page
 ---
 
 # aws

@@ -1,5 +1,6 @@
 ---
-title: ACM Certificate Validation
+title: Insecure Ciphers
+draft: false
 avd_page_type: cloudsploit_page
 ---
 

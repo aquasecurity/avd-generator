@@ -122,7 +122,7 @@ const cloudSploitTableOfContents = `---
 title: "CloudSploit Index"
 draft: false
 
-avd_page_type: nvd_page
+avd_page_type: cloudsploit_page
 ---
 
 {{range $provider, $serviceFile := .}}# {{ $provider }}
@@ -595,6 +595,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 
 		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
 title: %s
+draft: false
 avd_page_type: cloudsploit_page
 ---
 ## Quick Info`, pageName)), []byte(fileContent)...), 0600)

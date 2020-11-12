@@ -1,5 +1,6 @@
 ---
-title: ACM Certificate Validation
+title: "ACM Certificate Validation"
+draft: false
 avd_page_type: cloudsploit_page
 ---
 ## Quick Info
