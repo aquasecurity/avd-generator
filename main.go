@@ -35,25 +35,25 @@ header_subtitle: "{{.Vulnerability.CWEInfo.Name}}"
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"
 
-cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "-"}}"
+cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "N/A"}}"
 cvss_nvd_v3_score: "{{.Vulnerability.CVSS.V3Score}}"
-cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "-"}}"
+cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "N/A"}}"
 
-cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "-"}}"
+cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "N/A"}}"
 cvss_nvd_v2_score: "{{.Vulnerability.CVSS.V2Score}}"
-cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "-"}}"
+cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "N/A"}}"
 
-redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}}"
+redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "N/A"}}"
 redhat_v2_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}}"
-redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
 
-redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}}"
+redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "N/A"}}"
 redhat_v3_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}}"
-redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
-ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}}"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "N/A"}}"
 
 ---
 

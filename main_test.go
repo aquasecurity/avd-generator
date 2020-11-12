@@ -182,17 +182,17 @@ cvss_nvd_v2_vector: "AV:L/AC:L/Au:N/C:P/I:N/A:N"
 cvss_nvd_v2_score: "2.1"
 cvss_nvd_v2_severity: "HIGH"
 
-redhat_v2_vector: "-"
+redhat_v2_vector: "N/A"
 redhat_v2_score: "0"
-redhat_v2_severity: "-"
+redhat_v2_severity: "N/A"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
-redhat_v3_severity: "-"
+redhat_v3_severity: "N/A"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
-ubuntu_severity: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "N/A"
 
 ---
 
@@ -274,17 +274,17 @@ cvss_nvd_v2_vector: "AV:L/AC:L/Au:N/C:C/I:C/A:C"
 cvss_nvd_v2_score: "3.4"
 cvss_nvd_v2_severity: "HIGH"
 
-redhat_v2_vector: "-"
+redhat_v2_vector: "N/A"
 redhat_v2_score: "0"
-redhat_v2_severity: "-"
+redhat_v2_severity: "N/A"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
-redhat_v3_severity: "-"
+redhat_v3_severity: "N/A"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
-ubuntu_severity: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "N/A"
 
 ---
 
@@ -431,12 +431,12 @@ redhat_v2_vector: "AV:N/AC:M/Au:N/C:P/I:N/A:N"
 redhat_v2_score: "4.3"
 redhat_v2_severity: "MODERATE"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
 redhat_v3_severity: "MODERATE"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
 ubuntu_severity: "LOW"
 
 ---
@@ -541,12 +541,12 @@ redhat_v2_vector: "AV:N/AC:M/Au:N/C:P/I:N/A:N"
 redhat_v2_score: "4.3"
 redhat_v2_severity: "MODERATE"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
 redhat_v3_severity: "MODERATE"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
 ubuntu_severity: "LOW"
 
 ---
