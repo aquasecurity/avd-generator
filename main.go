@@ -605,14 +605,8 @@ avd_page_type: cloudsploit_page
 		}
 	}
 
-	// generate an _index.md for hugo to include in build
-	f, err := os.Create(filepath.Join(outputPagesDir, "_index.md"))
-	if err != nil {
-		log.Fatal("unable to create a _index.md file: ", err)
-	}
-
 	// generate a table of contents markdown
-	f, err = os.Create(filepath.Join(outputPagesDir, "index.md"))
+	f, err := os.Create(filepath.Join(outputPagesDir, "index.md"))
 	if err != nil {
 		log.Fatal("unable to create a table of contents index.md file: ", err)
 	}
