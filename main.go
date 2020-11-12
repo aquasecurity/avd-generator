@@ -140,7 +140,7 @@ avd_page_type: cloudsploit_page
 
 {{range $provider, $serviceFile := .}}# {{ $provider }}
 {{ range $service, $files := .}}## {{ $service }}
-{{ range $file := .}}### {{ $file }}
+{{ range $file := .}}### [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
@@ -779,10 +779,16 @@ avd_page_type: cloudsploit_page
 		}
 	}
 
-	// generate a table of contents markdown
-	f, err := os.Create(filepath.Join(outputPagesDir, "index.md"))
+	// generate an _index.md for hugo to include in build
+	f, err := os.Create(filepath.Join(outputPagesDir, "_index.md"))
 	if err != nil {
-		log.Fatal("unable to create a table of contents file: ", err)
+		log.Fatal("unable to create a _index.md file: ", err)
+	}
+
+	// generate a table of contents markdown
+	f, err = os.Create(filepath.Join(outputPagesDir, "index.md"))
+	if err != nil {
+		log.Fatal("unable to create a table of contents index.md file: ", err)
 	}
 	t := template.Must(template.New("cloudSploitTableOfContents").Funcs(gtf.GtfTextFuncMap).Parse(cloudSploitTableOfContents))
 	err = t.Execute(f, csIndexMap)
