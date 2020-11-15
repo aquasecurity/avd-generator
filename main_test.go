@@ -780,3 +780,39 @@ func TestKubeHunterPages(t *testing.T) {
 	want, _ := ioutil.ReadFile("goldens/kube-hunter/KHV002-avd.md")
 	assert.Equal(t, string(want), string(got))
 }
+
+func TestGenerateCloudSploitPages(t *testing.T) {
+	pagesDir, _ := ioutil.TempDir("", "TestGenerateCloudSploitPages-*")
+	defer func() {
+		_ = os.RemoveAll(pagesDir)
+	}()
+
+	generateCloudSploitPages("goldens/cloudsploit/en", pagesDir)
+	got, err := ioutil.ReadFile(filepath.Join(pagesDir, "aws/acm/acm-certificate-validation.md"))
+	require.NoError(t, err)
+
+	want, _ := ioutil.ReadFile("goldens/cloudsploit/acm-certificate-validation.avd.md")
+	assert.Equal(t, string(want), string(got))
+
+	// check table of contents content
+	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "index.md"))
+	require.NoError(t, err)
+	assert.Equal(t, `---
+title: "CloudSploit Index"
+draft: false
+
+avd_page_type: cloudsploit_page
+---
+
+# aws
+## acm
+### [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
+## elb
+### [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
+### [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
+# google
+## dns
+### [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
+`, string(got))
+
+}

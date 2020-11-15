@@ -118,6 +118,21 @@ avd_page_type: appshield_page
 - {{$element}}{{end}}
 `
 
+const cloudSploitTableOfContents = `---
+title: "CloudSploit Index"
+draft: false
+
+avd_page_type: cloudsploit_page
+---
+
+{{range $provider, $serviceFile := .}}# {{ $provider }}
+{{ range $service, $files := .}}## {{ $service }}
+{{ range $file := .}}### [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
+{{ end }}{{ end }}{{ end }}`
+
+// {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
+type CloudSploitIndexMap map[string]map[string][]string
+
 type Dates struct {
 	Published string
 	Modified  string
@@ -422,6 +437,7 @@ func main() {
 	generateVulnPages()
 	generateRegoPages()
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
+	generateCloudSploitPages("cloudsploit-repo/en", "content/cloudsploit")
 }
 
 func generateVulnPages() {
@@ -527,6 +543,77 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 			continue
 		}
 		_ = f.Close()
+	}
+}
+
+func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
+	var fileList []string
+	_ = filepath.Walk(inputPagesDir, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		fileList = append(fileList, path)
+		return nil
+	})
+
+	csIndexMap := make(CloudSploitIndexMap)
+
+	for _, file := range fileList {
+		fullPath := strings.Split(file, "en/")[1]
+		provider := strings.Split(fullPath, "/")[0]
+		service := strings.Split(fullPath, "/")[1]
+		fileName := strings.Split(fullPath, "/")[2]
+
+		r := strings.NewReplacer("-", " ", ".md", "")
+
+		if v, ok := csIndexMap[provider]; !ok {
+			csIndexMap[provider] = map[string][]string{
+				service: {r.Replace(fileName)},
+			}
+		} else {
+			csIndexMap[provider][service] = append(v[service], r.Replace(fileName))
+		}
+
+		b, err := ioutil.ReadFile(file)
+		if err != nil {
+			log.Println("unable to read cloudsploit file: ", err)
+			continue
+		}
+
+		fileContent := strings.Split(string(b), "## Quick Info")[1]
+
+		pageName := strings.Title(r.Replace(fileName))
+		splittedName := strings.Split(pageName, " ")
+		if len(splittedName[0]) <= 3 {
+			pageName = strings.ToUpper(splittedName[0]) + " " + strings.Join(splittedName[1:], " ")
+		}
+
+		err = os.MkdirAll(filepath.Join(outputPagesDir, provider, service), 0755)
+		if err != nil {
+			log.Fatal("unable to create cloudsploit directory ", err)
+		}
+
+		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
+title: %s
+draft: false
+avd_page_type: cloudsploit_page
+---
+## Quick Info`, pageName)), []byte(fileContent)...), 0600)
+		if err != nil {
+			log.Println("unable to write cloudsploit file: ", err)
+			continue
+		}
+	}
+
+	// generate a table of contents markdown
+	f, err := os.Create(filepath.Join(outputPagesDir, "index.md"))
+	if err != nil {
+		log.Fatal("unable to create a table of contents index.md file: ", err)
+	}
+	t := template.Must(template.New("cloudSploitTableOfContents").Funcs(gtf.GtfTextFuncMap).Parse(cloudSploitTableOfContents))
+	err = t.Execute(f, csIndexMap)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
