@@ -11,6 +11,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+type fakeClock struct{}
+
+func (fakeClock) Now() string {
+	return "2020-11-18T14:32:34-08:00"
+}
+
 func TestParseVulnerabilityJSONFile(t *testing.T) {
 	testCases := []struct {
 		fileName         string
@@ -788,7 +794,7 @@ func TestGenerateReservedPages(t *testing.T) {
 	}()
 
 	for _, year := range []string{"2020"} {
-		generateReservedPages(year, "goldens/reserved", postsDir)
+		generateReservedPages(year, fakeClock{}, "goldens/reserved", postsDir)
 	}
 
 	// check for one expected file
@@ -797,30 +803,37 @@ func TestGenerateReservedPages(t *testing.T) {
 
 	assert.Equal(t, `---
 title: "CVE-2020-0569"
-date: 2020-11-17T17:48:27-08:00
+date: 2020-11-18T14:32:34-08:00
 draft: false
 
 avd_page_type: reserved_page
 ---
 
-# Redhat
+This vulnerability is marked as __RESERVED__ by NVD. This means that the CVE-ID is reserved for future use
+by the [CVE Numbering Authority (CNA)](https://cve.mitre.org/cve/cna.html) or a security researcher, but the details of it are not yet publicly available yet. 
+
+This page will reflect the classification results once they are available through NVD. 
+
+Any vendor information available is shown as below.
+
+||||
+| ------------- |-------------|-----|
+
+
+### Redhat
 CVE-2020-0569 qt: files placed by attacker can influence the working directory and lead to malicious code execution
 
-# Affected Software List
+#### Affected Software List
 | Name | Vendor           | Version |
 | ------------- |-------------|-----|
-| Red Hat Enterprise Linux 7 | RedHat | qt5-qtbase-0:5.9.7-4.el7| 
-| Red Hat Enterprise Linux 8 | RedHat | qt5-qtbase-0:5.12.5-6.el8| 
+| Red Hat Enterprise Linux 8 | RedHat | qt5-qtbase-0:5.12.5-6.el8|
 
-# Ubuntu
+### Ubuntu
 QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugins first on the current working directory of the application, which allows an attacker that can place files in the file system and influence the working directory of Qt-based applications to load and execute malicious code. This issue was verified on macOS and Linux and probably affects all other Unix operating systems. This issue does not affect Windows.
 
-# Affected Software List
+#### Affected Software List
 | Name | Vendor           | Version |
 | ------------- |-------------|-----|
-| Qtbase-opensource-src | Ubuntu/upstream | 5.12.5+dfsg-8| 
-| Qtbase-opensource-src | Ubuntu/xenial | 5.5.1+dfsg-16ubuntu7.7| 
-| Qtbase-opensource-src | Ubuntu/bionic | 5.9.5+dfsg-0ubuntu2.5| 
-| Qtbase-opensource-src | Ubuntu/eoan | 5.12.4+dfsg-4ubuntu1.1|
+| Qtbase-opensource-src | Ubuntu/bionic | 5.9.5+dfsg-0ubuntu2.5|
 `, string(got))
 }

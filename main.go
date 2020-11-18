@@ -22,7 +22,16 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-var CVEMap map[string]map[string]ReservedCVEInfo
+var (
+	CVEMap map[string]map[string]ReservedCVEInfo
+	Years  = []string{
+		"1999", "2000", "2001", "2002", "2003", "2004", "2005",
+		"2006", "2007", "2008", "2009", "2010",
+		"2011", "2012", "2013", "2014", "2015",
+		"2016", "2017", "2018", "2019",
+		"2020",
+	}
+)
 
 const vulnerabilityPostTemplate = `---
 title: "{{.Title}}"
@@ -129,15 +138,36 @@ draft: false
 
 avd_page_type: reserved_page
 ---
+
+This vulnerability is marked as __RESERVED__ by NVD. This means that the CVE-ID is reserved for future use
+by the [CVE Numbering Authority (CNA)](https://cve.mitre.org/cve/cna.html) or a security researcher, but the details of it are not yet publicly available yet. 
+
+This page will reflect the classification results once they are available through NVD. 
+
+Any vendor information available is shown as below.
+
+||||
+| ------------- |-------------|-----|
+
 {{ range $vendor, $reservedCVEInfo := .CVEMap }}
-# {{ $vendor | capfirst }}
+### {{ $vendor | capfirst }}
 {{ $reservedCVEInfo.Description }}
 
-# Affected Software List
+#### Affected Software List
 | Name | Vendor           | Version |
 | ------------- |-------------|-----|{{range $s := $reservedCVEInfo.AffectedSoftwareList}}
-| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}| {{end}}
+| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}|{{end}}
 {{end}}`
+
+type Clock interface {
+	Now() string
+}
+
+type realClock struct{}
+
+func (realClock) Now() string {
+	return time.Now().Format(time.RFC3339)
+}
 
 type ReservedPage struct {
 	ID     string
@@ -472,20 +502,14 @@ func main() {
 	generateVulnPages()
 	generateRegoPages()
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
-	// TODO: Add generateReservedPages()
+	for _, year := range Years { // TODO: goroutines?
+		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+	}
 }
 
 func generateVulnPages() {
-	years := []string{
-		"1999", "2000", "2001", "2002", "2003", "2004", "2005",
-		"2006", "2007", "2008", "2009", "2010",
-		"2011", "2012", "2013", "2014", "2015",
-		"2016", "2017", "2018", "2019",
-		"2020",
-	}
-
 	var wg sync.WaitGroup
-	for _, year := range years {
+	for _, year := range Years {
 		year := year
 		wg.Add(1)
 
@@ -579,7 +603,7 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 	}
 }
 
-func generateReservedPages(year string, inputDir string, postsDir string) {
+func generateReservedPages(year string, clock Clock, inputDir string, postsDir string) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
 	for _, year := range []string{"2020"} {
 		nvdDir := fmt.Sprintf("%s/nvd/%s", inputDir, year)
@@ -622,7 +646,7 @@ func generateReservedPages(year string, inputDir string, postsDir string) {
 		}
 		if err = ReservedPostToMarkdown(ReservedPage{
 			ID:     file,
-			Date:   time.Now().Format(time.RFC3339),
+			Date:   clock.Now(),
 			CVEMap: vendorsMap,
 		}, f); err != nil {
 			log.Println("unable to create reserved post markdown, err: ", err)
@@ -645,14 +669,20 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 		}
 		for pkg, info := range ua.Patches {
 			for release, status := range info {
-				if status.Status == "released" || status.Status == "needed" {
+				if status.Status == "released" || status.Status == "needed" || status.Status == "ignored" || status.Status == "needs-triage" {
 					rp := CVEMap[fKey][vendor]
-					rp.AffectedSoftwareList = append(rp.AffectedSoftwareList, AffectedSoftware{
-						Name:         string(pkg),
-						Vendor:       fmt.Sprintf("%s/%s", vendor, release),
-						StartVersion: status.Note,
-						EndVersion:   status.Note,
-					})
+					as := AffectedSoftware{
+						Name:   string(pkg),
+						Vendor: fmt.Sprintf("%s/%s", vendor, release),
+					}
+					if status.Status == "needs-triage" {
+						as.StartVersion = "TBD"
+						as.EndVersion = "TBD"
+					} else {
+						as.StartVersion = status.Note
+						as.EndVersion = status.Note
+					}
+					rp.AffectedSoftwareList = append(rp.AffectedSoftwareList, as)
 					CVEMap[fKey][vendor] = rp
 				}
 			}
