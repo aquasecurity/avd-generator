@@ -780,3 +780,47 @@ func TestKubeHunterPages(t *testing.T) {
 	want, _ := ioutil.ReadFile("goldens/kube-hunter/KHV002-avd.md")
 	assert.Equal(t, string(want), string(got))
 }
+
+func TestGenerateReservedPages(t *testing.T) {
+	postsDir, _ := ioutil.TempDir("", "TestGenerateReservedPages-postsDir-*")
+	defer func() {
+		_ = os.RemoveAll(postsDir)
+	}()
+
+	for _, year := range []string{"2020"} {
+		generateReservedPages(year, "goldens/reserved", postsDir)
+	}
+
+	// check for one expected file
+	got, err := ioutil.ReadFile(filepath.Join(postsDir, "CVE-2020-0569.md"))
+	require.NoError(t, err)
+
+	assert.Equal(t, `---
+title: "CVE-2020-0569"
+date: 2020-11-17T17:48:27-08:00
+draft: false
+
+avd_page_type: reserved_page
+---
+
+# Redhat
+CVE-2020-0569 qt: files placed by attacker can influence the working directory and lead to malicious code execution
+
+# Affected Software List
+| Name | Vendor           | Version |
+| ------------- |-------------|-----|
+| Red Hat Enterprise Linux 7 | RedHat | qt5-qtbase-0:5.9.7-4.el7| 
+| Red Hat Enterprise Linux 8 | RedHat | qt5-qtbase-0:5.12.5-6.el8| 
+
+# Ubuntu
+QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugins first on the current working directory of the application, which allows an attacker that can place files in the file system and influence the working directory of Qt-based applications to load and execute malicious code. This issue was verified on macOS and Linux and probably affects all other Unix operating systems. This issue does not affect Windows.
+
+# Affected Software List
+| Name | Vendor           | Version |
+| ------------- |-------------|-----|
+| Qtbase-opensource-src | Ubuntu/upstream | 5.12.5+dfsg-8| 
+| Qtbase-opensource-src | Ubuntu/xenial | 5.5.1+dfsg-16ubuntu7.7| 
+| Qtbase-opensource-src | Ubuntu/bionic | 5.9.5+dfsg-0ubuntu2.5| 
+| Qtbase-opensource-src | Ubuntu/eoan | 5.12.4+dfsg-4ubuntu1.1|
+`, string(got))
+}

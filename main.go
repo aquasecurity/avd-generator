@@ -15,10 +15,14 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/aquasecurity/vuln-list-update/redhat"
+	"github.com/aquasecurity/vuln-list-update/ubuntu"
 	"github.com/leekchan/gtf"
 	"github.com/umisama/go-cpe"
 	"github.com/valyala/fastjson"
 )
+
+var CVEMap map[string]map[string]ReservedCVEInfo
 
 const vulnerabilityPostTemplate = `---
 title: "{{.Title}}"
@@ -117,6 +121,43 @@ avd_page_type: appshield_page
 ### Links{{range $element := .Rego.Links}}
 - {{$element}}{{end}}
 `
+
+const reservedPostTemplate = `---
+title: "{{.ID}}"
+date: {{.Date}}
+draft: false
+
+avd_page_type: reserved_page
+---
+{{ range $vendor, $reservedCVEInfo := .CVEMap }}
+# {{ $vendor | capfirst }}
+{{ $reservedCVEInfo.Description }}
+
+# Affected Software List
+| Name | Vendor           | Version |
+| ------------- |-------------|-----|{{range $s := $reservedCVEInfo.AffectedSoftwareList}}
+| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}| {{end}}
+{{end}}`
+
+type ReservedPage struct {
+	ID     string
+	Date   string
+	CVEMap map[string]ReservedCVEInfo
+}
+
+type ReservedCVEInfo struct {
+	Description          string
+	Severity             string
+	AffectedSoftwareList []AffectedSoftware
+}
+
+type UbuntuAdvisory ubuntu.Vulnerability
+
+type RedhatAdvisory struct {
+	ThreatSeverity  string                         `json:"threat_severity"`
+	Bugzilla        redhat.RedhatBugzilla          `json:"bugzilla"`
+	AffectedRelease []redhat.RedhatAffectedRelease `json:"affected_release"`
+}
 
 type Dates struct {
 	Published string
@@ -338,6 +379,15 @@ func RegoPostToMarkdown(rp RegoPost, outputFile *os.File) error {
 	return nil
 }
 
+func ReservedPostToMarkdown(rpi ReservedPage, outputFile *os.File) error {
+	t := template.Must(template.New("reservedCVEPost").Funcs(gtf.GtfTextFuncMap).Parse(reservedPostTemplate))
+	err := t.Execute(outputFile, rpi)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetAllFiles(dir string) ([]string, error) {
 	var filesFound []string
 	files, err := ioutil.ReadDir(dir)
@@ -422,6 +472,7 @@ func main() {
 	generateVulnPages()
 	generateRegoPages()
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
+	// TODO: Add generateReservedPages()
 }
 
 func generateVulnPages() {
@@ -439,8 +490,6 @@ func generateVulnPages() {
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
-		//nvdDir := fmt.Sprintf("goldens/json")
-		//postsDir := "temp-posts"
 		nvdDir := fmt.Sprintf("vuln-list/nvd/%s/", year)
 		postsDir := "content/nvd"
 		cweDir := fmt.Sprintf("vuln-list/cwe")
@@ -527,6 +576,104 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 			continue
 		}
 		_ = f.Close()
+	}
+}
+
+func generateReservedPages(year string, inputDir string, postsDir string) {
+	CVEMap = map[string]map[string]ReservedCVEInfo{}
+	for _, year := range []string{"2020"} {
+		nvdDir := fmt.Sprintf("%s/nvd/%s", inputDir, year)
+		files, _ := GetAllFiles(nvdDir)
+		for _, file := range files {
+			CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
+				"nvd": {},
+			}
+		}
+	}
+
+	for _, vendor := range []string{"redhat", "ubuntu"} {
+		vendorDir := fmt.Sprintf("%s/%s/%s", inputDir, vendor, year)
+		files, _ := GetAllFiles(vendorDir)
+		for _, file := range files {
+			fKey := strings.ReplaceAll(file, ".json", "")
+			if vendorMap, ok := CVEMap[fKey]; !ok { // no nvd info & first time adding vendor
+				CVEMap[fKey] = make(map[string]ReservedCVEInfo)
+				addReservedCVE(vendorDir, CVEMap, vendorMap, vendor, fKey)
+			} else {
+				addReservedCVE(vendorDir, CVEMap, vendorMap, vendor, fKey)
+			}
+		}
+	}
+
+	// cleanup NVD entries
+	for file, vendorsMap := range CVEMap {
+		for vendor, _ := range vendorsMap {
+			if vendor == "nvd" {
+				delete(CVEMap, file)
+			}
+		}
+	}
+
+	for file, vendorsMap := range CVEMap {
+		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", file)))
+		if err != nil {
+			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
+			continue
+		}
+		if err = ReservedPostToMarkdown(ReservedPage{
+			ID:     file,
+			Date:   time.Now().Format(time.RFC3339),
+			CVEMap: vendorsMap,
+		}, f); err != nil {
+			log.Println("unable to create reserved post markdown, err: ", err)
+			continue
+		}
+	}
+}
+
+func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEInfo, vendorMap map[string]ReservedCVEInfo, vendor string, fKey string) {
+	b, _ := ioutil.ReadFile(fmt.Sprintf("%s/%s.json", vendorDir, fKey))
+
+	// TODO: refactor parts
+	switch vendor {
+	case "ubuntu":
+		var ua UbuntuAdvisory
+		_ = json.Unmarshal(b, &ua)
+		CVEMap[fKey][vendor] = ReservedCVEInfo{
+			Description: ua.Description,
+			Severity:    ua.Priority,
+		}
+		for pkg, info := range ua.Patches {
+			for release, status := range info {
+				if status.Status == "released" || status.Status == "needed" {
+					rp := CVEMap[fKey][vendor]
+					rp.AffectedSoftwareList = append(rp.AffectedSoftwareList, AffectedSoftware{
+						Name:         string(pkg),
+						Vendor:       fmt.Sprintf("%s/%s", vendor, release),
+						StartVersion: status.Note,
+						EndVersion:   status.Note,
+					})
+					CVEMap[fKey][vendor] = rp
+				}
+			}
+		}
+	case "redhat":
+		var rh RedhatAdvisory
+		_ = json.Unmarshal(b, &rh)
+		CVEMap[fKey][vendor] = ReservedCVEInfo{
+			Description: rh.Bugzilla.Description,
+			Severity:    rh.ThreatSeverity,
+		}
+		for _, release := range rh.AffectedRelease {
+			rp := CVEMap[fKey][vendor]
+			rp.AffectedSoftwareList = append(rp.AffectedSoftwareList, AffectedSoftware{
+				Name:         release.ProductName,
+				Vendor:       "RedHat",
+				StartVersion: release.Package,
+				EndVersion:   release.Package,
+			})
+			CVEMap[fKey][vendor] = rp
+		}
 	}
 }
 
