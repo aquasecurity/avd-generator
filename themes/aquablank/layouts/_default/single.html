@@ -9,6 +9,8 @@
 		{{ partial "page_appshield.html" . }}
 	{{ else if eq "search_page" .Params.avd_page_type }}
 		{{ partial "page_search.html" . }}
+	{{ else if eq "reserved_page" .Params.avd_page_type }}
+		{{ partial "page_reserved.html" . }}
 	{{else}}
 		<main>
 			<article>
