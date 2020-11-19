@@ -631,7 +631,7 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 
 	// cleanup NVD entries
 	for file, vendorsMap := range CVEMap {
-		for vendor, _ := range vendorsMap {
+		for vendor := range vendorsMap {
 			if vendor == "nvd" {
 				delete(CVEMap, file)
 			}
