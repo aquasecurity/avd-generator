@@ -823,17 +823,26 @@ Any vendor information available is shown as below.
 ### Redhat
 CVE-2020-0569 qt: files placed by attacker can influence the working directory and lead to malicious code execution
 
+
+#### Mitigation
+Use subscription-manager directly from the terminal and do not use the --password flag.
+
+
 #### Affected Software List
 | Name | Vendor           | Version |
 | ------------- |-------------|-----|
 | Red Hat Enterprise Linux 8 | RedHat | qt5-qtbase-0:5.12.5-6.el8|
 
+
 ### Ubuntu
 QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugins first on the current working directory of the application, which allows an attacker that can place files in the file system and influence the working directory of Qt-based applications to load and execute malicious code. This issue was verified on macOS and Linux and probably affects all other Unix operating systems. This issue does not affect Windows.
+
+
 
 #### Affected Software List
 | Name | Vendor           | Version |
 | ------------- |-------------|-----|
 | Qtbase-opensource-src | Ubuntu/bionic | 5.9.5+dfsg-0ubuntu2.5|
+
 `, string(got))
 }

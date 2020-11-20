@@ -153,10 +153,16 @@ Any vendor information available is shown as below.
 ### {{ $vendor | capfirst }}
 {{ $reservedCVEInfo.Description }}
 
+{{if  $reservedCVEInfo.Mitigation}}
+#### Mitigation
+{{ $reservedCVEInfo.Mitigation }}
+{{end}}
+{{if $reservedCVEInfo.AffectedSoftwareList}}
 #### Affected Software List
 | Name | Vendor           | Version |
 | ------------- |-------------|-----|{{range $s := $reservedCVEInfo.AffectedSoftwareList}}
 | {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}|{{end}}
+{{end}}
 {{end}}`
 
 type Clock interface {
@@ -178,15 +184,8 @@ type ReservedPage struct {
 type ReservedCVEInfo struct {
 	Description          string
 	Severity             string
+	Mitigation           string // Redhat publishes mitigation
 	AffectedSoftwareList []AffectedSoftware
-}
-
-type UbuntuAdvisory ubuntu.Vulnerability
-
-type RedhatAdvisory struct {
-	ThreatSeverity  string                         `json:"threat_severity"`
-	Bugzilla        redhat.RedhatBugzilla          `json:"bugzilla"`
-	AffectedRelease []redhat.RedhatAffectedRelease `json:"affected_release"`
 }
 
 type Dates struct {
@@ -661,7 +660,7 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 	// TODO: refactor parts
 	switch vendor {
 	case "ubuntu":
-		var ua UbuntuAdvisory
+		var ua ubuntu.Vulnerability
 		_ = json.Unmarshal(b, &ua)
 		CVEMap[fKey][vendor] = ReservedCVEInfo{
 			Description: ua.Description,
@@ -688,11 +687,12 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 			}
 		}
 	case "redhat":
-		var rh RedhatAdvisory
+		rh := &redhat.RedhatCVEJSON{}
 		_ = json.Unmarshal(b, &rh)
 		CVEMap[fKey][vendor] = ReservedCVEInfo{
 			Description: rh.Bugzilla.Description,
 			Severity:    rh.ThreatSeverity,
+			Mitigation:  rh.Mitigation,
 		}
 		for _, release := range rh.AffectedRelease {
 			rp := CVEMap[fKey][vendor]
