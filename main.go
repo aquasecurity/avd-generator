@@ -501,7 +501,7 @@ func main() {
 	generateVulnPages()
 	generateRegoPages()
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
-	for _, year := range Years { // TODO: goroutines?
+	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
 }
@@ -657,7 +657,6 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEInfo, vendorMap map[string]ReservedCVEInfo, vendor string, fKey string) {
 	b, _ := ioutil.ReadFile(fmt.Sprintf("%s/%s.json", vendorDir, fKey))
 
-	// TODO: refactor parts
 	switch vendor {
 	case "ubuntu":
 		var ua ubuntu.Vulnerability
