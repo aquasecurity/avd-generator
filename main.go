@@ -604,13 +604,11 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 
 func generateReservedPages(year string, clock Clock, inputDir string, postsDir string) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
-	for _, year := range []string{"2020"} {
-		nvdDir := fmt.Sprintf("%s/nvd/%s", inputDir, year)
-		files, _ := GetAllFiles(nvdDir)
-		for _, file := range files {
-			CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
-				"nvd": {},
-			}
+	nvdDir := fmt.Sprintf("%s/nvd/%s", inputDir, year)
+	files, _ := GetAllFiles(nvdDir)
+	for _, file := range files {
+		CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
+			"nvd": {},
 		}
 	}
 
