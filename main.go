@@ -125,9 +125,9 @@ draft: false
 avd_page_type: cloudsploit_page
 ---
 
-{{range $provider, $serviceFile := .}}# {{ $provider }}
-{{ range $service, $files := .}}## {{ $service }}
-{{ range $file := .}}### [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
+{{range $provider, $serviceFile := .}}### {{ $provider }} {.listpage_section_title}
+{{ range $service, $files := .}}#### {{ $service }} {.listpage_section_subtitle}
+{{ range $file := .}}- [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
@@ -580,7 +580,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			continue
 		}
 
-		fileContent := strings.Split(string(b), "## Quick Info")[1]
+		fileContent := strings.Split(string(b), "### Quick Info")[1]
 
 		pageName := strings.Title(r.Replace(fileName))
 		splittedName := strings.Split(pageName, " ")
@@ -598,7 +598,7 @@ title: %s
 draft: false
 avd_page_type: cloudsploit_page
 ---
-## Quick Info`, pageName)), []byte(fileContent)...), 0600)
+### Quick Info`, pageName)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue

@@ -7,7 +7,7 @@ avd_page_type: cloudsploit_page
 
 # GOOGLE / DNS / DNS Security Enabled
 
-## Quick Info
+### Quick Info
 
 | | |
 |-|-|

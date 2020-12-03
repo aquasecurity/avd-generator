@@ -5,7 +5,7 @@ avd_page_type: cloudsploit_page
 
 # AWS / ELB / ELB Logging Enabled
 
-## Quick Info
+### Quick Info
 
 | | |
 |-|-|

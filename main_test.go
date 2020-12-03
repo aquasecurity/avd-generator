@@ -804,15 +804,15 @@ draft: false
 avd_page_type: cloudsploit_page
 ---
 
-# aws
-## acm
-### [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
-## elb
-### [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
-### [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
-# google
-## dns
-### [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
+### aws {.listpage_section_title}
+#### acm {.listpage_subsection_title}
+- [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
+#### elb {.listpage_subsection_title}
+- [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
+- [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
+### google {.listpage_section_title}
+#### dns {.listpage_subsection_title}
+- [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
 `, string(got))
 
 }

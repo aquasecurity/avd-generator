@@ -5,7 +5,7 @@ avd_page_type: cloudsploit_page
 
 # AWS / ACM / ACM Certificate Validation
 
-## Quick Info
+### Quick Info
 
 | | |
 |-|-|

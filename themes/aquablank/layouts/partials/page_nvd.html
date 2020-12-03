@@ -54,7 +54,7 @@
 							
 							
 
-							<div class="avdcve_scores_cvss {{ if not (eq .Params.cvss_nvd_v3_score "-") }}cvss_{{ math.Round (float (.Params.cvss_nvd_v3_score)) }}{{ end }}">
+							<div class="avdcve_scores_cvss {{ if and (not (eq .Params.cvss_nvd_v3_score "-")) (not (eq .Params.cvss_nvd_v3_score "N/A")) }}cvss_{{ math.Round (float (.Params.cvss_nvd_v3_score)) }}{{ end }}">
 
 										<div class="large_score_wrap">
 
@@ -64,7 +64,7 @@
 											<div class="large_score_gauge_wrap">
 												<div class="large_score_gague">
 													<div class="score_gague_content">
-														<div class="score_value">{{ if not (eq .Params.cvss_nvd_v3_score "0") }}{{ .Params.cvss_nvd_v3_score }} {{ end }}</div>
+														<div class="score_value">{{ if and (not (eq .Params.cvss_nvd_v3_score "0")) (not (eq .Params.cvss_nvd_v3_score "N/A")) }}{{ .Params.cvss_nvd_v3_score }} {{ end }}</div>
 														<div class="score_label">{{ .Params.cvss_nvd_v3_severity }}</div>
 														</div><!-- large_score_gague -->
 														<div class="score_bg"></div>
@@ -75,8 +75,9 @@
 										
 										</div><!-- large_score_wrap -->
 
-										<div class="large_score_vector">{{ .Params.cvss_nvd_v3_vector }}</div>
-
+										{{ if and (not (eq .Params.cvss_nvd_v3_vector "-")) (not (eq .Params.cvss_nvd_v3_vector "N/A")) }}
+										<div class="large_score_vector">*{{ .Params.cvss_nvd_v3_vector }}</div>
+										{{ end }}
 										<!--
 										<div class="score_bar redhat score_bar_7">
 											<div class="score_bar_name">CVSS 2.x</div>
@@ -85,11 +86,11 @@
 											<div class="score_bar_vector">avcd:d/caF:dfafafs:fghfgh</div>
 										</div>--><!-- score_bar -->
 
-										<div class="score_bar {{ if not (eq .Params.cvss_nvd_v2_score "-") }}score_bar_{{ math.Round (float (.Params.cvss_nvd_v2_score)) }}{{ end }}">
+										<div class="score_bar {{ if and (not (eq .Params.cvss_nvd_v2_score "-")) (not (eq .Params.cvss_nvd_v2_score "N/A")) }}score_bar_{{ math.Round (float (.Params.cvss_nvd_v2_score)) }}{{ end }}">
 											<div class="score_bar_name">CVSS 2.x</div>
 											<div class="score_bar_image"></div>
-											<div class="score_bar_label">{{ if and (not (eq .Params.cvss_nvd_v2_score "0")) (not (eq .Params.cvss_nvd_v2_score "0")) }}{{ .Params.cvss_nvd_v2_score }} {{ end }}{{ .Params.cvss_nvd_v2_severity }}</div>
-											{{ if and (not (eq .Params.cvss_nvd_v2_vector "-")) (not (eq .Params.cvss_nvd_v2_vector "")) }}
+											<div class="score_bar_label">{{ if and (not (eq .Params.cvss_nvd_v2_score "-")) (not (eq .Params.cvss_nvd_v2_score "0")) (not (eq .Params.cvss_nvd_v2_score "N/A")) }}{{ .Params.cvss_nvd_v2_score }} {{ .Params.cvss_nvd_v2_severity }}{{ end }}</div>
+											{{ if and (not (eq .Params.cvss_nvd_v2_vector "-")) (not (eq .Params.cvss_nvd_v2_vector "")) (not (eq .Params.cvss_nvd_v2_vector "N/A")) }}
 											<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.cvss_nvd_v2_vector }}">{{ .Params.cvss_nvd_v2_vector }}</div>
 											{{ else }}
 											<div class="score_bar_vector without_tooltip"></div>
@@ -110,11 +111,11 @@
 								</div>--><!-- score_bar -->
 
 
-								<div class="score_bar redhat {{ if not (eq .Params.redhat_v2_score "-") }}score_bar_{{ math.Round (float (.Params.redhat_v2_score)) }}{{ end }}">
+								<div class="score_bar redhat {{ if and (not (eq .Params.redhat_v2_score "-")) (not (eq .Params.redhat_v2_score "N/A")) }}score_bar_{{ math.Round (float (.Params.redhat_v2_score)) }}{{ end }}">
 									<div class="score_bar_name">RedHat/V2</div>
 									<div class="score_bar_image"></div>
-									<div class="score_bar_label">{{ if and (not (eq .Params.redhat_v2_score "-")) (not (eq .Params.redhat_v2_score "0")) }}{{ .Params.redhat_v2_score }} {{ end }} {{ .Params.redhat_v2_severity }}</div>
-									{{ if and (not (eq .Params.redhat_v2_vector "-")) (not (eq .Params.redhat_v2_vector "")) }}
+									<div class="score_bar_label">{{ if and (not (eq .Params.redhat_v2_score "-")) (not (eq .Params.redhat_v2_score "0")) (not (eq .Params.redhat_v2_score "N/A")) }}{{ .Params.redhat_v2_score }} {{ .Params.redhat_v2_severity }}{{ end }}</div>
+									{{ if and (not (eq .Params.redhat_v2_vector "-")) (not (eq .Params.redhat_v2_vector "")) (not (eq .Params.redhat_v2_vector "N/A")) }}
 										<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.redhat_v2_vector }}">{{ .Params.redhat_v2_vector }}</div>
 									{{ else }}
 										<div class="score_bar_vector without_tooltip"></div>
@@ -122,11 +123,11 @@
 
 								</div><!-- score_bar -->
 
-								<div class="score_bar redhat {{ if not (eq .Params.redhat_v3_score "-") }}score_bar_{{ math.Round (float (.Params.redhat_v3_score)) }}{{ end }}">
+								<div class="score_bar redhat {{ if and (not (eq .Params.redhat_v3_score "-")) (not (eq .Params.redhat_v3_score "N/A")) }}score_bar_{{ math.Round (float (.Params.redhat_v3_score)) }}{{ end }}">
 									<div class="score_bar_name">RedHat/V3</div>
 									<div class="score_bar_image"></div>
-									<div class="score_bar_label">{{ if and (not (eq .Params.redhat_v3_score "-")) (not (eq .Params.redhat_v3_score "0")) }}{{ .Params.redhat_v3_score }} {{ end }}{{ .Params.redhat_v3_severity }}</div>
-									{{ if and (not (eq .Params.redhat_v3_vector "-")) (not (eq .Params.redhat_v3_vector "")) }}
+									<div class="score_bar_label">{{ if and (not (eq .Params.redhat_v3_score "-")) (not (eq .Params.redhat_v3_score "0")) (not (eq .Params.redhat_v3_score "N/A")) }}{{ .Params.redhat_v3_score }} {{ .Params.redhat_v3_severity }}{{ end }}</div>
+									{{ if and (not (eq .Params.redhat_v3_vector "-")) (not (eq .Params.redhat_v3_vector "")) (not (eq .Params.redhat_v3_vector "N/A")) }}
 									<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.redhat_v3_vector }}">{{ .Params.redhat_v3_vector }}</div>
 									{{ else }}
 									<div class="score_bar_vector without_tooltip"></div>
@@ -134,11 +135,11 @@
 
 								</div><!-- score_bar -->
 
-								<div class="score_bar ubuntu {{ if not (eq .Params.ubuntu_score "-") }}score_bar_{{ math.Round (float (.Params.ubuntu_score)) }}{{ end }}">
+								<div class="score_bar ubuntu {{ if and (not (eq .Params.ubuntu_score "-")) (not (eq .Params.ubuntu_score "N/A")) }}score_bar_{{ math.Round (float (.Params.ubuntu_score)) }}{{ end }}">
 									<div class="score_bar_name">Ubuntu</div>
 									<div class="score_bar_image"></div>
-									<div class="score_bar_label">{{ if and (not (eq .Params.ubuntu_score "-")) (not (eq .Params.ubuntu_score "0")) }}{{ .Params.ubuntu_score }} {{ end }}{{ .Params.ubuntu_severity }}</div>
-									{{ if and (not (eq .Params.ubuntu_vector "-")) (not (eq .Params.ubuntu_vector "")) }}
+									<div class="score_bar_label">{{ if and (not (eq .Params.ubuntu_score "-")) (not (eq .Params.ubuntu_score "0")) (not (eq .Params.ubuntu_score "N/A")) }}{{ .Params.ubuntu_score }} {{ .Params.ubuntu_severity }}{{ end }}</div>
+									{{ if and (not (eq .Params.ubuntu_vector "-")) (not (eq .Params.ubuntu_vector "")) (not (eq .Params.ubuntu_vector "N/A")) }}
 										<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.ubuntu_vector }}">{{ .Params.ubuntu_vector }}</div>
 									{{ else }}
 										<div class="score_bar_vector without_tooltip"></div>
