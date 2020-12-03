@@ -861,7 +861,7 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 	assert.Equal(t, string(want), string(got))
 
 	// check table of contents content
-	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "index.md"))
+	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "_index.md"))
 	require.NoError(t, err)
 	assert.Equal(t, `---
 title: "CloudSploit Index"

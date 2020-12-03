@@ -780,9 +780,9 @@ avd_page_type: cloudsploit_page
 	}
 
 	// generate a table of contents markdown
-	f, err := os.Create(filepath.Join(outputPagesDir, "index.md"))
+	f, err := os.Create(filepath.Join(outputPagesDir, "_index.md"))
 	if err != nil {
-		log.Fatal("unable to create a table of contents index.md file: ", err)
+		log.Fatal("unable to create a table of contents _index.md file: ", err)
 	}
 	t := template.Must(template.New("cloudSploitTableOfContents").Funcs(gtf.GtfTextFuncMap).Parse(cloudSploitTableOfContents))
 	err = t.Execute(f, csIndexMap)
