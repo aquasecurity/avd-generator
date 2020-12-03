@@ -76,7 +76,7 @@
 										</div><!-- large_score_wrap -->
 
 										{{ if and (not (eq .Params.cvss_nvd_v3_vector "-")) (not (eq .Params.cvss_nvd_v3_vector "N/A")) }}
-										<div class="large_score_vector">*{{ .Params.cvss_nvd_v3_vector }}</div>
+										<div class="large_score_vector">{{ .Params.cvss_nvd_v3_vector }}</div>
 										{{ end }}
 										<!--
 										<div class="score_bar redhat score_bar_7">

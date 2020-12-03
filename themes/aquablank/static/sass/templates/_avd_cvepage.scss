@@ -104,7 +104,12 @@
 			background-color: transparent;
 
 			th {padding-left: 20px;}
-			td {padding-left: 20px;}
+			td {
+				padding-left: 20px;
+				a {
+					word-break: break-word;
+				}
+			} //td
 		}
 
 		&.avdcve_scores_wrap {
@@ -232,6 +237,7 @@
 		font-size: 1rem;
 		opacity: 0.8;
 		padding-bottom: 15px;
+		word-break: break-word;
 	}
 
 
