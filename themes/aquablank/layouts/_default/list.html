@@ -1,8 +1,12 @@
 {{ define "main" }}
 
-<script type='text/javascript'>
-//alert("list.html");
-window.location.replace("{{ "/" | relURL }}");
-</script>
-
+	{{ if eq "cloudsploit_page" .Params.avd_page_type }}
+		{{ partial "list_cloudsploit.html" . }}
+	{{else}}
+		<script type='text/javascript'>
+		//alert("list.html");
+		window.location.replace("{{ "/" | relURL }}");
+		</script>
+	{{ end }}
+	
 {{ end }}
