@@ -12150,6 +12150,10 @@ figure.aligncenter {
   padding-left: 20px;
 }
 
+.avdcve_sidebar_wrap .avd_sidebar_widget .table.sidebar_links_table td a {
+  word-break: break-word;
+}
+
 .avdcve_sidebar_wrap .avd_sidebar_widget.avdcve_scores_wrap {
   background-color: #ffffff;
 }
@@ -12281,6 +12285,7 @@ figure.aligncenter {
   font-size: 1rem;
   opacity: 0.8;
   padding-bottom: 15px;
+  word-break: break-word;
 }
 
 .avdcve_scores_cvss.cvss_1, .avdcve_scores_cvss.cvss_2, .avdcve_scores_cvss.cvss_3 {
