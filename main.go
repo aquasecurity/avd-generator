@@ -754,7 +754,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			continue
 		}
 
-		fileContent := strings.Split(string(b), "### Quick Info")[1]
+		fileContent := strings.Split(string(b), "## Quick Info")[1]
 
 		pageName := strings.Title(r.Replace(fileName))
 		splittedName := strings.Split(pageName, " ")
