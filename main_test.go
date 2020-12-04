@@ -188,17 +188,17 @@ cvss_nvd_v2_vector: "AV:L/AC:L/Au:N/C:P/I:N/A:N"
 cvss_nvd_v2_score: "2.1"
 cvss_nvd_v2_severity: "HIGH"
 
-redhat_v2_vector: "-"
+redhat_v2_vector: "N/A"
 redhat_v2_score: "0"
-redhat_v2_severity: "-"
+redhat_v2_severity: "N/A"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
-redhat_v3_severity: "-"
+redhat_v3_severity: "N/A"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
-ubuntu_severity: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "N/A"
 
 ---
 
@@ -280,17 +280,17 @@ cvss_nvd_v2_vector: "AV:L/AC:L/Au:N/C:C/I:C/A:C"
 cvss_nvd_v2_score: "3.4"
 cvss_nvd_v2_severity: "HIGH"
 
-redhat_v2_vector: "-"
+redhat_v2_vector: "N/A"
 redhat_v2_score: "0"
-redhat_v2_severity: "-"
+redhat_v2_severity: "N/A"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
-redhat_v3_severity: "-"
+redhat_v3_severity: "N/A"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
-ubuntu_severity: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "N/A"
 
 ---
 
@@ -437,12 +437,12 @@ redhat_v2_vector: "AV:N/AC:M/Au:N/C:P/I:N/A:N"
 redhat_v2_score: "4.3"
 redhat_v2_severity: "MODERATE"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
 redhat_v3_severity: "MODERATE"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
 ubuntu_severity: "LOW"
 
 ---
@@ -547,12 +547,12 @@ redhat_v2_vector: "AV:N/AC:M/Au:N/C:P/I:N/A:N"
 redhat_v2_score: "4.3"
 redhat_v2_severity: "MODERATE"
 
-redhat_v3_vector: "-"
+redhat_v3_vector: "N/A"
 redhat_v3_score: "0"
 redhat_v3_severity: "MODERATE"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
 ubuntu_severity: "LOW"
 
 ---
@@ -845,4 +845,40 @@ QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugi
 | Qtbase-opensource-src | Ubuntu/bionic | 5.9.5+dfsg-0ubuntu2.5|
 
 `, string(got))
+}
+
+func TestGenerateCloudSploitPages(t *testing.T) {
+	pagesDir, _ := ioutil.TempDir("", "TestGenerateCloudSploitPages-*")
+	defer func() {
+		_ = os.RemoveAll(pagesDir)
+	}()
+
+	generateCloudSploitPages("goldens/cloudsploit/en", pagesDir)
+	got, err := ioutil.ReadFile(filepath.Join(pagesDir, "aws/acm/acm-certificate-validation.md"))
+	require.NoError(t, err)
+
+	want, _ := ioutil.ReadFile("goldens/cloudsploit/acm-certificate-validation.avd.md")
+	assert.Equal(t, string(want), string(got))
+
+	// check table of contents content
+	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "_index.md"))
+	require.NoError(t, err)
+	assert.Equal(t, `---
+title: "CloudSploit Index"
+draft: false
+
+avd_page_type: cloudsploit_page
+---
+
+### aws {.listpage_section_title}
+#### acm {.listpage_subsection_title}
+- [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
+#### elb {.listpage_subsection_title}
+- [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
+- [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
+### google {.listpage_section_title}
+#### dns {.listpage_subsection_title}
+- [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
+`, string(got))
+
 }

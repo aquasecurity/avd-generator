@@ -53,6 +53,13 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/kube-hunter-repo
 
+      - name: Checkout public cloud-security-remediation-guides-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/cloud-security-remediation-guides
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/cloudsploit-repo
+
       - name: Build generator
         run: make md-clean md-build
 
@@ -64,6 +71,9 @@ jobs:
 
       - name: Generate Hugo website
         run: make hugo-generate
+
+      - name: Copy assets
+        run: make copy-assets
 
       - name: Deploy Search Index to MeiliSearch Instance
         run: |

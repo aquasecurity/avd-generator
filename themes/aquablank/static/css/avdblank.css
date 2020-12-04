@@ -11821,6 +11821,10 @@ pre {
   margin-right: 6px;
 }
 
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.cloudsploit:before {
+  background-image: url("../images/icon_page_cloudsploit.png");
+}
+
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_title {
   margin-top: 40px;
   font-size: 3rem;
@@ -12146,6 +12150,10 @@ figure.aligncenter {
   padding-left: 20px;
 }
 
+.avdcve_sidebar_wrap .avd_sidebar_widget .table.sidebar_links_table td a {
+  word-break: break-word;
+}
+
 .avdcve_sidebar_wrap .avd_sidebar_widget.avdcve_scores_wrap {
   background-color: #ffffff;
 }
@@ -12277,6 +12285,7 @@ figure.aligncenter {
   font-size: 1rem;
   opacity: 0.8;
   padding-bottom: 15px;
+  word-break: break-word;
 }
 
 .avdcve_scores_cvss.cvss_1, .avdcve_scores_cvss.cvss_2, .avdcve_scores_cvss.cvss_3 {
@@ -12575,33 +12584,71 @@ input.avd_large_search {
   margin-top: 10px;
 }
 
-/*
-@import "homepage";
+/* avd cve page */
+.avdlistpage_wrap .listpage_content_wrap {
+  /*.listpage_content_title {
+			font-size: 1.625rem;
+			font-weight: $weight-normal;
+			margin-bottom: 30px;
+		}*/
+}
 
-@import "resources";
+.avdlistpage_wrap .listpage_content_wrap .listpage_content .listpage_section_title {
+  border-bottom: 2px solid #1904da;
+  margin-left: -8px;
+  padding-left: 8px;
+  max-width: 100%;
+}
 
-@import "integrations";
+.avdlistpage_wrap .listpage_content_wrap .listpage_content .listpage_subsection_title {
+  margin-bottom: 0px;
+}
 
-@import "links_101";
-@import "single_resources";
+.avdlistpage_wrap .listpage_content_wrap .listpage_content ul {
+  padding-left: 1.4em;
+  margin-top: -0.5em;
+}
 
+.avdlistpage_wrap .listpage_content_wrap .listpage_content ul li {
+  /*&.list_more_link {
+						padding-left: 0px;
+						color: $aq-royal-blue;
+						font-weight: $weight-bold;
+						font-size: 1rem;
+						display: inline-block;
+						margin-top: 8px;
+						cursor: pointer;
 
-@import "customers";
+						&:before {
+							display: none;
+						}
 
-@import "partners";
-@import "products_overview";
+						&:after {
+							content: "";
+							display: inline-block;
+							width: 0; 
+							height: 0; 
+							border-left: 6px solid transparent;
+							border-right: 6px solid transparent;
+							border-top: 6px solid $aq-royal-blue;
+							margin-left: 5px;
+							margin-bottom: 2px;
+						}
+					}*/
+}
 
+.avdlistpage_wrap .listpage_content_wrap .listpage_content ul li p {
+  display: inline;
+}
 
-@import "404";
+.avdlistpage_wrap .listpage_content_wrap .listpage_content ul li ul {
+  margin-top: 0.5em;
+}
 
-@import "opensourcepage";
+.avdlistpage_wrap .listpage_content_wrap .listpage_content ul li li:before {
+  display: none;
+}
 
-@import "about_v2";
-
-@import "careers";
-
-@import "pricing";
-*/
 /* avd_footer_wrap */
 .avd_footer_wrap {
   background-color: #07242d;

@@ -48,25 +48,25 @@ header_subtitle: "{{.Vulnerability.CWEInfo.Name}}"
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"
 
-cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "-"}}"
+cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "N/A"}}"
 cvss_nvd_v3_score: "{{.Vulnerability.CVSS.V3Score}}"
-cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "-"}}"
+cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "N/A"}}"
 
-cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "-"}}"
+cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "N/A"}}"
 cvss_nvd_v2_score: "{{.Vulnerability.CVSS.V2Score}}"
-cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "-"}}"
+cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "N/A"}}"
 
-redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "-"}}"
+redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "N/A"}}"
 redhat_v2_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}}"
-redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
 
-redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "-"}}"
+redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "N/A"}}"
 redhat_v3_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}}"
-redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "-" }}"
+redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
 
-ubuntu_vector: "-"
-ubuntu_score: "-"
-ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "-"}}"
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "N/A"}}"
 
 ---
 
@@ -130,6 +130,21 @@ avd_page_type: appshield_page
 ### Links{{range $element := .Rego.Links}}
 - {{$element}}{{end}}
 `
+
+const cloudSploitTableOfContents = `---
+title: "CloudSploit Index"
+draft: false
+
+avd_page_type: cloudsploit_page
+---
+
+{{range $provider, $serviceFile := .}}### {{ $provider }} {.listpage_section_title}
+{{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
+{{ range $file := .}}- [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
+{{ end }}{{ end }}{{ end }}`
+
+// {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
+type CloudSploitIndexMap map[string]map[string][]string
 
 const reservedPostTemplate = `---
 title: "{{.ID}}"
@@ -504,6 +519,7 @@ func main() {
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
+	generateCloudSploitPages("cloudsploit-repo/en", "content/cloudsploit")
 }
 
 func generateVulnPages() {
@@ -701,6 +717,81 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 			})
 			CVEMap[fKey][vendor] = rp
 		}
+	}
+}
+
+func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
+	var fileList []string
+	_ = filepath.Walk(inputPagesDir, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		fileList = append(fileList, path)
+		return nil
+	})
+
+	csIndexMap := make(CloudSploitIndexMap)
+
+	for _, file := range fileList {
+		fullPath := strings.Split(file, "en/")[1]
+		provider := strings.Split(fullPath, "/")[0]
+		service := strings.Split(fullPath, "/")[1]
+		fileName := strings.Split(fullPath, "/")[2]
+
+		r := strings.NewReplacer("-", " ", ".md", "")
+
+		if v, ok := csIndexMap[provider]; !ok {
+			csIndexMap[provider] = map[string][]string{
+				service: {r.Replace(fileName)},
+			}
+		} else {
+			csIndexMap[provider][service] = append(v[service], r.Replace(fileName))
+		}
+
+		b, err := ioutil.ReadFile(file)
+		if err != nil {
+			log.Println("unable to read cloudsploit file: ", err)
+			continue
+		}
+
+		fileContent := strings.Split(string(b), "## Quick Info")[1]
+		contentReplacer := strings.NewReplacer(`</br> <img src="`, `\
+![](`, `</br><img src="`, `\
+![](`, `"/>`, `)`)
+		fileContent = contentReplacer.Replace(fileContent)
+
+		pageName := strings.Title(r.Replace(fileName))
+		splittedName := strings.Split(pageName, " ")
+		if len(splittedName[0]) <= 3 {
+			pageName = strings.ToUpper(splittedName[0]) + " " + strings.Join(splittedName[1:], " ")
+		}
+
+		err = os.MkdirAll(filepath.Join(outputPagesDir, provider, service), 0755)
+		if err != nil {
+			log.Fatal("unable to create cloudsploit directory ", err)
+		}
+
+		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
+title: %s
+draft: false
+avd_page_type: cloudsploit_page
+---
+### Quick Info`, pageName)), []byte(fileContent)...), 0600)
+		if err != nil {
+			log.Println("unable to write cloudsploit file: ", err)
+			continue
+		}
+	}
+
+	// generate a table of contents markdown
+	f, err := os.Create(filepath.Join(outputPagesDir, "_index.md"))
+	if err != nil {
+		log.Fatal("unable to create a table of contents _index.md file: ", err)
+	}
+	t := template.Must(template.New("cloudSploitTableOfContents").Funcs(gtf.GtfTextFuncMap).Parse(cloudSploitTableOfContents))
+	err = t.Execute(f, csIndexMap)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
