@@ -40,7 +40,7 @@ hugo-generate: hugo-clean
 	echo "avd.aquasec.com" > avd-repo/docs/CNAME
 
 copy-assets:
-	cp -R avd-repo/cloudsploit-repo/resources avd-repo/content/resources
+	cp -R avd-repo/cloudsploit-repo/resources avd-repo/docs/resources
 
 build-all-no-clone: md-clean md-build sync-all md-generate hugo-generate copy-assets nginx-restart
 	echo "Build Done, navigate to http://localhost:9011/avd to browse"
