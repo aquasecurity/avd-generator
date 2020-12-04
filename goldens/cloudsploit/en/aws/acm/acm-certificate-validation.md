@@ -19,8 +19,8 @@ avd_page_type: cloudsploit_page
 
 ## Detailed Remediation Steps
 
-1. Log into the AWS console and navigate to the ACM service page.
-2. Click into each certificate that has been requested.
+1. Log into the AWS console and navigate to the ACM service page.</br> <img src="/path/to/some/image.png"/>
+2. Click into each certificate that has been requested. </br><img src="/path/to/some/image.png"/>
 3. Expand the domains associated with the certificate.
 4. Ensure each domain listed has DNS validation configured. If DNS validation is used, DNS records will be listed for the domain.
 5. Ensure that the records provided by AWS are configured and valid within your DNS provider (such as Route 53).
