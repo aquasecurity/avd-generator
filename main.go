@@ -140,7 +140,7 @@ avd_page_type: cloudsploit_page
 
 {{range $provider, $serviceFile := .}}### {{ $provider }} {.listpage_section_title}
 {{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
-{{ range $file := .}}- [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
+{{ range $file := .}}- [{{ $file }}](/remediations/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
@@ -519,7 +519,7 @@ func main() {
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
-	generateCloudSploitPages("cloudsploit-repo/en", "content/cloudsploit")
+	generateCloudSploitPages("remediations-repo/en", "content/remediations")
 }
 
 func generateVulnPages() {

@@ -872,13 +872,13 @@ avd_page_type: cloudsploit_page
 
 ### aws {.listpage_section_title}
 #### acm {.listpage_subsection_title}
-- [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
+- [acm certificate validation](/remediations/aws/acm/acm-certificate-validation)
 #### elb {.listpage_subsection_title}
-- [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
-- [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
+- [elb logging enabled](/remediations/aws/elb/elb-logging-enabled)
+- [insecure ciphers](/remediations/aws/elb/insecure-ciphers)
 ### google {.listpage_section_title}
 #### dns {.listpage_subsection_title}
-- [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
+- [dns security enabled](/remediations/google/dns/dns-security-enabled)
 `, string(got))
 
 }
