@@ -39,6 +39,11 @@
 		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
 		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}	
 
+	{{ else if eq "cloudsploit_page" .Params.avd_page_type }}
+
+		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+
 	{{ else }}
 
 	{{ end }}
