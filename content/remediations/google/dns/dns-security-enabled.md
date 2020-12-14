@@ -1,7 +1,8 @@
 ---
-title: DNS Security Enabled
+title: DNS-Security-Enabled
 draft: false
 
+display_title: DNS Security Enabled
 avd_page_type: cloudsploit_page
 ---
 

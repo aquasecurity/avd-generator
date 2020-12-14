@@ -1,6 +1,8 @@
 ---
-title: Insecure Ciphers
+title: Insecure-Ciphers
 draft: false
+
+display_title: Insecure Ciphers
 avd_page_type: cloudsploit_page
 ---
 ### Quick Info

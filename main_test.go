@@ -864,9 +864,10 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "_index.md"))
 	require.NoError(t, err)
 	assert.Equal(t, `---
-title: "Aqua CSPM Remediations"
+title: "Aqua_CSPM_Remediations"
 draft: false
 
+display_title: "Aqua CSPM Remediations"
 avd_page_type: cloudsploit_page
 ---
 

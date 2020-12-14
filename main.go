@@ -132,9 +132,10 @@ avd_page_type: appshield_page
 `
 
 const cloudSploitTableOfContents = `---
-title: "Aqua CSPM Remediations"
+title: "Aqua_CSPM_Remediations"
 draft: false
 
+display_title: "Aqua CSPM Remediations"
 avd_page_type: cloudsploit_page
 ---
 
@@ -774,9 +775,11 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
 title: %s
 draft: false
+
+display_title: %s
 avd_page_type: cloudsploit_page
 ---
-### Quick Info`, pageName)), []byte(fileContent)...), 0600)
+### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue
