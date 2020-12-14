@@ -778,8 +778,11 @@ draft: false
 
 display_title: %s
 avd_page_type: cloudsploit_page
+
+breadcrumb_remediation_parent: %s
+breadcrumb_remediation_child: %s
 ---
-### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName)), []byte(fileContent)...), 0600)
+### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName, provider, service)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue

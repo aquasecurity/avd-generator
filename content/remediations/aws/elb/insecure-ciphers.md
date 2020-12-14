@@ -4,6 +4,9 @@ draft: false
 
 display_title: Insecure Ciphers
 avd_page_type: cloudsploit_page
+
+breadcrumb_remediation_parent: aws
+breadcrumb_remediation_child: elb
 ---
 ### Quick Info
 

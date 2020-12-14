@@ -4,6 +4,9 @@ draft: false
 
 display_title: DNS Security Enabled
 avd_page_type: cloudsploit_page
+
+breadcrumb_remediation_parent: google
+breadcrumb_remediation_child: dns
 ---
 
 # GOOGLE / DNS / DNS Security Enabled

@@ -4,6 +4,9 @@ draft: false
 
 display_title: ACM Certificate Validation
 avd_page_type: cloudsploit_page
+
+breadcrumb_remediation_parent: aws
+breadcrumb_remediation_child: acm
 ---
 ### Quick Info
 
