@@ -139,8 +139,8 @@ display_title: "Aqua CSPM Remediations"
 avd_page_type: cloudsploit_page
 ---
 
-{{range $provider, $serviceFile := .}}### {{ $provider }} {.listpage_section_title}
-{{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
+{{range $provider, $serviceFile := .}}### {{ $provider | upper }} {.listpage_section_title}
+{{ range $service, $files := .}}#### {{ $service | upper }} {.listpage_subsection_title}
 {{ range $file := .}}- [{{ $file }}](/remediations/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 

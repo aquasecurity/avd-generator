@@ -871,14 +871,14 @@ display_title: "Aqua CSPM Remediations"
 avd_page_type: cloudsploit_page
 ---
 
-### aws {.listpage_section_title}
-#### acm {.listpage_subsection_title}
+### AWS {.listpage_section_title}
+#### ACM {.listpage_subsection_title}
 - [acm certificate validation](/remediations/aws/acm/acm-certificate-validation)
-#### elb {.listpage_subsection_title}
+#### ELB {.listpage_subsection_title}
 - [elb logging enabled](/remediations/aws/elb/elb-logging-enabled)
 - [insecure ciphers](/remediations/aws/elb/insecure-ciphers)
-### google {.listpage_section_title}
-#### dns {.listpage_subsection_title}
+### GOOGLE {.listpage_section_title}
+#### DNS {.listpage_subsection_title}
 - [dns security enabled](/remediations/google/dns/dns-security-enabled)
 `, string(got))
 
