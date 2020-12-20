@@ -7,7 +7,18 @@
         <div class="hero-body">
             <div class="clearboth container">
                 <div class="header_title_wrap">
-                    <div class="page_pretitle with_icon cloudsploit fadeInUp">Aqua CSPM Remediation Guides</div>
+					<div class="page_pretitle with_icon aqua fadeInUp">Aqua CSPM</div>
+					{{ if or (.Params.breadcrumb_remediation_parent) (.Params.breadcrumb_remediation_child) }}
+						<div class="page_breadcrumbs fadeInUp animationDelay_1">
+							{{ if .Params.breadcrumb_remediation_parent }}
+								<a href="/remediations#{{ .Params.breadcrumb_remediation_parent }}">{{ .Params.breadcrumb_remediation_parent }}</a> ›
+							{{ end }}
+							
+							{{ if .Params.breadcrumb_remediation_child }}
+							<a href="/remediations#{{ .Params.breadcrumb_remediation_child }}">{{ .Params.breadcrumb_remediation_child }}</a> ›
+							{{ end }}
+						</div>
+					{{ end }}
                     <h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Params.display_title }}</h1>
                     <!--<h2 class="subtitle page_subtitle"></h2>-->
                 </div><!-- header_title_wrap -->
@@ -53,11 +64,11 @@
 
             <div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_2">
                 <div class="avdcve_sidebar_wrap">
-                    <a href="https://github.com/aquasecurity/cloudsploit" target="_blank" class="project_item fadeInUp animationDelay_8">
-                        <div class="project_icon" style="background-image:url('{{ "images/project_logo_cloudsploit.png" | relURL }}');"></div>
-                        <h2 class="project_title">Aqua CSPM</h2>
-                        <div class="project_subtitle">Cloud Security Posture Management with hundreds of checks on cloud IaaS account and service configuration</div>
-                        <div class="button arrowlinkbutton">Learn more</div>
+                    <a href="https://cloud.aquasec.com/signup" target="_blank" class="project_item fadeInUp animationDelay_8">
+                        <div class="project_icon" style="background-image:url('{{ "images/project_logo_aqua_color.png" | relURL }}');"></div>
+                        <h2 class="project_title">Cloud Security Posture Management (CSPM)</h2>
+                        <div class="project_subtitle">Scan, monitor and remediate configuration issues in public cloud accounts according to best practices and compliance standards, across AWS, Azure, Google Cloud, and Oracle Cloud.</div>
+                        <div class="button arrowlinkbutton">Sign up for free</div>
                     </a>
                 </div>
             </div><!-- column is-4 -->
