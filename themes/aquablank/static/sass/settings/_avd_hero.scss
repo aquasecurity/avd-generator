@@ -60,6 +60,7 @@
 								margin-right: 6px;
 							}
 							&.cloudsploit:before {background-image: url('../images/icon_page_cloudsploit.png');}
+							&.aqua:before {background-image: url('../images/icon_page_aqua.png');}
 
 						} //with_icon
 						
@@ -78,6 +79,22 @@
 
 					.page_pretitle + .page_title  {
 						margin-top: 10px;
+					}
+
+					.page_breadcrumbs {
+						font-size: 1.75rem;
+						margin-bottom: -35px;
+						margin-top: 10px;
+						color: $aq-sea-foam;
+
+						a {
+							opacity: 0.85;
+							transition: all 0.2s ease;
+
+							&:hover {
+								opacity: 1;
+							}
+						}
 					}
 
 
