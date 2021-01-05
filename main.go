@@ -140,7 +140,12 @@ avd_page_type: cloudsploit_page
 ---
 
 {{range $provider, $serviceFile := .}}### {{ $provider | upper }} {.listpage_section_title}
-{{ range $service, $files := .}}#### {{ $service | upper }} {.listpage_subsection_title}
+{{ range $service, $files := .}}
+{{ if $service | lengthis 3 }}
+#### {{ $service | upper }} {.listpage_subsection_title}
+{{ else }}
+#### {{ $service | capfirst }} {.listpage_subsection_title}
+{{ end }}
 {{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
@@ -772,6 +777,13 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			log.Fatal("unable to create cloudsploit directory ", err)
 		}
 
+		var serviceName string
+		if len(service) <= 3 {
+			serviceName = strings.ToUpper(service)
+		} else {
+			serviceName = strings.Title(service)
+		}
+
 		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
 title: %s
 draft: false
@@ -780,9 +792,11 @@ display_title: %s
 avd_page_type: cloudsploit_page
 
 breadcrumb_remediation_parent: %s
+breadcrumb_remediation_parent_name: %s
 breadcrumb_remediation_child: %s
+breadcrumb_remediation_child_name: %s
 ---
-### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName, provider, service)), []byte(fileContent)...), 0600)
+### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName, provider, strings.ToUpper(provider), service, serviceName)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue

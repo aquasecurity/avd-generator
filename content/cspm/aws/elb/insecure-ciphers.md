@@ -6,7 +6,9 @@ display_title: Insecure Ciphers
 avd_page_type: cloudsploit_page
 
 breadcrumb_remediation_parent: aws
+breadcrumb_remediation_parent_name: AWS
 breadcrumb_remediation_child: elb
+breadcrumb_remediation_child_name: ELB
 ---
 ### Quick Info
 
