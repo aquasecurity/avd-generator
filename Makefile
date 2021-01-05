@@ -12,7 +12,7 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
 	git clone git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
 	git clone git@github.com:aquasecurity/kube-hunter.git avd-repo/kube-hunter-repo
-	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/cloudsploit-repo
+	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 
 sync-all:
 	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
@@ -40,7 +40,7 @@ hugo-generate: hugo-clean
 	echo "avd.aquasec.com" > avd-repo/docs/CNAME
 
 copy-assets:
-	cp -R avd-repo/cloudsploit-repo/resources avd-repo/docs/resources
+	cp -R avd-repo/remediations-repo/resources avd-repo/docs/resources
 
 build-all-no-clone: md-clean md-build sync-all md-generate hugo-generate copy-assets nginx-restart
 	echo "Build Done, navigate to http://localhost:9011/avd to browse"
