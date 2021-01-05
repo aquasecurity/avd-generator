@@ -58,7 +58,7 @@ jobs:
         with:
           repository: aquasecurity/cloud-security-remediation-guides
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          path: avd-repo/cloudsploit-repo
+          path: avd-repo/remediations-repo
 
       - name: Build generator
         run: make md-clean md-build

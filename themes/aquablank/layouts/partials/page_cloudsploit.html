@@ -11,11 +11,11 @@
 					{{ if or (.Params.breadcrumb_remediation_parent) (.Params.breadcrumb_remediation_child) }}
 						<div class="page_breadcrumbs fadeInUp animationDelay_1">
 							{{ if .Params.breadcrumb_remediation_parent }}
-								<a href="/remediations#{{ .Params.breadcrumb_remediation_parent }}">{{ .Params.breadcrumb_remediation_parent }}</a> ›
+								<a href="/cspm#{{ .Params.breadcrumb_remediation_parent }}">{{ .Params.breadcrumb_remediation_parent }}</a> ›
 							{{ end }}
 							
 							{{ if .Params.breadcrumb_remediation_child }}
-							<a href="/remediations#{{ .Params.breadcrumb_remediation_child }}">{{ .Params.breadcrumb_remediation_child }}</a> ›
+							<a href="/cspm#{{ .Params.breadcrumb_remediation_child }}">{{ .Params.breadcrumb_remediation_child }}</a> ›
 							{{ end }}
 						</div>
 					{{ end }}
