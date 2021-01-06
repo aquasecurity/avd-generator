@@ -132,7 +132,7 @@ avd_page_type: appshield_page
 `
 
 const cloudSploitTableOfContents = `---
-title: "Aqua_CSPM_Remediations"
+title: Aqua_CSPM_Remediations
 draft: false
 
 display_title: "Aqua CSPM Remediations"
