@@ -784,6 +784,9 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			serviceName = strings.Title(service)
 		}
 
+		// strip any nasty chars for search index primary key
+		titleSanitizer := strings.NewReplacer(" ", "-", ".", "")
+
 		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
 title: %s
 draft: false
@@ -796,7 +799,7 @@ breadcrumb_remediation_parent_name: %s
 breadcrumb_remediation_child: %s
 breadcrumb_remediation_child_name: %s
 ---
-### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName, provider, strings.ToUpper(provider), service, serviceName)), []byte(fileContent)...), 0600)
+### Quick Info`, titleSanitizer.Replace(pageName), pageName, provider, strings.ToUpper(provider), service, serviceName)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue
