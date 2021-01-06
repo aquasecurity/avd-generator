@@ -8,4 +8,5 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/umisama/go-cpe v0.0.0-20190323060751-cdd6c3c28a23
 	github.com/valyala/fastjson v1.5.3
+	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
