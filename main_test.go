@@ -864,21 +864,31 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "_index.md"))
 	require.NoError(t, err)
 	assert.Equal(t, `---
-title: "CloudSploit Index"
+title: "Aqua_CSPM_Remediations"
 draft: false
 
+display_title: "Aqua CSPM Remediations"
 avd_page_type: cloudsploit_page
 ---
 
-### aws {.listpage_section_title}
-#### acm {.listpage_subsection_title}
-- [acm certificate validation](/cloudsploit/aws/acm/acm-certificate-validation)
-#### elb {.listpage_subsection_title}
-- [elb logging enabled](/cloudsploit/aws/elb/elb-logging-enabled)
-- [insecure ciphers](/cloudsploit/aws/elb/insecure-ciphers)
-### google {.listpage_section_title}
-#### dns {.listpage_subsection_title}
-- [dns security enabled](/cloudsploit/google/dns/dns-security-enabled)
+### AWS {.listpage_section_title}
+
+
+#### ACM {.listpage_subsection_title}
+
+- [acm certificate validation](/cspm/aws/acm/acm-certificate-validation)
+
+
+#### ELB {.listpage_subsection_title}
+
+- [elb logging enabled](/cspm/aws/elb/elb-logging-enabled)
+- [insecure ciphers](/cspm/aws/elb/insecure-ciphers)
+### GOOGLE {.listpage_section_title}
+
+
+#### DNS {.listpage_subsection_title}
+
+- [dns security enabled](/cspm/google/dns/dns-security-enabled)
 `, string(got))
 
 }

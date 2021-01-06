@@ -11825,6 +11825,10 @@ pre {
   background-image: url("../images/icon_page_cloudsploit.png");
 }
 
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.aqua:before {
+  background-image: url("../images/icon_page_aqua.png");
+}
+
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_title {
   margin-top: 40px;
   font-size: 3rem;
@@ -11836,6 +11840,23 @@ pre {
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle + .page_title {
   margin-top: 10px;
+}
+
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_breadcrumbs {
+  font-size: 1.75rem;
+  margin-bottom: -35px;
+  margin-top: 10px;
+  color: #00ffe4;
+}
+
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_breadcrumbs a {
+  opacity: 0.85;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_breadcrumbs a:hover {
+  opacity: 1;
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-foot {
@@ -13401,6 +13422,7 @@ input.avd_large_search {
 
 .project_item .project_title {
   font-size: 1.75rem;
+  line-height: 1.4em;
   font-weight: 700;
   color: #1904da;
   margin-bottom: 10px;

@@ -39,12 +39,22 @@
 		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
 		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}	
 
+	{{ else if eq "cloudsploit_page" .Params.avd_page_type }}
+
+		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+
 	{{ else }}
 
 	{{ end }}
 	
 	<title>{{ .Scratch.Get "seo_title" }}</title>
 	<meta name="description" content="{{ .Scratch.Get "seo_description" }}" />
+
+	<meta property="og:title" content="{{ .Scratch.Get "seo_title" }}"/>
+	<meta property="og:site_name" content="Aqua Vulnerability Database"/>
+	<meta property="og:description" content="{{ .Scratch.Get "seo_description" }}"/>
+
 	<link rel="stylesheet" href="{{ "css/avdblank.min.css" | relURL }}">
 	<script type='text/javascript' src='{{ "js/avdblank.js" | relURL }}'></script>
 </head>

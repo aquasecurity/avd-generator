@@ -132,15 +132,21 @@ avd_page_type: appshield_page
 `
 
 const cloudSploitTableOfContents = `---
-title: "CloudSploit Index"
+title: "Aqua_CSPM_Remediations"
 draft: false
 
+display_title: "Aqua CSPM Remediations"
 avd_page_type: cloudsploit_page
 ---
 
-{{range $provider, $serviceFile := .}}### {{ $provider }} {.listpage_section_title}
-{{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
-{{ range $file := .}}- [{{ $file }}](/cloudsploit/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
+{{range $provider, $serviceFile := .}}### {{ $provider | upper }} {.listpage_section_title}
+{{ range $service, $files := .}}
+{{ if $service | lengthis 3 }}
+#### {{ $service | upper }} {.listpage_subsection_title}
+{{ else }}
+#### {{ $service | capfirst }} {.listpage_subsection_title}
+{{ end }}
+{{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
@@ -519,7 +525,7 @@ func main() {
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
-	generateCloudSploitPages("cloudsploit-repo/en", "content/cloudsploit")
+	generateCloudSploitPages("remediations-repo/en", "content/cspm")
 }
 
 func generateVulnPages() {
@@ -771,12 +777,26 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			log.Fatal("unable to create cloudsploit directory ", err)
 		}
 
+		var serviceName string
+		if len(service) <= 3 {
+			serviceName = strings.ToUpper(service)
+		} else {
+			serviceName = strings.Title(service)
+		}
+
 		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
 title: %s
 draft: false
+
+display_title: %s
 avd_page_type: cloudsploit_page
+
+breadcrumb_remediation_parent: %s
+breadcrumb_remediation_parent_name: %s
+breadcrumb_remediation_child: %s
+breadcrumb_remediation_child_name: %s
 ---
-### Quick Info`, pageName)), []byte(fileContent)...), 0600)
+### Quick Info`, strings.ReplaceAll(pageName, " ", "-"), pageName, provider, strings.ToUpper(provider), service, serviceName)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue
