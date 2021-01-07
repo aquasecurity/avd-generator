@@ -142,7 +142,7 @@ avd_page_type: cloudsploit_page
 
 {{range $provider, $serviceFile := .}}### {{ $provider | upper }} {.listpage_section_title}
 {{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
-{{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service | lower | findreplace " " "-" }}/{{ $file | findreplace " " "-" }})
+{{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service | lower | findreplace " " "-" }}/{{ $file | lower | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
@@ -742,16 +742,15 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 
 		fullPath := strings.Split(file, "en/")[1]
 		provider := strings.Split(fullPath, "/")[0]
-		fileName := strings.Split(fullPath, "/")[2]
-
-		r := strings.NewReplacer("-", " ", ".md", "")
+		pluginTitle := regexp.MustCompile(`\|\s\*\*(Plugin Title)\*\*\s\|\s.*`).Find(b)
+		fileName := strings.TrimSpace(strings.Split(string(pluginTitle), "|")[2])
 
 		if v, ok := csIndexMap[provider]; !ok {
 			csIndexMap[provider] = map[string][]string{
-				service: {r.Replace(fileName)},
+				service: {fileName},
 			}
 		} else {
-			csIndexMap[provider][service] = append(v[service], r.Replace(fileName))
+			csIndexMap[provider][service] = append(v[service], fileName)
 		}
 
 		b, err := ioutil.ReadFile(file)
@@ -766,12 +765,6 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 ![](`, `"/>`, `)`)
 		fileContent = contentReplacer.Replace(fileContent)
 
-		pageName := strings.Title(r.Replace(fileName))
-		splittedName := strings.Split(pageName, " ")
-		if len(splittedName[0]) <= 3 {
-			pageName = strings.ToUpper(splittedName[0]) + " " + strings.Join(splittedName[1:], " ")
-		}
-
 		err = os.MkdirAll(filepath.Join(outputPagesDir, provider, service), 0755)
 		if err != nil {
 			log.Fatal("unable to create cloudsploit directory ", err)
@@ -780,7 +773,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 		// strip any nasty chars for search index primary key
 		titleSanitizer := strings.NewReplacer(" ", "-", ".", "")
 
-		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, fileName), append([]byte(fmt.Sprintf(`---
+		err = ioutil.WriteFile(filepath.Join(outputPagesDir, provider, service, strings.ToLower(strings.ReplaceAll(fileName, " ", "-"))+".md"), append([]byte(fmt.Sprintf(`---
 title: %s
 draft: false
 
@@ -792,7 +785,7 @@ breadcrumb_remediation_parent_name: %s
 breadcrumb_remediation_child: %s
 breadcrumb_remediation_child_name: %s
 ---
-### Quick Info`, titleSanitizer.Replace(pageName), pageName, strings.ToLower(provider), strings.ToUpper(provider), strings.ReplaceAll(strings.ToLower(service), " ", "-"), service)), []byte(fileContent)...), 0600)
+### Quick Info`, titleSanitizer.Replace(fileName), fileName, strings.ToLower(provider), strings.ToUpper(provider), strings.ReplaceAll(strings.ToLower(service), " ", "-"), service)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue

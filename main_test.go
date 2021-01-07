@@ -873,15 +873,15 @@ avd_page_type: cloudsploit_page
 
 ### AWS {.listpage_section_title}
 #### ACM {.listpage_subsection_title}
-- [acm certificate validation](/cspm/aws/acm/acm-certificate-validation)
+- [ACM Certificate Validation](/cspm/aws/acm/acm-certificate-validation)
 #### CloudFront {.listpage_subsection_title}
-- [cloudfront https only](/cspm/aws/cloudfront/cloudfront-https-only)
+- [CloudFront HTTPS Only](/cspm/aws/cloudfront/cloudfront-https-only)
 #### ELB {.listpage_subsection_title}
-- [elb logging enabled](/cspm/aws/elb/elb-logging-enabled)
-- [insecure ciphers](/cspm/aws/elb/insecure-ciphers)
+- [ELB Logging Enabled](/cspm/aws/elb/elb-logging-enabled)
+- [Insecure Ciphers](/cspm/aws/elb/insecure-ciphers)
 ### GOOGLE {.listpage_section_title}
 #### DNS {.listpage_subsection_title}
-- [dns security enabled](/cspm/google/dns/dns-security-enabled)
+- [DNS Security Enabled](/cspm/google/dns/dns-security-enabled)
 `, string(got))
 
 }
