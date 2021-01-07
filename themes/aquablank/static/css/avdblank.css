@@ -11853,6 +11853,7 @@ pre {
   opacity: 0.85;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
+  color: #00ffe4;
 }
 
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_breadcrumbs a:hover {
