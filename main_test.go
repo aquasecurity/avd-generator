@@ -854,7 +854,7 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 	}()
 
 	generateCloudSploitPages("goldens/cloudsploit/en", pagesDir)
-	got, err := ioutil.ReadFile(filepath.Join(pagesDir, "aws/acm/acm-certificate-validation.md"))
+	got, err := ioutil.ReadFile(filepath.Join(pagesDir, "aws/ACM/acm-certificate-validation.md"))
 	require.NoError(t, err)
 
 	want, _ := ioutil.ReadFile("goldens/cloudsploit/acm-certificate-validation.avd.md")
