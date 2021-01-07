@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -140,13 +141,8 @@ avd_page_type: cloudsploit_page
 ---
 
 {{range $provider, $serviceFile := .}}### {{ $provider | upper }} {.listpage_section_title}
-{{ range $service, $files := .}}
-{{ if $service | lengthis 3 }}
-#### {{ $service | upper }} {.listpage_subsection_title}
-{{ else }}
-#### {{ $service | capfirst }} {.listpage_subsection_title}
-{{ end }}
-{{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service }}/{{ $file | findreplace " " "-" }})
+{{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
+{{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service | lower | findreplace " " "-" }}/{{ $file | findreplace " " "-" }})
 {{ end }}{{ end }}{{ end }}`
 
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
@@ -727,6 +723,7 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 }
 
 func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
+	log.Printf("generating cloudsploit pages in: %s...", outputPagesDir)
 	var fileList []string
 	_ = filepath.Walk(inputPagesDir, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
@@ -739,9 +736,12 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 	csIndexMap := make(CloudSploitIndexMap)
 
 	for _, file := range fileList {
+		b, _ := ioutil.ReadFile(file)
+		category := regexp.MustCompile(`\|\s\*\*(Category)\*\*\s\|\s.*`).Find(b)
+		service := strings.TrimSpace(strings.Split(string(category), "|")[2])
+
 		fullPath := strings.Split(file, "en/")[1]
 		provider := strings.Split(fullPath, "/")[0]
-		service := strings.Split(fullPath, "/")[1]
 		fileName := strings.Split(fullPath, "/")[2]
 
 		r := strings.NewReplacer("-", " ", ".md", "")
@@ -777,13 +777,6 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			log.Fatal("unable to create cloudsploit directory ", err)
 		}
 
-		var serviceName string
-		if len(service) <= 3 {
-			serviceName = strings.ToUpper(service)
-		} else {
-			serviceName = strings.Title(service)
-		}
-
 		// strip any nasty chars for search index primary key
 		titleSanitizer := strings.NewReplacer(" ", "-", ".", "")
 
@@ -799,7 +792,7 @@ breadcrumb_remediation_parent_name: %s
 breadcrumb_remediation_child: %s
 breadcrumb_remediation_child_name: %s
 ---
-### Quick Info`, titleSanitizer.Replace(pageName), pageName, provider, strings.ToUpper(provider), service, serviceName)), []byte(fileContent)...), 0600)
+### Quick Info`, titleSanitizer.Replace(pageName), pageName, strings.ToLower(provider), strings.ToUpper(provider), strings.ReplaceAll(strings.ToLower(service), " ", "-"), service)), []byte(fileContent)...), 0600)
 		if err != nil {
 			log.Println("unable to write cloudsploit file: ", err)
 			continue
