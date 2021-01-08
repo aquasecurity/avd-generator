@@ -272,12 +272,10 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 		for _, file := range files {
 			fKey := strings.ReplaceAll(file, ".json", "")
 
-			var vendorMap map[string]ReservedCVEInfo
-			var ok bool
-			if vendorMap, ok = CVEMap[fKey]; !ok { // no nvd info & first time adding vendor
+			if _, ok := CVEMap[fKey]; !ok { // no nvd info & first time adding vendor
 				CVEMap[fKey] = make(map[string]ReservedCVEInfo)
 			}
-			addReservedCVE(vendorDir, CVEMap, vendorMap, vendor, fKey)
+			addReservedCVE(vendorDir, CVEMap, vendor, fKey)
 		}
 	}
 
@@ -307,7 +305,7 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 	}
 }
 
-func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEInfo, vendorMap map[string]ReservedCVEInfo, vendor string, fKey string) {
+func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEInfo, vendor string, fKey string) {
 	b, _ := ioutil.ReadFile(fmt.Sprintf("%s/%s.json", vendorDir, fKey))
 
 	switch vendor {
