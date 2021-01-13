@@ -860,6 +860,14 @@ func TestGenerateCloudSploitPages(t *testing.T) {
 	want, _ := ioutil.ReadFile("goldens/cloudsploit/acm-certificate-validation.avd.md")
 	assert.Equal(t, string(want), string(got))
 
+	// check all providers and services have _index.md pages for redirection back to homepage
+	want, err = ioutil.ReadFile(filepath.Join(pagesDir, "aws/_index.md"))
+	require.NoError(t, err)
+	assert.Empty(t, want)
+	want, err = ioutil.ReadFile(filepath.Join(pagesDir, "aws/ACM/_index.md"))
+	require.NoError(t, err)
+	assert.Empty(t, want)
+
 	// check table of contents content
 	got, err = ioutil.ReadFile(filepath.Join(pagesDir, "_index.md"))
 	require.NoError(t, err)

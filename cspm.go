@@ -97,6 +97,10 @@ breadcrumb_remediation_child_name: %s
 			log.Println("unable to write cloudsploit file: ", err)
 			continue
 		}
+
+		// generate an empty _index.md for each provider to redirect
+		_, _ = os.OpenFile(filepath.Join(outputPagesDir, provider, "_index.md"), os.O_RDONLY|os.O_CREATE, 0666)
+		_, _ = os.OpenFile(filepath.Join(outputPagesDir, provider, service, "_index.md"), os.O_RDONLY|os.O_CREATE, 0666)
 	}
 
 	// generate a table of contents markdown
