@@ -1,7 +1,8 @@
 package main
 
 import (
-	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -28,12 +29,20 @@ func (realClock) Now() string {
 
 func GetAllFiles(dir string) ([]string, error) {
 	var filesFound []string
-	files, err := ioutil.ReadDir(dir)
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		filesFound = append(filesFound, path)
+		return nil
+	})
 	if err != nil {
 		return nil, err
-	}
-	for _, file := range files {
-		filesFound = append(filesFound, file.Name())
 	}
 	return filesFound, nil
 }
