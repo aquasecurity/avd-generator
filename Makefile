@@ -43,7 +43,7 @@ copy-assets:
 	cp -R avd-repo/remediations-repo/resources avd-repo/docs/resources
 
 build-all-no-clone: md-clean md-build sync-all md-generate hugo-generate copy-assets nginx-restart
-	echo "Build Done, navigate to http://localhost:9011/avd to browse"
+	echo "Build Done, navigate to http://localhost:9011/ to browse"
 
 build-all: md-clean md-build md-clone-all sync-all md-generate hugo-generate copy-assets nginx-restart
-	echo "Build Done, navigate to http://localhost:9011/avd to browse"
+	echo "Build Done, navigate to http://localhost:9011/ to browse"
