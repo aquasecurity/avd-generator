@@ -27,6 +27,7 @@ func (realClock) Now() string {
 	return time.Now().Format(time.RFC3339)
 }
 
+// GetAllFiles returns the absolute file path to all files in dir
 func GetAllFiles(dir string) ([]string, error) {
 	var filesFound []string
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {

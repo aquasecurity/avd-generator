@@ -385,7 +385,7 @@ In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write 
 func TestGetAllFiles(t *testing.T) {
 	actual, err := GetAllFiles("goldens/json/nvd")
 	require.NoError(t, err)
-	assert.Equal(t, []string{"CVE-2020-0001.json", "CVE-2020-0002.json", "CVE-2020-11932.json"}, actual)
+	assert.Equal(t, []string{"goldens/json/nvd/CVE-2020-0001.json", "goldens/json/nvd/CVE-2020-0002.json", "goldens/json/nvd/CVE-2020-11932.json"}, actual)
 }
 
 func TestGenerateVulnerabilityPages(t *testing.T) {
@@ -406,7 +406,7 @@ func TestGenerateVulnerabilityPages(t *testing.T) {
 		gotFiles, err := GetAllFiles(postsDir)
 		require.NoError(t, err)
 		for _, file := range gotFiles {
-			b, _ := ioutil.ReadFile(filepath.Join(postsDir, file))
+			b, _ := ioutil.ReadFile(file)
 			assert.NotEmpty(t, b)
 
 			if file == "CVE-2020-0002.md" {
@@ -516,7 +516,7 @@ An attacker may use the contents of error messages to help launch another, more 
 		gotFiles, err := GetAllFiles(postsDir)
 		require.NoError(t, err)
 		for _, file := range gotFiles {
-			b, _ := ioutil.ReadFile(filepath.Join(postsDir, file))
+			b, _ := ioutil.ReadFile(file)
 			assert.NotEmpty(t, b, file)
 
 			if file == "CVE-2020-0002.md" {
@@ -756,7 +756,7 @@ func TestGenerateRegoPolicyPages(t *testing.T) {
 		require.NoError(t, err)
 		assert.NotEmpty(t, gotFiles)
 		for _, file := range gotFiles {
-			got, _ := ioutil.ReadFile(filepath.Join(postsDir, file))
+			got, _ := ioutil.ReadFile(file)
 			assert.NotEmpty(t, got)
 
 			// check a few files for correctness

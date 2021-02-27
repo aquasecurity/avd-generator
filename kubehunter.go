@@ -15,7 +15,7 @@ func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
 	}
 
 	for _, page := range pages {
-		b, err := ioutil.ReadFile(filepath.Join(inputPagesDir, page))
+		b, err := ioutil.ReadFile(page)
 		if err != nil {
 			log.Println("unable to read original kube hunter doc: ", err)
 			continue
@@ -31,7 +31,7 @@ avd_page_type: kube-hunter_page
 			"categories: ", "types: ")
 		content := r.Replace(newContent)
 
-		err = ioutil.WriteFile(filepath.Join(outputPagesDir, page), []byte(content), 0644)
+		err = ioutil.WriteFile(filepath.Join(outputPagesDir, filepath.Base(page)), []byte(content), 0644)
 		if err != nil {
 			log.Fatalln("unable to write kube hunter page: ", err)
 		}

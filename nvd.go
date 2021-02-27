@@ -224,7 +224,7 @@ func generateVulnerabilityPages(nvdDir string, cweDir string, postsDir string) {
 		log.Fatal(err)
 	}
 	for _, file := range files {
-		bp, err := ParseVulnerabilityJSONFile(filepath.Join(nvdDir, file))
+		bp, err := ParseVulnerabilityJSONFile(file)
 		if err != nil {
 			log.Printf("unable to parse file: %s, err: %s, skipping...\n", file, err)
 			continue
@@ -270,7 +270,7 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 		vendorDir := fmt.Sprintf("%s/%s/%s", inputDir, vendor, year)
 		files, _ := GetAllFiles(vendorDir)
 		for _, file := range files {
-			fKey := strings.ReplaceAll(file, ".json", "")
+			fKey := strings.ReplaceAll(filepath.Base(file), ".json", "")
 
 			if _, ok := CVEMap[fKey]; !ok { // no nvd info & first time adding vendor
 				CVEMap[fKey] = make(map[string]ReservedCVEInfo)
@@ -289,13 +289,13 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 	}
 
 	for file, vendorsMap := range CVEMap {
-		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", file)))
+		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", filepath.Base(file))))
 		if err != nil {
 			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
 			continue
 		}
 		if err = ReservedPostToMarkdown(ReservedPage{
-			ID:     file,
+			ID:     filepath.Base(file),
 			Date:   clock.Now(),
 			CVEMap: vendorsMap,
 		}, f); err != nil {
