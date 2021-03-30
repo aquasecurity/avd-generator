@@ -48,7 +48,7 @@ func GetAllFiles(dir string) ([]string, error) {
 	return filesFound, nil
 }
 
-func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, error) {
+func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, error) { // TODO: include and exclude should be slices/variadic
 	var filteredFiles []string
 	files, err := GetAllFiles(dir)
 	if err != nil {
@@ -64,11 +64,12 @@ func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 }
 
 func main() {
-	generateVulnPages()
-	generateRegoPages()
-	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
-	for _, year := range Years {
-		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
-	}
-	generateCloudSploitPages("remediations-repo/en", "content/cspm")
+	//generateVulnPages()
+	//generateRegoPages()
+	//generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
+	//for _, year := range Years {
+	//	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+	//}
+	//generateCloudSploitPages("remediations-repo/en", "content/cspm")
+	generateTraceePages("tracee-repo/tracee-rules/signatures/rego", "content/tracee", realClock{})
 }

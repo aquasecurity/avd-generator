@@ -13,6 +13,8 @@
 		{{ partial "page_search.html" . }}
 	{{ else if eq "reserved_page" .Params.avd_page_type }}
 		{{ partial "page_reserved.html" . }}
+	{{ else if eq "tracee_page" .Params.avd_page_type }}
+		{{ partial "page_tracee.html" . }}
 	{{else}}
 		<main>
 			<article>
