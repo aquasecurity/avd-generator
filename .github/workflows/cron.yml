@@ -1,7 +1,7 @@
 name: Build Website
 on:
-  schedule:
-    - cron: '0 */24 * * *'
+  #schedule:
+    #- cron: '0 */24 * * *'
   watch:
     types: [started]
 
