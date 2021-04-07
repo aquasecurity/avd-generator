@@ -10,13 +10,13 @@ avd_page_type: tracee_page
 #### Standard Input-Output Over Socket
 
 ### Severity
-#### 3
+#### High
 
 ### Description
 Redirection of process's standard input/output to socket
 
 ### MITRE ATT&CK
-"Persistence: Server Software Component"
+Persistence: Server Software Component
 
 ### Version
 0.1.0

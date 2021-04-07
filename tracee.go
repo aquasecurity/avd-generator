@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -163,9 +164,10 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 																if v, ok := prop.Value.(*ast.BasicLit); ok {
 																	switch k.Value {
 																	case `"Severity"`:
-																		sm.Severity = v.Value
+																		sev, _ := strconv.Atoi(v.Value)
+																		sm.Severity = SeverityNames[sev]
 																	case `"MITRE ATT&CK"`:
-																		sm.MitreAttack = v.Value
+																		sm.MitreAttack = strings.ReplaceAll(v.Value, `"`, ``)
 																	default:
 																		log.Println("unknown key in signature metadata properties: ", k.Value, "file: ", file)
 																	}
