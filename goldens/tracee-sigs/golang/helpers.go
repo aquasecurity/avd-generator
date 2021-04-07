@@ -25,14 +25,6 @@ func GetTraceeArgumentByName(event tracee.Event, argName string) (tracee.Argumen
 	return tracee.Argument{}, fmt.Errorf("argument %s not found", argName)
 }
 
-func IsFileWrite(flags string) bool {
-	flagsLow := strings.ToLower(flags)
-	if strings.Contains(flagsLow, "o_wronly") || strings.Contains(flagsLow, "o_rdwr") {
-		return true
-	}
-	return false
-}
-
 func GetAddrStructFromArg(addrArg tracee.Argument, connectData *connectAddrData) error {
 	addrStr := strings.Replace(addrArg.Value.(string), "'", "\"", -1)
 	err := json.Unmarshal([]byte(addrStr), &connectData)
