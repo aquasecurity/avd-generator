@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -23,18 +24,10 @@ func Test_generateTraceePages(t *testing.T) {
 	assert.Equal(t, 3, len(gotFiles))
 
 	// check for various files and contents
-	got, err := ioutil.ReadFile(filepath.Join(postsDir, "TRC2.md"))
-	require.NoError(t, err)
-	want, _ := ioutil.ReadFile("goldens/tracee-sigs/generated-mds/TRC2.md")
-	assert.Equal(t, string(want), string(got))
-
-	got, err = ioutil.ReadFile(filepath.Join(postsDir, "TRC3.md"))
-	require.NoError(t, err)
-	want, _ = ioutil.ReadFile("goldens/tracee-sigs/generated-mds/TRC3.md")
-	assert.Equal(t, string(want), string(got))
-
-	got, err = ioutil.ReadFile(filepath.Join(postsDir, "TRC1.md"))
-	require.NoError(t, err)
-	want, _ = ioutil.ReadFile("goldens/tracee-sigs/generated-mds/TRC1.md")
-	assert.Equal(t, string(want), string(got))
+	for i := 1; i <= 3; i++ {
+		got, err := ioutil.ReadFile(filepath.Join(postsDir, fmt.Sprintf("TRC%d.md", i)))
+		require.NoError(t, err)
+		want, _ := ioutil.ReadFile(fmt.Sprintf("goldens/tracee-sigs/generated-mds/TRC%d.md", i))
+		assert.Equal(t, string(want), string(got))
+	}
 }
