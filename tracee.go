@@ -108,7 +108,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if !strings.Contains(file, "stdio") { // TODO: Remove this
+		if strings.Contains(file, "export.go") || strings.Contains(file, "helpers.go") || strings.Contains(file, "example.go") {
 			continue
 		}
 
