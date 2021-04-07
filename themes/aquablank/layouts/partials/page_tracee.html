@@ -1,0 +1,51 @@
+<!-- hero starts -->
+<div class="avd_hero_wrap animatable">
+    <div class="hero header_wrap is-primary"><!--  is-small -->
+        <!-- header starts -->
+
+        <!--<div class="hero-head"></div>-->
+        <div class="hero-body">
+            <div class="clearboth container">
+                <div class="header_title_wrap">
+                    <div class="page_pretitle with_icon aqua fadeInUp">Tracee</div>
+                    <h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Params.display_title }}</h1>
+<!--                    <h2 class="subtitle page_subtitle"></h2>-->
+                </div><!-- header_title_wrap -->
+            </div><!-- container -->
+        </div><!-- hero-body -->
+    </div><!-- hero -->
+
+</div><!-- hero_wrap -->
+<!-- hero ends -->
+
+<!-- content starts -->
+
+<div class="section avdcve_wrap animatable">
+    <div class="clearboth container">
+
+        <div class="columns is-multiline rever*se-columns">
+            <div class="column is-8-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_4">
+                <div class="vulnerability_content_wrap fadeInUp">
+                    <!--<h4 class="vulnerability_content_title fadeInUp"></h4>-->
+                    <div class="content vulnerability_content">
+                        {{ .Content }}
+                    </div><!-- vulnerability_content -->
+                </div><!-- vulnerability_content_wrap -->
+            </div><!-- column is-8 -->
+
+            <div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_2">
+                <div class="avdcve_sidebar_wrap">
+                    <a href="https://cloud.aquasec.com/signup" target="_blank" class="project_item fadeInUp animationDelay_8">
+                        <div class="project_icon" style="background-image:url('{{ "images/tracee.png" | relURL }}');"></div>
+                <h2 class="project_title">Tracee</h2>
+                <div class="project_subtitle">Runtime Security and Forensics using eBPF</div>
+                <div class="button arrowlinkbutton">Sign up for free</div>
+                </a>
+            </div>
+        </div><!-- column is-4 -->
+    </div><!-- columns -->
+
+</div><!-- container -->
+</div>
+
+<!-- content ends -->

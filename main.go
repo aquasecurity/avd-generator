@@ -48,7 +48,7 @@ func GetAllFiles(dir string) ([]string, error) {
 	return filesFound, nil
 }
 
-func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, error) {
+func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, error) { // TODO: include and exclude should be slices/variadic
 	var filteredFiles []string
 	files, err := GetAllFiles(dir)
 	if err != nil {
@@ -71,4 +71,5 @@ func main() {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
 	generateCloudSploitPages("remediations-repo/en", "content/cspm")
+	generateTraceePages("tracee-repo/tracee-rules/signatures", "content/tracee", realClock{})
 }
