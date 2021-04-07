@@ -3,6 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"io/ioutil"
 	"log"
 	"os"
@@ -33,6 +36,7 @@ type Signature struct {
 	//Tags        []string
 	//Properties  map[string]interface{}
 	RegoPolicy string
+	GoCode     string
 }
 
 type TraceePost struct {
@@ -63,8 +67,12 @@ avd_page_type: tracee_page
 ### Version
 {{.Version}}
 
-### Rego Policy
+{{if .RegoPolicy}}### Rego Policy
 ` + "```\n{{ .RegoPolicy }}\n```" + `
+{{- end}}
+{{- if .GoCode}}### Go Source
+` + "```\n{{ .GoCode }}\n```" + `
+{{- end}}
 `
 
 func TraceePostToMarkdown(tp TraceePost, outputFile *os.File) error {
@@ -79,15 +87,142 @@ func TraceePostToMarkdown(tp TraceePost, outputFile *os.File) error {
 func generateTraceePages(rulesDir, postsDir string, clock Clock) error {
 	log.Println("generating tracee pages in: ", postsDir)
 
-	files, err := GetAllFilesOfKind(rulesDir, "rego", "_test")
-	if err != nil {
-		log.Println("unable to get signature files: ", err)
+	if err := generateRegoSigPages(rulesDir, postsDir, clock); err != nil {
 		return err
 	}
 
-	helpers, err := ioutil.ReadFile(filepath.Join(rulesDir, "helpers.rego"))
+	if err := generateGoSigPages(rulesDir, postsDir, clock); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
+	fset := token.NewFileSet()
+	files, err := GetAllFilesOfKind(rulesDir, ".go", "_test.go")
 	if err != nil {
-		log.Printf("unable to read helpers.rego file: %s\n", err)
+		log.Println("unable to get golang signature files: ", err)
+		return err
+	}
+
+	for _, file := range files {
+		if !strings.Contains(file, "stdio") { // TODO: Remove this
+			continue
+		}
+
+		b, err := ioutil.ReadFile(file)
+		if err != nil {
+			log.Println("unable to read golang signature file: ", file, err, "skipping...")
+			continue
+		}
+		f, err := parser.ParseFile(fset, "", string(b), 0)
+		if err != nil {
+			log.Println("unable to parse golang signature file: ", file, err, "skipping...")
+			continue
+		}
+
+		//ast.Print(fset, f) // debug output
+		sm := Signature{}
+
+		for _, dec := range f.Decls {
+			if fn, ok := dec.(*ast.FuncDecl); ok {
+				if fn.Name.String() != "GetMetadata" {
+					continue
+				}
+
+				for _, b := range fn.Body.List {
+					if res, ok := b.(*ast.ReturnStmt); ok {
+						for _, r := range res.Results {
+							if cl, ok := r.(*ast.CompositeLit); ok {
+								for _, elt := range cl.Elts {
+									if kv, ok := elt.(*ast.KeyValueExpr); ok {
+										if val, ok := kv.Value.(*ast.BasicLit); ok { // id, version, name, description
+											val.Value = strings.ReplaceAll(val.Value, `"`, ``)
+											key, _ := kv.Key.(*ast.Ident)
+											switch key.Name {
+											case "ID":
+												sm.ID = val.Value
+											case "Version":
+												sm.Version = val.Value
+											case "Name":
+												sm.Name = strings.ReplaceAll(val.Value, "/", "-")
+											case "Description":
+												sm.Description = val.Value
+											default:
+												log.Println("unknown key in signature metadata: ", key.Name, "file: ", file)
+											}
+											continue
+										}
+										if val, ok := kv.Value.(*ast.CompositeLit); ok { // properties
+											if keyName, ok := kv.Key.(*ast.Ident); ok {
+												if keyName.Name == "Properties" {
+													for _, elt := range val.Elts {
+														if prop, ok := elt.(*ast.KeyValueExpr); ok {
+															if k, ok := prop.Key.(*ast.BasicLit); ok {
+																if v, ok := prop.Value.(*ast.BasicLit); ok {
+																	switch k.Value {
+																	case `"Severity"`:
+																		sm.Severity = v.Value
+																	case `"MITRE ATT&CK"`:
+																		sm.MitreAttack = v.Value
+																	default:
+																		log.Println("unknown key in signature metadata properties: ", k.Value, "file: ", file)
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+		// at this point sm should be populated
+		r := strings.NewReplacer("-", "", `"`, ``)
+		of, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", r.Replace(sm.ID))))
+		if err != nil {
+			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, sm.ID)
+			continue
+		}
+		if err = TraceePostToMarkdown(TraceePost{
+			Date: clock.Now(),
+			Signature: Signature{
+				ID:          sm.ID,
+				Version:     sm.Version,
+				Name:        sm.Name,
+				Description: sm.Description,
+				Severity:    sm.Severity,
+				MitreAttack: sm.MitreAttack,
+				GoCode:      string(b),
+			},
+		}, of); err != nil {
+			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sm.ID, err)
+			continue
+		}
+	}
+
+	return nil
+}
+
+func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
+	files, err := GetAllFilesOfKind(rulesDir, "rego", "_test")
+	if err != nil {
+		log.Println("unable to get rego signature files: ", err)
+		return err
+	}
+
+	helpers, err := ioutil.ReadFile(filepath.Join(rulesDir, "rego", "helpers.rego"))
+	if err != nil {
+		log.Println("unable to read helpers.rego file: ", err)
 		return err
 	}
 
@@ -144,6 +279,5 @@ func generateTraceePages(rulesDir, postsDir string, clock Clock) error {
 		// TODO: Add MITRE classification details
 		// TODO: Add ability to append custom aqua blog post from another markdown
 	}
-
 	return nil
 }
