@@ -85,18 +85,16 @@ func TraceePostToMarkdown(tp TraceePost, outputFile *os.File) error {
 	return nil
 }
 
-func generateTraceePages(rulesDir, postsDir string, clock Clock) error {
+func generateTraceePages(rulesDir, postsDir string, clock Clock) {
 	log.Println("generating tracee pages in: ", postsDir)
 
 	if err := generateRegoSigPages(rulesDir, postsDir, clock); err != nil {
-		return err
+		log.Fatal("failed to generate rego sig pages: ", err)
 	}
 
 	if err := generateGoSigPages(rulesDir, postsDir, clock); err != nil {
-		return err
+		log.Fatal("failed to generate go sig pages: ", err)
 	}
-
-	return nil
 }
 
 func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {

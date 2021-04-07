@@ -17,7 +17,7 @@ func Test_generateTraceePages(t *testing.T) {
 	defer func() {
 		_ = os.RemoveAll(postsDir)
 	}()
-	require.NoError(t, generateTraceePages("goldens/tracee-sigs", postsDir, fakeClock{}))
+	generateTraceePages("goldens/tracee-sigs", postsDir, fakeClock{})
 
 	gotFiles, err := GetAllFiles(postsDir)
 	require.NoError(t, err)
