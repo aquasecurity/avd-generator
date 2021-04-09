@@ -3,18 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go/ast"
-	"go/parser"
-	"go/token"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
+	"regexp"
 	"strings"
 	"text/template"
 
 	"github.com/aquasecurity/tracee/tracee-rules/signatures/rego/regosig"
+	traceesigs "github.com/simar7/tracee-signatures/golang" // TODO: Update to Aqua repo
 )
 
 var (
@@ -98,118 +96,68 @@ func generateTraceePages(rulesDir, postsDir string, clock Clock) {
 }
 
 func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
-	fset := token.NewFileSet()
-	files, err := GetAllFilesOfKind(rulesDir, ".go", "_test.go")
-	if err != nil {
-		log.Println("unable to get golang signature files: ", err)
+	var files []string
+	var err error
+	if files, err = GetAllFiles(rulesDir); err != nil {
 		return err
 	}
 
+	// gather all signatures and their data
+	type fileMap struct {
+		sigID        string
+		fileContents string
+		fileName     string
+	}
+	var fm []fileMap
 	for _, file := range files {
-		if strings.Contains(file, "export.go") || strings.Contains(file, "helpers.go") || strings.Contains(file, "example.go") {
+		if strings.Contains(file, "helpers.go") || strings.Contains(file, "example.go") || strings.Contains(file, "export.go") {
 			continue
 		}
+		b, _ := ioutil.ReadFile(file)
+		fm = append(fm, fileMap{
+			fileName:     file,
+			sigID:        regexp.MustCompile(`(TRC)\-\d+`).FindString(string(b)),
+			fileContents: string(b)})
+	}
 
-		b, err := ioutil.ReadFile(file)
+	// iterate over exported signatures
+	for _, sig := range traceesigs.ExportedSignatures {
+		m, err := sig.GetMetadata()
 		if err != nil {
-			log.Println("unable to read golang signature file: ", file, err, "skipping...")
+			log.Println("unable to get signature metadata: ", err, "skipping..")
 			continue
 		}
-		f, err := parser.ParseFile(fset, "", string(b), 0)
+
+		r := strings.NewReplacer("-", "", `"`, ``)
+		of, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", r.Replace(m.ID))))
 		if err != nil {
-			log.Println("unable to parse golang signature file: ", file, err, "skipping...")
+			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, m.ID)
 			continue
 		}
 
-		//ast.Print(fset, f) // debug output
-		sm := Signature{}
-
-		for _, dec := range f.Decls {
-			if fn, ok := dec.(*ast.FuncDecl); ok {
-				if fn.Name.String() != "GetMetadata" {
-					continue
-				}
-
-				for _, b := range fn.Body.List {
-					if res, ok := b.(*ast.ReturnStmt); ok {
-						for _, r := range res.Results {
-							if cl, ok := r.(*ast.CompositeLit); ok {
-								for _, elt := range cl.Elts {
-									if kv, ok := elt.(*ast.KeyValueExpr); ok {
-										if val, ok := kv.Value.(*ast.BasicLit); ok { // id, version, name, description
-											val.Value = strings.ReplaceAll(val.Value, `"`, ``)
-											key, _ := kv.Key.(*ast.Ident)
-											switch key.Name {
-											case "ID":
-												sm.ID = val.Value
-											case "Version":
-												sm.Version = val.Value
-											case "Name":
-												sm.Name = strings.ReplaceAll(val.Value, "/", "-")
-											case "Description":
-												sm.Description = val.Value
-											default:
-												log.Println("unknown key in signature metadata: ", key.Name, "file: ", file)
-											}
-											continue
-										}
-										if val, ok := kv.Value.(*ast.CompositeLit); ok { // properties
-											if keyName, ok := kv.Key.(*ast.Ident); ok {
-												if keyName.Name == "Properties" {
-													for _, elt := range val.Elts {
-														if prop, ok := elt.(*ast.KeyValueExpr); ok {
-															if k, ok := prop.Key.(*ast.BasicLit); ok {
-																if v, ok := prop.Value.(*ast.BasicLit); ok {
-																	switch k.Value {
-																	case `"Severity"`:
-																		sev, _ := strconv.Atoi(v.Value)
-																		sm.Severity = SeverityNames[sev]
-																	case `"MITRE ATT&CK"`:
-																		sm.MitreAttack = strings.ReplaceAll(v.Value, `"`, ``)
-																	default:
-																		log.Println("unknown key in signature metadata properties: ", k.Value, "file: ", file)
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-
+		var goCode string
+		for _, f := range fm {
+			if f.sigID == m.ID {
+				goCode = f.fileContents
 			}
 		}
 
-		// at this point sm should be populated
-		r := strings.NewReplacer("-", "", `"`, ``)
-		of, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", r.Replace(sm.ID))))
-		if err != nil {
-			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, sm.ID)
-			continue
-		}
 		if err = TraceePostToMarkdown(TraceePost{
 			Date: clock.Now(),
 			Signature: Signature{
-				ID:          sm.ID,
-				Version:     sm.Version,
-				Name:        sm.Name,
-				Description: sm.Description,
-				Severity:    sm.Severity,
-				MitreAttack: sm.MitreAttack,
-				GoCode:      string(b),
+				ID:          m.ID,
+				Version:     m.Version,
+				Name:        strings.ReplaceAll(m.Name, "/", "-"),
+				Description: m.Description,
+				Severity:    SeverityNames[m.Properties["Severity"].(int)],
+				MitreAttack: strings.ReplaceAll(m.Properties["MITRE ATT&CK"].(string), `"`, ``),
+				GoCode:      goCode,
 			},
 		}, of); err != nil {
-			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sm.ID, err)
+			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", m.ID, err)
 			continue
 		}
 	}
-
 	return nil
 }
 
