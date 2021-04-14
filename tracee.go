@@ -8,11 +8,11 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 
 	"github.com/aquasecurity/tracee/tracee-rules/signatures/rego/regosig"
-	traceesigs "github.com/simar7/tracee-signatures/golang" // TODO: Update to Aqua repo
 )
 
 var (
@@ -24,6 +24,11 @@ var (
 		"Critical",
 	}
 )
+
+func getSeverityName(sev string) string {
+	sevIndex, _ := strconv.Atoi(sev)
+	return SeverityNames[sevIndex]
+}
 
 type Signature struct {
 	ID          string
@@ -39,38 +44,38 @@ type Signature struct {
 }
 
 type TraceePost struct {
-	Date string
-	Signature
+	Date      string
+	Signature Signature
 }
 
 const signaturePostTemplate = `---
-title: "{{.Name}}"
+title: "{{.Signature.Name}}"
 date: {{.Date}}
 draft: false
 
 avd_page_type: tracee_page
 ---
 
-### {{.ID}}
-#### {{.Name}}
+### {{.Signature.ID}}
+#### {{.Signature.Name}}
 
 ### Severity
-#### {{.Severity}}
+#### {{.Signature.Severity}}
 
 ### Description
-{{.Description}}
+{{.Signature.Description}}
 
 ### MITRE ATT&CK
-{{.MitreAttack}}
+{{.Signature.MitreAttack}}
 
 ### Version
-{{.Version}}
+{{.Signature.Version}}
 
-{{if .RegoPolicy}}### Rego Policy
-` + "```\n{{ .RegoPolicy }}\n```" + `
+{{if .Signature.RegoPolicy}}### Rego Policy
+` + "```\n{{ .Signature.RegoPolicy }}\n```" + `
 {{- end}}
-{{- if .GoCode}}### Go Source
-` + "```\n{{ .GoCode }}\n```" + `
+{{- if .Signature.GoCode}}### Go Source
+` + "```\n{{ .Signature.GoCode }}\n```" + `
 {{- end}}
 `
 
@@ -102,62 +107,40 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		return err
 	}
 
-	// gather all signatures and their data
-	type fileMap struct {
-		sigID        string
-		fileContents string
-		fileName     string
-	}
-	var fm []fileMap
 	for _, file := range files {
-		if strings.Contains(file, "helpers.go") || strings.Contains(file, "example.go") || strings.Contains(file, "export.go") {
+		if strings.Contains(file, "helpers.go") || strings.Contains(file, "example.go") || strings.Contains(file, "export.go") || strings.HasSuffix(file, ".md") || strings.HasSuffix(file, ".rego") {
 			continue
 		}
 		b, _ := ioutil.ReadFile(file)
-		fm = append(fm, fileMap{
-			fileName:     file,
-			sigID:        regexp.MustCompile(`(TRC)\-\d+`).FindString(string(b)),
-			fileContents: string(b)})
-	}
+		r := strings.NewReplacer(`"`, ``)
+		rTitle := strings.NewReplacer("/", "-", `"`, "")
 
-	// iterate over exported signatures
-	for _, sig := range traceesigs.ExportedSignatures {
-		m, err := sig.GetMetadata()
-		if err != nil {
-			log.Println("unable to get signature metadata: ", err, "skipping..")
-			continue
+		var sig Signature
+		sig = Signature{
+			ID:          r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(ID)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
+			Version:     r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Version)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
+			Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
+			Description: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Description)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
+			Severity:    getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(Severity)\"\:\s*\d`).FindString(string(b)), ":")[1]))),
+			MitreAttack: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(MITRE ATT&CK)\"\:\s*\"(...)*`).FindString(string(b)), `: "`)[1])),
+			GoCode:      string(b),
 		}
 
-		r := strings.NewReplacer("-", "", `"`, ``)
-		of, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", r.Replace(m.ID))))
+		of, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", strings.ReplaceAll(sig.ID, "-", ""))))
 		if err != nil {
-			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, m.ID)
+			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, sig.ID)
 			continue
-		}
-
-		var goCode string
-		for _, f := range fm {
-			if f.sigID == m.ID {
-				goCode = f.fileContents
-			}
 		}
 
 		if err = TraceePostToMarkdown(TraceePost{
-			Date: clock.Now(),
-			Signature: Signature{
-				ID:          m.ID,
-				Version:     m.Version,
-				Name:        strings.ReplaceAll(m.Name, "/", "-"),
-				Description: m.Description,
-				Severity:    SeverityNames[m.Properties["Severity"].(int)],
-				MitreAttack: strings.ReplaceAll(m.Properties["MITRE ATT&CK"].(string), `"`, ``),
-				GoCode:      goCode,
-			},
+			Date:      clock.Now(),
+			Signature: sig,
 		}, of); err != nil {
-			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", m.ID, err)
+			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sig.ID, err)
 			continue
 		}
 	}
+
 	return nil
 }
 
