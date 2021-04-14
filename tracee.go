@@ -134,11 +134,12 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		r := strings.NewReplacer(`"`, ``)
 		rTitle := strings.NewReplacer("/", "-", `"`, "")
 
+		// TODO: Check for split string length before indexing to avoid panic
 		sig := Signature{
-			ID:          r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(ID)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
-			Version:     r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Version)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
-			Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
-			Description: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Description)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
+			ID:          r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(ID)\:\s*\"(.*?)"`).FindString(string(b)), ":")[1])),
+			Version:     r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Version)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
+			Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
+			Description: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Description)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
 			Severity:    getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(Severity)\"\:\s*\d`).FindString(string(b)), ":")[1]))),
 			MitreAttack: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(MITRE ATT&CK)\"\:\s*\"(...)*`).FindString(string(b)), `: "`)[1])),
 			GoCode:      string(b),
