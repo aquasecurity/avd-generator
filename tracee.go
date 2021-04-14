@@ -30,6 +30,24 @@ func getSeverityName(sev string) string {
 	return SeverityNames[sevIndex]
 }
 
+func findSubstringsInString(target string, needles []string) bool {
+	for _, s := range needles {
+		if strings.Contains(target, s) {
+			return true
+		}
+	}
+	return false
+}
+
+func findSuffixSubstringInString(target string, needles []string) bool {
+	for _, s := range needles {
+		if strings.HasSuffix(target, s) {
+			return true
+		}
+	}
+	return false
+}
+
 type Signature struct {
 	ID          string
 	Version     string
@@ -108,9 +126,10 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if strings.Contains(file, "helpers.go") || strings.Contains(file, "example.go") || strings.Contains(file, "export.go") || strings.HasSuffix(file, ".md") || strings.HasSuffix(file, ".rego") {
+		if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go"}) {
 			continue
 		}
+
 		b, _ := ioutil.ReadFile(file)
 		r := strings.NewReplacer(`"`, ``)
 		rTitle := strings.NewReplacer("/", "-", `"`, "")
@@ -158,7 +177,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if strings.Contains(file, "helpers") || strings.Contains(file, "traceerego.go") || strings.Contains(file, "example") { // TODO: This should be handled by a filter in GetAllFilesOfKind
+		if findSubstringsInString(file, []string{"helpers", "traceerego.go", "example"}) { // TODO: This should be handled by a filter in GetAllFilesOfKind
 			continue
 		}
 
