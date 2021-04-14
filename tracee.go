@@ -134,8 +134,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		r := strings.NewReplacer(`"`, ``)
 		rTitle := strings.NewReplacer("/", "-", `"`, "")
 
-		var sig Signature
-		sig = Signature{
+		sig := Signature{
 			ID:          r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(ID)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
 			Version:     r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Version)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
 			Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(...)*`).FindString(string(b)), ":")[1])),
