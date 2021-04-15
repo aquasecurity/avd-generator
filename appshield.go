@@ -6,20 +6,23 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
-	"time"
 )
 
 const regoPolicyPostTemplate = `---
-title: "{{.Title}}"
+title: "{{.Rego.ID}}"
 date: {{.Date}}
 draft: false
 
 avd_page_type: appshield_page
 ---
 
-### {{.Rego.ID}}
+### {{.Rego.Title}}
+
+### Version
+{{.Rego.Version}}
 
 ### Description
 {{.Rego.Description}}
@@ -38,6 +41,7 @@ avd_page_type: appshield_page
 
 type Rego struct {
 	ID                 string
+	Version            string
 	Description        string
 	Links              []string
 	Severity           string
@@ -53,41 +57,28 @@ type RegoPost struct {
 	Rego   Rego
 }
 
-func ParseAppShieldRegoPolicyFile(fileName string) (rp RegoPost, err error) {
+func ParseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp RegoPost, err error) {
 	rego, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return RegoPost{}, err
 	}
 
-	idx := strings.Index(string(rego), "package main")
-	metadata := string(rego)[:idx]
-
 	rp.Layout = "regoPolicy"
 	rp.By = "Aqua Security"
-	rp.Rego.Policy = strings.TrimSpace(string(rego)[idx:])
-	rp.Date = time.Unix(1594669401, 0).UTC().String()
+	rp.Rego.Policy = strings.TrimSpace(string(rego))
+	rp.Date = clock.Now()
 
-	for _, line := range strings.Split(metadata, "\n") {
-		r := strings.NewReplacer("@", "", "#", "")
-		str := r.Replace(line)
-		kv := strings.SplitN(str, ":", 2)
-		if len(kv) >= 2 {
-			val := strings.TrimSpace(kv[1])
-			switch strings.ToLower(strings.TrimSpace(kv[0])) {
-			case "id":
-				rp.Title = val
-			case "description":
-				rp.Rego.Description = val
-			case "recommended_actions":
-				rp.Rego.RecommendedActions = val
-			case "severity":
-				rp.Rego.Severity = val
-			case "title":
-				rp.Rego.ID = val
-				// TODO: Add case for parsing links
-			}
-		}
-	}
+	r := strings.NewReplacer(`"`, ``)
+	rTitle := strings.NewReplacer("/", "-", `"`, "")
+	rp.Rego.ID = r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"id\")\:\s*\"(.*?)"`).FindString(string(rego)), ":")[1]))
+	rp.Rego.Version = r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"version\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
+	rp.Title =
+		rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"title\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
+	rp.Rego.Description =
+		r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"description\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
+	rp.Rego.Severity =
+		getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"severity\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1])))
+	rp.Rego.RecommendedActions = r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"recommended_actions\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
 
 	return
 }
@@ -101,22 +92,23 @@ func RegoPostToMarkdown(rp RegoPost, outputFile *os.File) error {
 	return nil
 }
 
-func generateAppShieldPages() {
-	for _, p := range []string{"kubernetes", "docker"} {
-		policyDir := filepath.Join("appshield-repo", p, "policies")
+func generateAppShieldPages(policyDir, postsDir string, clock Clock) {
+	//for _, p := range []string{"kubernetes", "docker"} { // TODO: See issue: https://github.com/aquasecurity/appshield/issues/55
+	for _, p := range []string{"kubernetes"} {
+		policyDir := filepath.Join(policyDir, p, "policies")
 		log.Printf("generating policies in: %s...", policyDir)
-		generateAppShieldRegoPolicyPages(policyDir, "content/appshield")
+		generateAppShieldRegoPolicyPages(policyDir, postsDir, clock)
 	}
 }
 
-func generateAppShieldRegoPolicyPages(policyDir string, postsDir string) {
+func generateAppShieldRegoPolicyPages(policyDir string, postsDir string, clock Clock) {
 	files, err := GetAllFilesOfKind(policyDir, "rego", "_test")
-
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("unable to get policy files: ", err)
 	}
+
 	for _, file := range files {
-		rp, err := ParseAppShieldRegoPolicyFile(file)
+		rp, err := ParseAppShieldRegoPolicyFile(file, clock)
 		if err != nil {
 			log.Printf("unable to parse file: %s, err: %s, skipping...\n", file, err)
 			continue

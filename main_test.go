@@ -14,7 +14,7 @@ import (
 type fakeClock struct{}
 
 func (fakeClock) Now() string {
-	return "2020-11-18T14:32:34-08:00"
+	return "2021-04-15T20:55:39Z"
 }
 
 func TestParseVulnerabilityJSONFile(t *testing.T) {
@@ -640,7 +640,7 @@ func TestGenerateReservedPages(t *testing.T) {
 
 	assert.Equal(t, `---
 title: "CVE-2020-0569"
-date: 2020-11-18T14:32:34-08:00
+date: 2021-04-15T20:55:39Z
 draft: false
 
 avd_page_type: reserved_page

@@ -24,7 +24,7 @@ type Clock interface {
 type realClock struct{}
 
 func (realClock) Now() string {
-	return time.Now().Format(time.RFC3339)
+	return time.Now().UTC().Format(time.RFC3339)
 }
 
 // GetAllFiles returns the absolute file path to all files in dir
@@ -65,7 +65,7 @@ func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 
 func main() {
 	generateVulnPages()
-	generateAppShieldPages()
+	generateAppShieldPages("appshield-repo", "content/appshield", realClock{})
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
