@@ -65,7 +65,7 @@ func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 
 func main() {
 	generateVulnPages()
-	generateRegoPages()
+	generateAppShieldPages()
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")

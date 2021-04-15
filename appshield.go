@@ -53,7 +53,7 @@ type RegoPost struct {
 	Rego   Rego
 }
 
-func ParseRegoPolicyFile(fileName string) (rp RegoPost, err error) {
+func ParseAppShieldRegoPolicyFile(fileName string) (rp RegoPost, err error) {
 	rego, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return RegoPost{}, err
@@ -101,22 +101,22 @@ func RegoPostToMarkdown(rp RegoPost, outputFile *os.File) error {
 	return nil
 }
 
-func generateRegoPages() {
+func generateAppShieldPages() {
 	for _, p := range []string{"kubernetes", "docker"} {
 		policyDir := filepath.Join("appshield-repo", p, "policies")
 		log.Printf("generating policies in: %s...", policyDir)
-		generateRegoPolicyPages(policyDir, "content/appshield")
+		generateAppShieldRegoPolicyPages(policyDir, "content/appshield")
 	}
 }
 
-func generateRegoPolicyPages(policyDir string, postsDir string) {
+func generateAppShieldRegoPolicyPages(policyDir string, postsDir string) {
 	files, err := GetAllFilesOfKind(policyDir, "rego", "_test")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, file := range files {
-		rp, err := ParseRegoPolicyFile(file)
+		rp, err := ParseAppShieldRegoPolicyFile(file)
 		if err != nil {
 			log.Printf("unable to parse file: %s, err: %s, skipping...\n", file, err)
 			continue
