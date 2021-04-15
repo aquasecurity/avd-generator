@@ -1,27 +1,3 @@
----
-title: "KSV002"
-date: 2021-04-15T20:55:39Z
-draft: false
-
-avd_page_type: appshield_page
----
-
-### AppArmor policies disabled
-
-### Version
-v1.0.0
-
-### Description
-A program inside the container can bypass AppArmor protection policies.
-
-### Severity
-Informative
-
-### Recommended Actions
-Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.io'.
-
-### Rego Policy
-```
 package appshield.kubernetes.KSV002
 
 import data.lib.kubernetes
@@ -81,5 +57,3 @@ deny[res] {
         "type":  __rego_metadata__.type,
     }
 }
-```
-### Links

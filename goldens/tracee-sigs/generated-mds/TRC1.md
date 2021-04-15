@@ -1,6 +1,6 @@
 ---
 title: "Standard Input-Output Over Socket"
-date: 2020-11-18T14:32:34-08:00
+date: 2021-04-15T20:55:39Z
 draft: false
 
 avd_page_type: tracee_page
