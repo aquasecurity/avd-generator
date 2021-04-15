@@ -19,7 +19,7 @@ draft: false
 avd_page_type: appshield_page
 ---
 
-### {{.Rego.Title}}
+### {{.Title}}
 
 ### Version
 {{.Rego.Version}}
@@ -30,7 +30,7 @@ avd_page_type: appshield_page
 ### Severity
 {{ .Rego.Severity }}
 
-### Recommended Actions 
+### Recommended Actions
 {{ .Rego.RecommendedActions }}
 
 ### Rego Policy
@@ -114,7 +114,7 @@ func generateAppShieldRegoPolicyPages(policyDir string, postsDir string, clock C
 			continue
 		}
 
-		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", rp.Title)))
+		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", rp.Rego.ID)))
 		if err != nil {
 			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
 			continue

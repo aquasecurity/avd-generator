@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -189,19 +190,19 @@ func Test_generateAppShieldRegoPolicyPages(t *testing.T) {
 
 		gotFiles, err := GetAllFiles(postsDir)
 		require.NoError(t, err)
-		assert.NotEmpty(t, gotFiles)
+		assert.Equal(t, 3, len(gotFiles))
 		for _, file := range gotFiles {
 			got, _ := ioutil.ReadFile(file)
 			assert.NotEmpty(t, got)
 
 			// check a few files for correctness
-			if file == "KSV002.md" {
+			if strings.Contains(file, "KSV002.md") {
 				want, _ := ioutil.ReadFile("goldens/markdown/KSV002.md")
 				assert.Equal(t, string(want), string(got))
 			}
 
-			if file == "KSV013.md" {
-				want, _ := ioutil.ReadFile("goldens/markdown/KSV013.md")
+			if strings.Contains(file, "KSV005.md") {
+				want, _ := ioutil.ReadFile("goldens/markdown/KSV005.md")
 				assert.Equal(t, string(want), string(got))
 			}
 		}
