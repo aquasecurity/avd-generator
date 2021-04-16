@@ -8,8 +8,8 @@ on:
 jobs:
   build:
     name: Build Website
-    runs-on: ubuntu-20.04
-#    runs-on: macos-latest
+#    runs-on: ubuntu-20.04
+    runs-on: macos-latest
     steps:
       - name: Set up Go 1.16
         uses: actions/setup-go@v1
