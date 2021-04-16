@@ -107,6 +107,11 @@ func TraceePostToMarkdown(tp TraceePost, outputFile *os.File) error {
 }
 
 func generateTraceePages(rulesDir, postsDir string, clock Clock) {
+	err := os.MkdirAll(filepath.Join(postsDir), 0755)
+	if err != nil {
+		log.Fatal("unable to create tracee directory ", err)
+	}
+
 	log.Println("generating tracee pages in: ", postsDir)
 
 	if err := generateRegoSigPages(rulesDir, postsDir, clock); err != nil {
