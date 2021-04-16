@@ -60,6 +60,13 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/remediations-repo
 
+      - name: Checkout public tracee-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/tracee
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/tracee-repo
+
       - name: Build generator
         run: make md-clean md-build
 
