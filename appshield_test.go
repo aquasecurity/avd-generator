@@ -29,7 +29,7 @@ func TestParseAppShieldRegoPolicyFile(t *testing.T) {
 					ID:          "KSV002",
 					Version:     "v1.0.0",
 					Description: "A program inside the container can bypass AppArmor protection policies.",
-					Links:       nil,
+					Links:       []string{"https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline"},
 					Severity:    "Informative",
 					Policy: `package appshield.kubernetes.KSV002
 
@@ -45,6 +45,7 @@ __rego_metadata__ := {
      "type": "Kubernetes Security Check",
      "description": "A program inside the container can bypass AppArmor protection policies.",
      "recommended_actions": "Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.io'.",
+     "url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline",
 }
 
 # getApparmorContainers returns all containers which have an AppArmor
