@@ -80,6 +80,12 @@ func ParseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp RegoPost, er
 		getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"severity\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1])))
 	rp.Rego.RecommendedActions = r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"recommended_actions\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
 
+	reference := regexp.MustCompile(`(\"url\")\:\s*\"(.*?)\"`).FindString(string(rego))
+	if reference != "" {
+		reference = r.Replace(strings.TrimSpace(strings.SplitN(reference, ":", 2)[1]))
+		rp.Rego.Links = []string{reference}
+	}
+
 	return
 }
 
@@ -93,8 +99,7 @@ func RegoPostToMarkdown(rp RegoPost, outputFile *os.File) error {
 }
 
 func generateAppShieldPages(policyDir, postsDir string, clock Clock) {
-	//for _, p := range []string{"kubernetes", "docker"} { // TODO: See issue: https://github.com/aquasecurity/appshield/issues/55
-	for _, p := range []string{"kubernetes"} {
+	for _, p := range []string{"kubernetes", "docker"} {
 		policyDir := filepath.Join(policyDir, p, "policies")
 		log.Printf("generating policies in: %s...", policyDir)
 		generateAppShieldRegoPolicyPages(policyDir, postsDir, clock)
