@@ -33,10 +33,11 @@ avd_page_type: appshield_page
 ### Recommended Actions
 {{ .Rego.RecommendedActions }}
 
-### Rego Policy
-` + "```\n{{ .Rego.Policy }}\n```" + `
 ### Links{{range $element := .Rego.Links}}
 - {{$element}}{{end}}
+
+### Rego Policy
+` + "```\n{{ .Rego.Policy }}\n```" + `
 `
 
 type Rego struct {
