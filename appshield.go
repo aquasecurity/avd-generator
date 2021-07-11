@@ -79,7 +79,11 @@ func ParseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp RegoPost, er
 		r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"description\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
 	rp.Rego.Severity =
 		getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"severity\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1])))
-	rp.Rego.RecommendedActions = r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(\"recommended_actions\")\:\s*\"(.*?)\"`).FindString(string(rego)), ":")[1]))
+
+	recommendedActions := regexp.MustCompile(`(\"recommended_actions\")\:\s*\"(.*?)\"`).FindString(string(rego))
+	if recommendedActions != "" {
+		rp.Rego.RecommendedActions = r.Replace(strings.TrimSpace(strings.Split(recommendedActions, ":")[1]))
+	}
 
 	reference := regexp.MustCompile(`(\"url\")\:\s*\"(.*?)\"`).FindString(string(rego))
 	if reference != "" {
