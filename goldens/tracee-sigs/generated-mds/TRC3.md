@@ -1,5 +1,5 @@
 ---
-title: "Code injection"
+title: "Code-injection"
 date: 2021-04-15T20:55:39Z
 draft: false
 
@@ -7,7 +7,7 @@ avd_page_type: tracee_page
 ---
 
 ### TRC-3
-#### Code injection
+#### Code-injection
 
 ### Severity
 #### High

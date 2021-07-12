@@ -1,5 +1,5 @@
 ---
-title: "Standard Input-Output Over Socket"
+title: "Standard-Input-Output-Over-Socket"
 date: 2021-04-15T20:55:39Z
 draft: false
 
@@ -7,7 +7,7 @@ avd_page_type: tracee_page
 ---
 
 ### TRC-1
-#### Standard Input-Output Over Socket
+#### Standard-Input-Output-Over-Socket
 
 ### Severity
 #### High

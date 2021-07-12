@@ -137,7 +137,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 
 		b, _ := ioutil.ReadFile(file)
 		r := strings.NewReplacer(`"`, ``)
-		rTitle := strings.NewReplacer("/", "-", `"`, "")
+		rTitle := strings.NewReplacer("/", "-", `"`, "", " ", "-")
 
 		// TODO: Check for split string length before indexing to avoid panic
 		sig := Signature{
@@ -220,7 +220,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 				//Properties:  m.Properties,
 				ID:          m.ID,
 				Version:     m.Version,
-				Name:        m.Name,
+				Name:        strings.ReplaceAll(m.Name, " ", "-"),
 				Description: m.Description,
 				Severity:    SeverityNames[severity],
 				MitreAttack: ma,
