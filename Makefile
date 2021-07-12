@@ -15,6 +15,13 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 	git clone git@github.com:aquasecurity/tracee.git avd-repo/tracee-repo
 
+update-all-repos:
+	cd avd-repo/vuln-list && git pull
+	cd avd-repo/appshield-repo && git pull
+	cd avd-repo/kube-hunter-repo && git pull
+	cd avd-repo/remediations-repo && git pull
+	cd avd-repo/tracee-repo && git pull
+
 sync-all:
 	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
