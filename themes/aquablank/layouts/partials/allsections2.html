@@ -1,0 +1,6 @@
+{{ $indexScratch := .indexScratch }}
+{{ $child_pages := union .context.Sections .context.Pages }}
+{{ range $child_pages }}
+  {{ $.indexScratch.Add "sections" (slice . ) }}
+  {{ partial "allsections2.html" (dict "indexScratch" $indexScratch "context" .) }}
+{{ end }}

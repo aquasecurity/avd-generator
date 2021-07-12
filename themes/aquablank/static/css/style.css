@@ -1,0 +1,19 @@
+
+.my-2{margin-top: 1rem; margin-bottom: 1rem;}
+.categories-list li{ margin-right: 1rem;}
+.categories-list li a{ text-decoration: underline;}
+.categories-list li a:hover{ text-decoration: none;}
+.list-page-design h2{
+    font-weight: 700;
+}
+.list-page-design h3{
+    margin-left: 2rem;
+    text-decoration: underline;
+}
+.list-page-design ul{
+    margin-left: 1.5rem;
+    margin-top: 1rem !important;
+}
+.list-page-design ul li:before{
+    content: "-"
+}

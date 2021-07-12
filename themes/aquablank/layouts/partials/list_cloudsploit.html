@@ -10,6 +10,7 @@
                     <div class="page_pretitle with_icon aqua fadeInUp">Aqua CSPM</div>
                     <h1 class="title page_title is-spaced fadeInUp animationDelay_1">Remediation Guides</h1>
                     <!--<h2 class="subtitle page_subtitle"></h2>-->
+                    {{ partial "breadcrumb" . }}
                 </div><!-- header_title_wrap -->
             </div><!-- container -->
         </div><!-- hero-body -->
@@ -35,6 +36,22 @@
             </div><!-- column is-8 -->
 
             <div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_2">
+                <div class="avdcve_sidebar_wrap ">
+                    <div class="project_item">
+                        <h2>Browse other categories:</h2>
+                        <ul class="mt-4">
+							<li class=""><a href="{{.Permalink}}">AWS</a> </li>
+							<li class=""><a href="{{.Permalink}}">GCP</a> </li>
+							<li class=""><a href="{{.Permalink}}">Docker</a> </li>
+							<li class=""><a href="{{.Permalink}}">Kubernetes</a> </li>
+							<li class=""><a href="{{.Permalink}}">Runtime Threats</a> </li>
+							<li class=""><a href="{{.Permalink}}">CVEs</a> </li>
+						</ul>
+					
+                    </div>
+                   
+                </div>
+                
                 <div class="avdcve_sidebar_wrap">
                     <a href="https://cloud.aquasec.com/signup" target="_blank" class="project_item fadeInUp animationDelay_8">
                         <div class="project_icon" style="background-image:url('{{ "images/project_logo_aqua_color.png" | relURL }}');"></div>

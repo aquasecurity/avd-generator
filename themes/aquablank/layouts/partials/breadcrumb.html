@@ -1,0 +1,15 @@
+<nav class="breadcrumb is-medium" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    {{ range (split .RelPermalink "/") }}
+        {{ if gt (len . ) 0 }}
+        <li>
+        <a href="/{{ . }}">{{ humanize (replace . "posts" "blog") }}</a>
+        {{ end }}
+        </li>
+    {{ end }}
+  </ul>
+</nav>
+
+
+                       

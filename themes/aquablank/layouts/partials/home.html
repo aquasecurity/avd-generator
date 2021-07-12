@@ -5,16 +5,25 @@
 		
 		<div class="hero-body">
 			<div class="clearboth container">
-				<div class="header_title_wrap">	
+				<div class="header_title_wrap has-text-centered aligncenter">	
 					<!--<div class="page_pretitle fadeInUp"><a href="#">Home Hero pre title link</a></div>-->
-					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Vulnerabilities and weaknesses in open source applications and cloud native infrastructure</h1>
-					<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Detailed information and remediation guidance for vulnerabilities and weaknesses published by NVD, software vendor advisories, and Kube-Hunter</h2>
+					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Cloud Native Security DB</h1>
+					<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Search for CVEs and Cloud Native Security Issues</h2>
 					<div class="fadeInUp animationDelay_3">
 						<div id="fastSearch">
 							<input id="searchInput" class="avd_large_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
 							<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
 						</div>
 					</div>
+
+					<h3 class="fadeInUp animationDelay_2 my-2">Or Browse by Category</h3>					
+						<ul class="categories-list">
+							{{range .Sections}}
+								<li class="is-inline-block"><a href="{{.Permalink}}">{{.Title}}</a> </li>
+							{{end}}
+							
+						</ul>
+					
 				</div><!-- header_title_wrap -->
 			</div><!-- container -->
 		</div><!-- hero-body -->
@@ -23,6 +32,9 @@
 
 </div><!-- hero_wrap -->
 <!-- hero ends -->
+
+{{ partial "featured.html" . }}		
+
 
 
 <div class="section projects_wrap animatable">

@@ -1,7 +1,7 @@
 ################################# Default configuration ###################
 # provide your domain here
-baseURL = "https://avd.aquasec.com/"
-#baseURL = "/"
+# baseURL = "https://avd.aquasec.com/"
+baseURL = "/"
 
 # theme
 #theme = "dot"
