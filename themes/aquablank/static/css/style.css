@@ -17,3 +17,29 @@
 .list-page-design ul li:before{
     content: "-"
 }
+.tabs.is-toggle {
+    white-space: normal;
+}
+.tabs.is-toggle li{
+    display: revert;
+    margin-top: 0px !important;    
+}
+
+.tabs.is-toggle li::before{
+    display: none;
+}
+
+.round-aera{
+    margin-bottom: 20px;
+    text-align: center;
+   
+}
+.round-aera .box{
+    max-width: 150px;
+    border-radius: 9999px;
+    height: 150px;
+    margin: 15px auto;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}

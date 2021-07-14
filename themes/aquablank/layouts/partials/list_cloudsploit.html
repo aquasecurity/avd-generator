@@ -38,8 +38,8 @@
             <div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_2">
                 <div class="avdcve_sidebar_wrap ">
                     <div class="project_item">
-                        <h2>Browse other categories:</h2>
-                        <ul class="mt-4">
+                        <h2 class="is-size-5">Browse other categories:</h2>
+                        <ul class="my-2">
 							<li class=""><a href="{{.Permalink}}">AWS</a> </li>
 							<li class=""><a href="{{.Permalink}}">GCP</a> </li>
 							<li class=""><a href="{{.Permalink}}">Docker</a> </li>
@@ -51,6 +51,12 @@
                     </div>
                    
                 </div>
+
+                {{ partial "startnow" . }}
+
+                
+
+
                 
                 <div class="avdcve_sidebar_wrap">
                     <a href="https://cloud.aquasec.com/signup" target="_blank" class="project_item fadeInUp animationDelay_8">

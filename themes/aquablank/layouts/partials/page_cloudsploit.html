@@ -8,8 +8,13 @@
             <div class="clearboth container">
                 <div class="header_title_wrap">
 					<div class="page_pretitle with_icon aqua fadeInUp">Aqua CSPM</div>
+                    
+
 					{{ if or (.Params.breadcrumb_remediation_parent) (.Params.breadcrumb_remediation_child) }}
 						<div class="page_breadcrumbs fadeInUp animationDelay_1">
+                            {{ partial "breadcrumb" . }}
+
+                            <!--
 							{{ if .Params.breadcrumb_remediation_parent }}
 								<a href="/cspm#{{ .Params.breadcrumb_remediation_parent }}">{{ .Params.breadcrumb_remediation_parent_name }}</a> ›
 							{{ end }}
@@ -17,6 +22,8 @@
 							{{ if .Params.breadcrumb_remediation_child }}
 							<a href="/cspm#{{ .Params.breadcrumb_remediation_child }}">{{ .Params.breadcrumb_remediation_child_name }}</a> ›
 							{{ end }}
+
+                            -->
 						</div>
 					{{ end }}
                     <h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Params.display_title }}</h1>
@@ -63,6 +70,57 @@
             </div><!-- column is-8 -->
 
             <div class="column is-4-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_2">
+                <div class="round-aera">
+                    <div class="box is-rounded has-text-danger	 is-size-3">
+                        High
+                    </div>
+                    <p>Recommended Severity</p>
+                </div>
+               
+
+                <div class="avdcve_sidebar_wrap ">
+                   
+
+
+
+                    {{ range .Pages.GroupBy "Section" }}
+<!-- Checks for existence of _index.md for a section; if available, pulls from "title" in front matter -->
+{{ with $.Site.GetPage "section" .Key }}
+<h3>{{.Title}}</h3>
+{{ else }}
+<!-- If no _index.md is available, ".Key" defaults to the section title and filters to title casing -->
+<h3>{{ .Key | title }}</h3>
+{{ end }}
+<ul>
+    {{ range .Pages }}
+    <li>
+    <a href="{{ .Permalink }}">{{ .Title }}</a>
+    <div class="meta">{{ .Date.Format "Mon, Jan 2, 2006" }}</div>
+    </li>
+    {{ end }}
+</ul>
+{{ end }}
+
+
+
+                    <div class="project_item">
+                        <h2 class="is-size-5">Browse more Active Directory topics  </h2>
+                        <ul class="my-2">
+                            {{$sect := .Section }}
+
+                            
+                            {{ range (where .Site.RegularPages  "Section" $sect) }} 
+                            
+								<li class=""><a href="{{.Permalink}}">{{.Title}}</a> </li>
+
+							{{end}}
+						</ul>
+					
+                    </div>
+                   
+                </div>
+
+                {{ partial "startnow" . }}
                 <div class="avdcve_sidebar_wrap">
                     <a href="https://cloud.aquasec.com/signup" target="_blank" class="project_item fadeInUp animationDelay_8">
                         <div class="project_icon" style="background-image:url('{{ "images/project_logo_aqua_color.png" | relURL }}');"></div>

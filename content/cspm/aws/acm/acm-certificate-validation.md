@@ -12,7 +12,7 @@ breadcrumb_remediation_child_name: ACM
 ---
 ### Quick Info
 
-| | |
+| Issue ID | AZU001 |
 |-|-|
 | **Plugin Title** | ACM Certificate Validation |
 | **Cloud** | AWS |
@@ -24,6 +24,10 @@ breadcrumb_remediation_child_name: ACM
 
 ## Detailed Remediation Steps
 
+{{< tabs  Runtime IaC >}}
+
+{{< codetab >}}
+
 1. Log into the AWS console and navigate to the ACM service page.\
 ![](/path/to/some/image.png)
 2. Click into each certificate that has been requested. \
@@ -32,3 +36,19 @@ breadcrumb_remediation_child_name: ACM
 4. Ensure each domain listed has DNS validation configured. If DNS validation is used, DNS records will be listed for the domain.
 5. Ensure that the records provided by AWS are configured and valid within your DNS provider (such as Route 53).
 6. If DNS validation is not used, request a new certificate for the same domains using DNS validation and update the downstream services to use this new certificate. Once done, delete the old certificate to ensure it can no longer be used.
+
+
+{{< /codetab >}}
+
+{{< codetab >}}
+bla bla bla bla bla bla bla bla bla
+bla bla bla bla bla bla bla bla bla
+bla bla bla bla bla bla bla bla bla
+bla bla bla bla bla bla bla bla bla
+bla bla bla bla bla bla bla bla
+{{< /codetab >}}
+
+
+{{< /tabs >}}
+
+
