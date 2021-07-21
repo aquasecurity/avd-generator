@@ -96,5 +96,45 @@
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " is-active";
 }
+
+if($('h2#detailed-remediation-steps').length!==0){
+      console.log("yes cide here dasfs");
+	  var testcon = $("#detailed-remediation-steps").next().length
+	  if($(testcon).length==0){
+		$('h2#detailed-remediation-steps').css( "display", "none" )
+	  }
+
+			
+
+	  
+	  
+	//   if($(this).after( $( "ol" ) )){
+	// 	console.log("ol not")
+
+
+	//   }
+	  $(this).siblings();
+}
+$("#detailed-remediation-steps").next().find("ol").css( "background", "yellow" );
+
+
+// $("#detailed-remediation-steps").nextUntil("ol li").css({
+//                 "color": "black",
+//                 "border": "2px solid green"
+//             });
+
+var content = $("#detailed-remediation-steps").next();
+
+
+$(document).ready(function() {
+	var content22 = $("h2#detailed-remediation-steps");
+            // $("h3").next().css({
+            //     "color": "black",
+            //     "border": "2px solid green"
+            // });
+
+			// console.log(content22)
+        });
+
 </script>
 </html>

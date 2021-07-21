@@ -8,7 +8,7 @@
             <div class="clearboth container">
                 <div class="header_title_wrap">
                     <div class="page_pretitle with_icon aqua fadeInUp">Aqua CSPM</div>
-                    <h1 class="title page_title is-spaced fadeInUp animationDelay_1">Remediation Guides</h1>
+                    <h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{.Title}}</h1>
                     <!--<h2 class="subtitle page_subtitle"></h2>-->
                     {{ partial "breadcrumb" . }}
                 </div><!-- header_title_wrap -->
@@ -30,7 +30,10 @@
                 <div class="listpage_content_wrap fadeInUp">
                     <!--<h4 class="listpage_content_title fadeInUp"></h4>-->
                     <div class="content listpage_content">
+                       
+
                         {{ .Content }}
+
                     </div><!-- listpage_content -->
                 </div><!-- listpage_content_wrap -->
             </div><!-- column is-8 -->
