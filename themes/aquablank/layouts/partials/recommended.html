@@ -1,0 +1,9 @@
+<div class="round-aera">
+    {{ $textprams := .Params.recommended.text | lower }}
+    <div class="box is-rounded has-text-{{if eq $textprams  "high" }}danger{{end}}{{if eq $textprams  "medium" }}primary{{end}}{{if eq $textprams  "info" }}success{{end}}	 is-size-3">
+        {{.Params.recommended.text}} 
+    </div>
+    {{with .Params.recommended.desc}}
+        <p>{{.}}</p>
+    {{end}}
+</div>

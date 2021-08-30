@@ -83,6 +83,13 @@ font_family = "lato" # Choose font family from : https://fonts.google.com/
 
 
 ############################## social links ##############################
+[params.sidebarInfo]
+heading = "start protecting your cloud" 
+link = "#"
+linkText = "Start Now"
+
+
+############################## social links ##############################
 [[params.social]]
 icon = "ti-twitter-alt" # themify icon pack : https://themify.me/themify-icons
 link = "https://twitter.com/aquasecteam"

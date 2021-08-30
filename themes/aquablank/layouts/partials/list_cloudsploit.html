@@ -11,6 +11,7 @@
                     <h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{.Title}}</h1>
                     <!--<h2 class="subtitle page_subtitle"></h2>-->
                     {{ partial "breadcrumb" . }}
+                    
                 </div><!-- header_title_wrap -->
             </div><!-- container -->
         </div><!-- hero-body -->
@@ -43,19 +44,31 @@
                     <div class="project_item">
                         <h2 class="is-size-5">Browse other categories:</h2>
                         <ul class="my-2">
-							<li class=""><a href="{{.Permalink}}">AWS</a> </li>
-							<li class=""><a href="{{.Permalink}}">GCP</a> </li>
-							<li class=""><a href="{{.Permalink}}">Docker</a> </li>
-							<li class=""><a href="{{.Permalink}}">Kubernetes</a> </li>
-							<li class=""><a href="{{.Permalink}}">Runtime Threats</a> </li>
-							<li class=""><a href="{{.Permalink}}">CVEs</a> </li>
+                            {{ $curSection :=  .Title | lower  }}
+
+                            
+                            
+                            
+							{{range  .Site.Sections}}
+                                {{$titleText := .Title | lower }}
+                                {{if ne $titleText $curSection }}
+								    <li class=""><a href="{{.Permalink}}">{{.Title }} </a> </li>
+                                {{end}}
+                                
+							{{end}}
+
+							
 						</ul>
+
+
 					
                     </div>
                    
                 </div>
 
-                {{ partial "startnow" . }}
+                {{if  .Site.Params.sidebarInfo.heading }}
+                    {{ partial "startnow" . }}
+                {{end}}
 
                 
 

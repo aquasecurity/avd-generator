@@ -1,0 +1,30 @@
+---
+title: "Azure"
+draft: false
+weight: 3
+avd_page_type: cloudsploit_page
+---
+
+
+
+## Security Issues: 
+### Active Directory 
+- [Ensure No Guest User](/azure/ensure-no-guest-user/) 
+- Minimum Password Length
+- No Custom Owner Roles
+- Password Requires Lowercase
+- Password Requires Numbers
+- Password Requires Symbols
+- Password Requires Uppercase
+  
+### App Service 
+- .NET Framework Version
+- Authentication Enabled
+- Client Certificates Enabled
+- HTTP 2.0 Enabled
+- HTTPS Only Enabled
+- Identity Enabled
+- Java Version
+- PHP Version
+- Python Version
+- TLS Version Check
