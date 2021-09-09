@@ -66,11 +66,12 @@ document.getElementById("searchInput").onkeyup = function(e) {
 
 // ==========================================
 // load our search index, only executed once
-//
+// host: search endpoint
+// apiKey: read-only public secret: https://docs.meilisearch.com/reference/features/authentication.html#key-types
 function loadMeiliSearch() {
     meilisearch = new MeiliSearch({
         host: 'https://avdsearch.aquasec.com',
-        apiKey: "96c29e9ddef066567a2ab370fd175fd4951099df32860aaa2213eb818a090e89",
+        apiKey: "96c29e9ddef066567a2ab370fd175fd4951099df32860aaa2213eb818a090e89", // this is a read-only public key, *not a secret*
     })
     meilisearchIndex = meilisearch.getIndex('content');
 }
