@@ -131,7 +131,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go"}) {
+		if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go", "aio", "common", "mapper"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go"}) {
 			continue
 		}
 
@@ -182,7 +182,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if findSubstringsInString(file, []string{"helpers", "traceerego.go", "example"}) { // TODO: This should be handled by a filter in GetAllFilesOfKind
+		if findSubstringsInString(file, []string{"helpers", "example", ".go", "aio"}) { // TODO: This should be handled by a filter in GetAllFilesOfKind
 			continue
 		}
 

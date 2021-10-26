@@ -23,6 +23,8 @@ github.com/aquasecurity/tracee/libbpfgo v0.0.0-20210407135941-e25ba71a024a/go.mo
 github.com/aquasecurity/tracee/tracee-ebpf v0.0.0-20210217124138-0575cb7b157d/go.mod h1:2hx4/WyixWannTcEJEF9Pe9UO5WGrusAyDJIaJ7mmDA=
 github.com/aquasecurity/tracee/tracee-ebpf v0.0.0-20210408194555-feb16774f64e h1:hzv/uc/XFKvJ8ctEDYESscoyCStuf7jPTF4bcTVlwGc=
 github.com/aquasecurity/tracee/tracee-ebpf v0.0.0-20210408194555-feb16774f64e/go.mod h1:a522Pd1sf3azJtAYirWrRRovSt/Hit/rUZaobisOj7Y=
+github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.3 h1:XQvHdUNBgDmxDU6O1SY/+lvQeoi+MCxHcvKBOq01bv0=
+github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.3/go.mod h1:C6aED/3HEi4aKSyjtCBWC//7EDXVlV/cQAdDgSbF1eM=
 github.com/aquasecurity/tracee/tracee-rules v0.0.0-20210408194555-feb16774f64e h1:vcyJwLdmc5uPppP0NKn0GQwvrdAGihvmRHHp3Uto0rM=
 github.com/aquasecurity/tracee/tracee-rules v0.0.0-20210408194555-feb16774f64e/go.mod h1:BVb+BPxY7BYdUuKxtlindLHiyDXuILxuY1QSx8H2vDY=
 github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2 h1:xbdUfr2KE4THsFx9CFWtWpU91lF+YhgP46moV94nYTA=
