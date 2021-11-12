@@ -599,20 +599,20 @@ bar content`, string(b))
 }
 
 func TestGenerateReservedPages(t *testing.T) {
-	postsDir, _ := ioutil.TempDir("", "TestGenerateReservedPages-postsDir-*")
-	defer func() {
-		_ = os.RemoveAll(postsDir)
-	}()
+	t.Run("no existing info from NVD", func(t *testing.T) {
+		postsDir, _ := ioutil.TempDir("", "TestGenerateReservedPages-postsDir-*")
+		defer func() {
+			_ = os.RemoveAll(postsDir)
+		}()
 
-	for _, year := range []string{"2020"} {
-		generateReservedPages(year, fakeClock{}, "goldens/reserved", postsDir)
-	}
+		for _, year := range []string{"2020"} {
+			generateReservedPages(year, fakeClock{}, "goldens/reserved-no-existing-info", postsDir)
+		}
 
-	// check for one expected file
-	got, err := ioutil.ReadFile(filepath.Join(postsDir, "CVE-2020-0569.md"))
-	require.NoError(t, err)
-
-	assert.Equal(t, `---
+		// check for one expected file
+		got, err := ioutil.ReadFile(filepath.Join(postsDir, "CVE-2020-0569.md"))
+		require.NoError(t, err)
+		assert.Equal(t, `---
 title: "CVE-2020-0569"
 date: 2021-04-15T20:55:39Z
 draft: false
@@ -656,4 +656,20 @@ QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugi
 | Qtbase-opensource-src | Ubuntu/bionic | 5.9.5+dfsg-0ubuntu2.5|
 
 `, string(got))
+	})
+
+	t.Run("with existing info from NVD", func(t *testing.T) {
+		postsDir, _ := ioutil.TempDir("", "TestGenerateReservedPages-postsDir-*")
+		defer func() {
+			_ = os.RemoveAll(postsDir)
+		}()
+
+		for _, year := range []string{"2020"} {
+			generateReservedPages(year, fakeClock{}, "goldens/reserved-with-existing-info", postsDir)
+		}
+
+		// no new reserved page must be created as NVD already has info
+		_, err := ioutil.ReadFile(filepath.Join(postsDir, "CVE-2020-0569.md"))
+		require.Contains(t, err.Error(), "no such file or directory")
+	})
 }
