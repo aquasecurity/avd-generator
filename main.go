@@ -70,5 +70,5 @@ func main() {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
 	generateCloudSploitPages("remediations-repo/en", "content/cspm")
-	generateTraceePages("tracee-repo/tracee-rules/signatures", "content/tracee", realClock{})
+	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
 }

@@ -192,7 +192,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 			return err
 		}
 
-		sig, err := regosig.NewRegoSignature(string(b), string(helpers))
+		sig, err := regosig.NewRegoSignature("rego", false, string(b), string(helpers))
 		if err != nil {
 			log.Printf("unable to create new rego signature in file %s: %s\n", file, err)
 			return err
