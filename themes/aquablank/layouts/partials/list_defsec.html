@@ -136,6 +136,14 @@
 					<!--<h4 class="vulnerability_content_title fadeInUp"></h4>-->
 					<div class="content vulnerability_content">
 						{{ .Content }}
+
+                        <ul>
+                        {{ range .Pages }}
+                            <li>
+                                <a href="{{.RelPermalink}}">{{.Title}}</a>
+                            </li>
+                        {{ end }}
+                        </ul>
 					</div><!-- vulnerability_content -->
 
 				</div><!-- vulnerability_content_wrap -->

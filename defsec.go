@@ -239,13 +239,12 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 		remediationKeys = append(remediationKeys, strings.ToLower(k))
 	}
 
-	shortName := strings.Title(strings.ReplaceAll(rule.Rule().ShortCode, "-", " "))
 	post := DefsecPost{
 		AVDID:        rule.Rule().AVDID,
-		ShortName:    shortName,
+		ShortName:    rule.Rule().ShortCodeDisplayName(),
 		Provider:     strings.ToLower(rule.Rule().Provider.ConstName()),
 		Service:      strings.ToLower(rule.Rule().Service),
-		ServiceName:  strings.Title(strings.ReplaceAll(rule.Rule().Service, "-", " ")),
+		ServiceName:  rule.Rule().ServiceDisplayName(),
 		Body:         documentBody.String(),
 		Severity:     strings.ToLower(string(rule.Rule().Severity)),
 		Remediations: remediationKeys,
@@ -312,8 +311,7 @@ menu:
     identifier: {{.ProviderID}}
     name: {{.DisplayName}}
 ---
-{{ range .Services }} - [{{.Name}}]({{$.ProviderID}}/{{.ID}})
-{{ end }}
+Select a service
 `
 
 const serviceTemplate = `---
@@ -331,8 +329,6 @@ menu:
     parent: {{.ProviderID}}
 ---
 
-Select a service
+Select a rule
 
-{{ range .Summaries }}- [{{ .AVDID }}]({{$.ProviderID}}/{{$.ServiceID}}/{{.AVDID}}): {{ .Summary }}
-{{ end }}
 `

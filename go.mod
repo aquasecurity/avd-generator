@@ -3,7 +3,7 @@ module github.com/aquasecurity/aqua-vulnerability-db-hugo
 go 1.16
 
 require (
-	github.com/aquasecurity/defsec v0.3.6
+	github.com/aquasecurity/defsec v0.3.7
 	github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5
 	github.com/aquasecurity/tracee/tracee-rules v0.6.5
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
