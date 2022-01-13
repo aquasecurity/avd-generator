@@ -15,6 +15,8 @@
 		{{ partial "page_reserved.html" . }}
 	{{ else if eq "tracee_page" .Params.avd_page_type }}
 		{{ partial "page_tracee.html" . }}
+	{{ else if eq "defsec_page" .Params.avd_page_type }}
+		{{ partial "page_defsec.html" . }}
 	{{else}}
 		<main>
 			<article>

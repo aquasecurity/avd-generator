@@ -63,12 +63,13 @@ func GetAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 }
 
 func main() {
-	generateAppShieldPages("appshield-repo", "content/appshield", realClock{})
-	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
-	generateVulnPages()
-	for _, year := range Years {
-		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
-	}
-	generateCloudSploitPages("remediations-repo/en", "content/cspm")
-	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
+	// generateAppShieldPages("appshield-repo", "content/appshield", realClock{})
+	// generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/kube-hunter")
+	// generateVulnPages()
+	// for _, year := range Years {
+	// 	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+	// }
+	// generateCloudSploitPages("remediations-repo/en", "content/cspm")
+	// generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
+	generateDefsecPages("defsec-repo/avd_docs", "content/defsec", realClock{})
 }

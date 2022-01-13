@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+<html lang="{{ .Site.LanguageCode | default " en-us" }}">
+
 <head>
-	{{ "<!--Favicon-->" | safeHTML }}
 	<link rel="icon" href="{{ `images/favicon.png` | absURL }}" type="image/x-icon">
 
 	<meta charset="UTF-8">
@@ -17,62 +17,71 @@
 	{{ .Scratch.Set "seo_description" "" }}
 
 	{{ if .IsHome }}
-		{{ .Scratch.Set "seo_title" "Vulnerability Database | Aqua Security" }}
-		{{ .Scratch.Set "seo_description" "Detailed information and remediation guidance for vulnerabilities and weaknesses published by NVD, software vendor advisories, and analysis of container images." }}
+	{{ .Scratch.Set "seo_title" "Vulnerability Database | Aqua Security" }}
+	{{ .Scratch.Set "seo_description" "Detailed information and remediation guidance for vulnerabilities and weaknesses	published by NVD, software vendor advisories, and analysis of container images." }}
 
 	{{ else if eq "nvd_page" .Params.avd_page_type }}
 
-		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
-		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+	{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
 
-		{{ .Scratch.Set "seo_description" .Title | safeHTML }}
-		{{ .Scratch.Add "seo_description" " " }}
-		{{ .Scratch.Add "seo_description" (.Params.header_subtitle | safeHTML | truncate 150) }}
+	{{ .Scratch.Set "seo_description" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_description" " " }}
+	{{ .Scratch.Add "seo_description" (.Params.header_subtitle | safeHTML | truncate 150) }}
 
 	{{ else if eq "kube-hunter_page" .Params.avd_page_type }}
 
-		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
-		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+	{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
 
 	{{ else if eq "appshield_page" .Params.avd_page_type }}
 
-		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
-		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}	
+	{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
 
 	{{ else if eq "cloudsploit_page" .Params.avd_page_type }}
 
-		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
-		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+	{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
 
 	{{ else if eq "tracee_page" .Params.avd_page_type }}
 
-		{{ .Scratch.Set "seo_title" .Title | safeHTML }}
-		{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+	{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+
+	{{ else if eq "defsec_page" .Params.avd_page_type }}
+
+	{{ .Scratch.Set "seo_title" .Title | safeHTML }}
+	{{ .Scratch.Add "seo_title" " | Vulnerability Database | Aqua Security" }}
+
 
 	{{ else }}
 
 	{{ end }}
-	
+
 	<title>{{ .Scratch.Get "seo_title" }}</title>
-	<meta name="description" content="{{ .Scratch.Get "seo_description" }}" />
+	<meta name="description" content="{{ .Scratch.Get " seo_description" }}" />
 
-	<meta property="og:title" content="{{ .Scratch.Get "seo_title" }}"/>
-	<meta property="og:site_name" content="Aqua Vulnerability Database"/>
-	<meta property="og:description" content="{{ .Scratch.Get "seo_description" }}"/>
+	<meta property="og:title" content="{{ .Scratch.Get " seo_title" }}" />
+	<meta property="og:site_name" content="Aqua Vulnerability Database" />
+	<meta property="og:description" content="{{ .Scratch.Get " seo_description" }}" />
 
-	<link rel="stylesheet" href="{{ "css/avdblank.min.css" | relURL }}">
+	<link rel="stylesheet" href='{{ "css/avdblank.min.css" | relURL }}'>
+	<link rel="stylesheet" href='{{ "css/syntax.css" | relURL }}'>
 	<script type='text/javascript' src='{{ "js/avdblank.js" | relURL }}'></script>
+	<script type='text/javascript' src='{{ "js/iac.js" | relURL }}'></script>
 </head>
+
 <body>
 
 	{{ partial "header" . }}
 
 	{{ if .IsHome }}
-		{{ partial "home.html" . }}		
+	{{ partial "home.html" . }}
 	{{ else }}
-		{{ block "main" . }}{{ end }}
+	{{ block "main" . }}{{ end }}
 	{{ end }}
-	
+
 	{{ partial "footer" . }}
 
 
@@ -80,4 +89,5 @@
 
 <script src="{{ .Site.BaseURL }}js/fastsearch.js"></script>
 <script src="{{ .Site.BaseURL }}js/meilisearch.js"></script>
+
 </html>
