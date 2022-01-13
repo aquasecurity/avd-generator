@@ -33,26 +33,68 @@ type RuleSummary struct {
 	Remediations []string
 }
 
+type Providers []*ProviderIndex
+
 type ProviderIndex struct {
 	Provider     provider.Provider
-	Remediations string
+	Remediations []string
+	Services     Services
 }
 
+type Services []*ServiceIndex
+
 type ServiceIndex struct {
+	ID            string
 	Name          string
-	Remediations  string
-	RuleSummaries []RuleSummary
+	Remediations  []string
+	RuleSummaries RuleSummaries
 }
+
+type RuleSummaries []RuleSummary
 
 func (p *ProviderIndex) Equals(p2 ProviderIndex) bool {
 
 	return true
 }
 
-func generateDefsecPages(remidiationDir, contentDir string, clock Clock) {
+func (p *Providers) Get(prov *ProviderIndex) *ProviderIndex {
+	for _, provider := range *p {
+		if provider.Provider.ConstName() == prov.Provider.ConstName() {
+			return provider
+		}
+	}
+	return nil
+}
+
+func (p *Providers) Add(i *ProviderIndex) *ProviderIndex {
+	if existing := p.Get(i); existing != nil {
+		return existing
+	}
+	*p = append(*p, i)
+	return i
+}
+
+func (s *Services) Get(svc *ServiceIndex) *ServiceIndex {
+	for _, service := range *s {
+		if service.Name == svc.Name {
+			return service
+		}
+	}
+	return nil
+}
+
+func (s *Services) Add(svc *ServiceIndex) *ServiceIndex {
+	if existing := s.Get(svc); existing != nil {
+		return existing
+	}
+	*s = append(*s, svc)
+	return svc
+}
+
+func generateDefsecPages(remidiationDir, contentDir string, _ Clock) {
 
 	registeredRules := rules.GetRegistered()
-	providers := make(map[ProviderIndex][]*ServiceIndex)
+	var providers Providers
 
 	for _, r := range registeredRules {
 
@@ -90,43 +132,28 @@ func generateDefsecPages(remidiationDir, contentDir string, clock Clock) {
 			log.Printf("an error occurred writing the page for %s. %v", r.Rule().AVDID, err)
 		}
 
-		p := ProviderIndex{
-			Provider: r.Rule().Provider,
-		}
-
-		if _, exists := providers[p]; !exists {
-			providers[p] = []*ServiceIndex{}
-		}
-		services := providers[p]
-
-		var serviceIndex *ServiceIndex
-		for _, s := range services {
-			if s.Name == r.Rule().Service {
-				serviceIndex = s
-				break
-			}
-		}
-
-		if serviceIndex == nil {
-			serviceIndex = &ServiceIndex{
-				Name: r.Rule().Service,
-			}
-			services = append(services, serviceIndex)
-		}
-
 		remediationNames := make([]string, 0, len(remediations))
 		for k := range remediations {
 			remediationNames = append(remediationNames, k)
 		}
 
-		serviceIndex.RuleSummaries = append(serviceIndex.RuleSummaries, RuleSummary{
-			AVID:         r.Rule().AVDID,
-			DisplayName:  r.Rule().ShortCode,
-			Summary:      r.Rule().Summary,
+		provider := providers.Add(&ProviderIndex{
+			Provider:     r.Rule().Provider,
 			Remediations: remediationNames,
 		})
 
-		providers[p] = services
+		service := provider.Services.Add(&ServiceIndex{
+			ID:           r.Rule().Service,
+			Name:         r.Rule().ServiceDisplayName(),
+			Remediations: remediationNames,
+		})
+
+		service.RuleSummaries = append(service.RuleSummaries, RuleSummary{
+			AVID:         r.Rule().AVDID,
+			DisplayName:  r.Rule().ShortCodeDisplayName(),
+			Summary:      r.Rule().Summary,
+			Remediations: remediationNames,
+		})
 	}
 
 	if err := generateIndexPages(providers, contentDir); err != nil {
@@ -134,31 +161,26 @@ func generateDefsecPages(remidiationDir, contentDir string, clock Clock) {
 	}
 }
 
-func generateIndexPages(providers map[ProviderIndex][]*ServiceIndex, contentDir string) error {
+func generateIndexPages(providers Providers, contentDir string) error {
 
-	for provider, services := range providers {
-		providerFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), "_index_.md")
+	for _, provider := range providers {
+		providerFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), "index.md")
 		providerFile, err := os.Create(providerFilePath)
 		if err != nil {
 			return err
-		}
-
-		serviceNames := make([]string, 0, len(services))
-		for _, k := range services {
-			serviceNames = append(serviceNames, k.Name)
 		}
 
 		t := template.Must(template.New("provider").Parse(providerTemplate))
 		if err := t.Execute(providerFile, map[string]interface{}{
 			"ProviderID":   provider.Provider.ConstName(),
 			"DisplayName":  provider.Provider.DisplayName(),
-			"ServiceNames": serviceNames,
-			"Remediations": strings.Split(provider.Remediations, " "),
+			"Services":     provider.Services,
+			"Remediations": provider.Remediations,
 		}); err != nil {
 			return err
 		}
 
-		for _, service := range services {
+		for _, service := range provider.Services {
 			serviceFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), strings.ToLower(service.Name), "_index_.md")
 			serviceFile, err := os.Create(serviceFilePath)
 			if err != nil {
@@ -168,10 +190,10 @@ func generateIndexPages(providers map[ProviderIndex][]*ServiceIndex, contentDir 
 			t := template.Must(template.New("service").Parse(serviceTemplate))
 			if err := t.Execute(serviceFile, map[string]interface{}{
 				"ProviderID":   strings.ToLower(provider.Provider.ConstName()),
-				"ServiceID":    service.Name,
-				"Name":         strings.Title(strings.ReplaceAll(service.Name, "-", " ")),
+				"ServiceID":    service.ID,
+				"Name":         service.Name,
 				"Summaries":    service.RuleSummaries,
-				"Remediations": strings.Split(service.Remediations, " "),
+				"Remediations": service.Remediations,
 			}); err != nil {
 				return err
 			}
@@ -278,15 +300,24 @@ avd_page_type: defsec_page
 `
 
 const providerTemplate = `---
+title: {{ .DisplayName }}
+draft: false
+avd_page_type: defsec_page
 menu:
   defsec:
     identifier: {{.ProviderID}}
     name: {{.DisplayName}}
 remediations:
 ---
+{{ range .Services }}
+ - [{{.Name}}]({{$.ProviderID}}/{{.ID}})
+{{ end }}
 `
 
 const serviceTemplate = `---
+title: {{ .Name }}
+draft: false
+avd_page_type: defsec_page
 menu:
   defsec:
     identifier: {{.ProviderID}}-{{.ServiceID}}
@@ -294,4 +325,7 @@ menu:
     parent: {{.ProviderID}}
 remediations:
 ---
+{{ range .Summaries }}
+- [{{ .AVDID }}]({{$.ProviderID}}/{{$.ServiceID}}/{{.AVDID}}): {{ .Summary }}
+{{ end }}
 `
