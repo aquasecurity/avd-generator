@@ -2,6 +2,8 @@
 
 	{{ if eq "cloudsploit_page" .Params.avd_page_type }}
 		{{ partial "list_cloudsploit.html" . }}
+	{{ if eq "defsec_page" .Params.avd_page_type }}
+		{{ partial "list_defsec.html" . }}
 	{{else}}
 		<script type='text/javascript'>
 		//alert("list.html");

@@ -103,12 +103,12 @@
 						{{ $currentPage := . }}
 						{{ range .Site.Menus.defsec }}
 						{{ if .HasChildren }}
-						<details class="" {{ if eq $currentPage.Params.provider .Name }}open{{ end }}>
+						<details class="{{ delimit .Page.Params.remediations " " }}" {{ if eq $currentPage.Params.provider .Name }}open{{ end }}>
 							<summary>{{ .Name }}</summary>
 							<ul class="sub-menu">
 								{{ range .Children }}
 								{{ if .HasChildren }}
-								<details class="" {{ if eq $currentPage.Params.service .Name }}open{{ end }}>
+								<details class="{{ delimit .Page.Params.remediations " " }}" {{ if eq $currentPage.Params.service .Name }}open{{ end }}>
 									<summary>{{ .Name }}</summary>
 									<ul class="sub-menu">
 										{{ range .Children }}

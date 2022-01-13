@@ -27,7 +27,7 @@ type DefsecPost struct {
 }
 
 type RuleSummary struct {
-	AVID         string
+	AVDID        string
 	DisplayName  string
 	Summary      string
 	Remediations []string
@@ -128,13 +128,13 @@ func generateDefsecPages(remidiationDir, contentDir string, _ Clock) {
 			os.Exit(1)
 		}
 
-		if err := generatePage(r, remediations, contentDir, docsFile); err != nil {
+		if err := generateDefsecCheckPage(r, remediations, contentDir, docsFile); err != nil {
 			log.Printf("an error occurred writing the page for %s. %v", r.Rule().AVDID, err)
 		}
 
 		remediationNames := make([]string, 0, len(remediations))
 		for k := range remediations {
-			remediationNames = append(remediationNames, k)
+			remediationNames = append(remediationNames, strings.ToLower(k))
 		}
 
 		provider := providers.Add(&ProviderIndex{
@@ -149,22 +149,22 @@ func generateDefsecPages(remidiationDir, contentDir string, _ Clock) {
 		})
 
 		service.RuleSummaries = append(service.RuleSummaries, RuleSummary{
-			AVID:         r.Rule().AVDID,
+			AVDID:        r.Rule().AVDID,
 			DisplayName:  r.Rule().ShortCodeDisplayName(),
 			Summary:      r.Rule().Summary,
 			Remediations: remediationNames,
 		})
 	}
 
-	if err := generateIndexPages(providers, contentDir); err != nil {
+	if err := generateDefsecIndexPages(providers, contentDir); err != nil {
 		log.Printf("an error occurred creating the provider file. %v", err)
 	}
 }
 
-func generateIndexPages(providers Providers, contentDir string) error {
+func generateDefsecIndexPages(providers Providers, contentDir string) error {
 
 	for _, provider := range providers {
-		providerFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), "index.md")
+		providerFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), "_index.md")
 		providerFile, err := os.Create(providerFilePath)
 		if err != nil {
 			return err
@@ -172,7 +172,7 @@ func generateIndexPages(providers Providers, contentDir string) error {
 
 		t := template.Must(template.New("provider").Parse(providerTemplate))
 		if err := t.Execute(providerFile, map[string]interface{}{
-			"ProviderID":   provider.Provider.ConstName(),
+			"ProviderID":   strings.ToLower(provider.Provider.ConstName()),
 			"DisplayName":  provider.Provider.DisplayName(),
 			"Services":     provider.Services,
 			"Remediations": provider.Remediations,
@@ -181,7 +181,7 @@ func generateIndexPages(providers Providers, contentDir string) error {
 		}
 
 		for _, service := range provider.Services {
-			serviceFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), strings.ToLower(service.Name), "_index_.md")
+			serviceFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), strings.ToLower(service.Name), "_index.md")
 			serviceFile, err := os.Create(serviceFilePath)
 			if err != nil {
 				return err
@@ -203,7 +203,7 @@ func generateIndexPages(providers Providers, contentDir string) error {
 	return nil
 }
 
-func generatePage(rule rules.RegisteredRule, remediations map[string]string, contentDir string, docsFile string) error {
+func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]string, contentDir string, docsFile string) error {
 
 	providerPath := strings.ToLower(rule.Rule().Provider.ConstName())
 	servicePath := strings.ToLower(rule.Rule().Service)
@@ -279,6 +279,9 @@ severity: "{{.Severity}}"
 draft: false
 provider: {{.Provider}}
 service: {{.ServiceName}}
+
+avd_page_type: defsec_page
+
 remediations:
 {{ range .Remediations }}  - {{ .}}
 {{ end }}
@@ -288,12 +291,9 @@ menu:
     identifier: {{.AVDID}}
     name: {{.ShortName}}
     parent: {{.Provider}}-{{.Service}}
-    remediations:
-{{ range .Remediations }}    - {{ .}}
-{{ end }}
-
-avd_page_type: defsec_page
 ---
+
+[{{.Provider}}](../../) | [{{.ServiceName}}](../)
 
 {{.Body}}
 
@@ -303,14 +303,16 @@ const providerTemplate = `---
 title: {{ .DisplayName }}
 draft: false
 avd_page_type: defsec_page
+remediations:
+{{ range .Remediations }}  - {{ .}}
+{{ end }}
+
 menu:
   defsec:
     identifier: {{.ProviderID}}
     name: {{.DisplayName}}
-remediations:
 ---
-{{ range .Services }}
- - [{{.Name}}]({{$.ProviderID}}/{{.ID}})
+{{ range .Services }} - [{{.Name}}]({{$.ProviderID}}/{{.ID}})
 {{ end }}
 `
 
@@ -318,14 +320,19 @@ const serviceTemplate = `---
 title: {{ .Name }}
 draft: false
 avd_page_type: defsec_page
+remediations:
+{{ range .Remediations }}  - {{ .}}
+{{ end }}
+
 menu:
   defsec:
     identifier: {{.ProviderID}}-{{.ServiceID}}
     name: {{.Name}}
     parent: {{.ProviderID}}
-remediations:
 ---
-{{ range .Summaries }}
-- [{{ .AVDID }}]({{$.ProviderID}}/{{$.ServiceID}}/{{.AVDID}}): {{ .Summary }}
+
+Select a service
+
+{{ range .Summaries }}- [{{ .AVDID }}]({{$.ProviderID}}/{{$.ServiceID}}/{{.AVDID}}): {{ .Summary }}
 {{ end }}
 `
