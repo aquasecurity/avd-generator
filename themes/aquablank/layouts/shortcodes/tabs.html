@@ -1,6 +1,21 @@
-{{ $_hugo_config := `{ "version": 1 }` }}
-
-<div class="code-tabs">
-  <ul class="nav nav-tabs"></ul>
-  <div class="tab-content">{{ .Inner }}</div>
+{{ with .Inner }}{{/* don't do anything, just call it */}}{{ end }}
+{{ $groupId := default "default" (.Get "groupId") }}
+<div class="tab-panel">
+    <div class="tab-nav">
+    {{ range $idx, $tab := .Scratch.Get "tabs" }}
+        <button
+          data-tab-item="{{ .name }}"
+          data-tab-group="{{ $groupId }}"
+          class="tab-nav-button btn {{ cond (eq $idx 0) "active" ""}}"
+          onclick="switchTab('{{ $groupId }}','{{ .name }}')"
+         >{{ .name }}</button>
+    {{ end }}
+    </div>
+    <div class="tab-content">
+        {{ range $idx, $tab := .Scratch.Get "tabs" }}
+        <div data-tab-item="{{ .name }}" data-tab-group="{{ $groupId }}" class="tab-item {{ cond (eq $idx 0) "active" ""}}">
+            {{ .content }}
+        </div>
+        {{ end }}
+    </div>
 </div>

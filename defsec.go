@@ -20,6 +20,7 @@ type DefsecPost struct {
 	ShortName    string
 	Severity     string
 	Provider     string
+	ProviderName string
 	Service      string
 	ServiceName  string
 	Body         string
@@ -243,6 +244,7 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 		AVDID:        rule.Rule().AVDID,
 		ShortName:    rule.Rule().ShortCodeDisplayName(),
 		Provider:     strings.ToLower(rule.Rule().Provider.ConstName()),
+		ProviderName: rule.Rule().Provider.DisplayName(),
 		Service:      strings.ToLower(rule.Rule().Service),
 		ServiceName:  rule.Rule().ServiceDisplayName(),
 		Body:         documentBody.String(),
@@ -292,7 +294,7 @@ menu:
     parent: {{.Provider}}-{{.Service}}
 ---
 
-{{.Provider}} > [{{.ServiceName}}](../) > {{.AVDID}}
+{{.ProviderName}} > [{{.ServiceName}}](../) > {{.AVDID}}
 
 {{.Body}}
 
