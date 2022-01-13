@@ -181,7 +181,7 @@ func generateDefsecIndexPages(providers Providers, contentDir string) error {
 		}
 
 		for _, service := range provider.Services {
-			serviceFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), strings.ToLower(service.Name), "_index.md")
+			serviceFilePath := filepath.Join(contentDir, strings.ToLower(provider.Provider.ConstName()), strings.ToLower(service.ID), "_index.md")
 			serviceFile, err := os.Create(serviceFilePath)
 			if err != nil {
 				return err
@@ -292,7 +292,7 @@ menu:
     parent: {{.Provider}}-{{.Service}}
 ---
 
-[{{.Provider}}](../../) | [{{.ServiceName}}](../)
+{{.Provider}} > [{{.ServiceName}}](../) > {{.AVDID}}
 
 {{.Body}}
 
