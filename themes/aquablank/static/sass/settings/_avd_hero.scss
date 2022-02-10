@@ -50,7 +50,7 @@
 							&.appshield:before {
 								background-image: url("../images/icon_page_appshield.png");
 							}
-							&.defsec:before {
+							&.iac:before {
 								background-image: url("../images/icon_page_defsec.png");
 							}
 							&.kube-hunter:before {
@@ -64,6 +64,9 @@
 								background-image: url("../images/icon_page_cloudsploit.png");
 							}
 							&.aqua:before {
+								background-image: url("../images/icon_page_aqua.png");
+							}
+							&.tracee:before {
 								background-image: url("../images/icon_page_aqua.png");
 							}
 						} //with_icon

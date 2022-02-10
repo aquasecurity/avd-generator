@@ -1,0 +1,452 @@
+.severity-pill {
+    border-radius: 8px;
+    padding: 6px 10px;
+    text-transform: uppercase;
+    font-size: 0.6em;
+    font-weight: bold;
+}
+
+.rego-version {
+    font-size: 1em !important;
+}
+
+.severity-pill.critical {
+    background-color: red;
+}
+
+.severity-pill.high {
+    background-color: orangered;
+}
+
+.severity-pill.medium {
+    background-color: orange;
+    color: #fff;
+}
+
+.severity-pill.low {
+    background-color: #666;
+    color: #fff;
+}
+
+.severity-pill.unknown {
+    background-color: #666;
+    color: #fff;
+}
+
+.sub-menu {
+    padding-left: 15px;
+    padding-bottom: 4px;
+}
+
+.check {
+    padding-left: 20px;
+    padding-bottom: 4px;
+}
+
+.check.active {
+    color: #1904da;
+    font-weight: bold;
+}
+
+.check.active::before {
+    content: " >> ";
+}
+
+details > summary {
+    list-style-type: none;
+    outline: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details > summary::before {
+    content: "+ ";
+    font-weight: bold;
+    color: #405a75;
+    font-family: monospace;
+}
+
+details[open] > summary::before {
+    content: "- ";
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.dropdown-check-list {
+    display: none;
+    position: absolute;
+    z-index: 1000 !important;
+    float: right;
+    right: 0;
+}
+
+.dropdown-check-list .anchor {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px 50px 5px 10px;
+    border: 1px solid #ccc;
+}
+
+.dropdown-check-list .anchor:after {
+    position: absolute;
+    content: "";
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+    padding: 5px;
+    right: 10px;
+    top: 20%;
+    -moz-transform: rotate(-135deg);
+    -ms-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+    right: 8px;
+    top: 21%;
+}
+
+.dropdown-check-list ul.items {
+    padding: 2px;
+    display: none;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.dropdown-check-list ul.items li {
+    list-style: none;
+}
+
+.dropdown-check-list.visible .anchor {
+    color: #0094ff;
+}
+
+.dropdown-check-list ul.visible {
+    display: block;
+}
+
+.dropdown-check-list .apply {
+    text-align: right;
+}
+
+dd label input {
+    margin-right: 3px;
+}
+
+dd {
+    padding: 10px;
+}
+
+.dropdown-check-list {
+    float: right;
+}
+.dropdown-check-list .anchor {
+    float: right;
+    background: #fff;
+}
+
+.dropdown-check-list ul {
+    clear: both;
+    background: #fff;
+}
+
+aside.side-nav {
+    position: relative;
+}
+
+.dropdown-check-list .iac-filter-btn {
+    margin: 10px;
+}
+
+.menu-treeview-current {
+    font-weight: bold;
+}
+
+.menu-treeview-current::before {
+    content: "» ";
+    font-weight: bold;
+}
+
+.main-menu {
+    margin-top: -1.5em;
+    padding-bottom: 2em;
+}
+
+.main-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.main-menu ul li {
+    float: left;
+    padding: 10px 30px;
+}
+
+.main-menu ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+
+.main-menu ul li:hover {
+    background-color: #ff445f;
+}
+
+.main-menu ul li.active {
+    background-color: #00ffe4;
+    color: #07242d;
+    font-weight: bold;
+}
+
+.dropbtn {
+    padding: 1rem 2rem;
+    font-size: 1em;
+    border: none;
+    border-radius: 0px 0px 10px 10px;
+    background: #1904da;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+.dropbtn.active {
+    background-color: #00ffe4;
+    color: #07242d;
+    font-weight: bold;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    color: #07242d;
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ff445f;
+    color: white;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #ff445f;
+    color: white;
+}
+
+.remediation-pills {
+    padding: 2px 10px;
+    float: right;
+}
+
+.remediation-pill {
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-right: 5px;
+    min-width: 30px;
+    display: inline-block;
+    text-align: center;
+}
+
+.remediation-pill a {
+    color: white;
+}
+
+.remediation-pill.terraform {
+    background-color: #844fba;
+    color: white;
+}
+
+.remediation-pill.dockerfile {
+    background-color: #0db7ed;
+    color: white;
+}
+
+.remediation-pill.kubernetes {
+    background-color: #326ce5;
+    color: white;
+}
+
+.remediation-pill.cloudformation,
+.remediation-pill.management_console {
+    background-color: #ff9900;
+    color: white;
+}
+
+.remediation-pill.cli {
+    background-color: #000;
+    color: white;
+}
+
+.remediation-pill.runtime {
+    background-color: #1904da;
+    color: white;
+}
+
+.config-item {
+    display: block;
+    position: relative;
+    min-height: 220px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background: #ebf3fa;
+    box-shadow: 7px 7px 14px #e2e9f0, -7px -7px 14px #f4fdff;
+    transition: all 0.2s ease;
+    background-color: #fff;
+    height: 100%;
+    /* padding: 40px 40px 60px 40px; */
+}
+
+.config-tile {
+    text-align: center;
+    background: #1904da;
+    color: white;
+    font-size: 2em;
+    align-content: center;
+    padding: 2em 0.5em;
+}
+
+.config-tile:hover {
+    background: #ff445f;
+}
+
+.config-subtitle {
+    padding: 3em;
+    font-size: 1.2em;
+}
+
+.config-tile.aqua::before {
+    content: url("../images/icon_page_aqua.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.iac::before {
+    content: url("../images/icon_page_defsec.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.appshield::before {
+    content: url("../images/icon_page_appshield.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.kubehunter::before {
+    content: url("../images/icon_page_kube-hunter.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.cve::before {
+    content: url("../images/icon_page_cve.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.aws::before {
+    content: url("../images/icon_tile_aws.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.azure::before {
+    content: url("../images/icon_tile_azure.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.alibaba::before {
+    content: url("../images/icon_tile_alibaba.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.cloudstack::before {
+    content: url("../images/icon_tile_cloudstack.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.digitalocean::before {
+    content: url("../images/icon_tile_digitalocean.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.dockerfile::before {
+    content: url("../images/icon_tile_dockerfile.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.general::before {
+    content: url("../images/icon_page_aqua.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.github::before {
+    content: url("../images/icon_tile_github.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.google::before {
+    content: url("../images/icon_tile_google.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.kubernetes::before {
+    content: url("../images/icon_page_appshield.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.openstack::before {
+    content: url("../images/icon_tile_openstack.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.oracle::before {
+    content: url("../images/icon_tile_oracle.png");
+    padding-right: 0.4em;
+}
+
+.paginated {
+    clear: both;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.home-button {
+    background: $aq-royal-blue;
+    color: white;
+    margin-bottom: 1.4em;
+    padding: 1.2em;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bolder;
+    border: white solid 1px;
+}
+
+.home-button:hover {
+    background: $aq-coral-red;
+}

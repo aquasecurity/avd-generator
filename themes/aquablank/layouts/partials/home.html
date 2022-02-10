@@ -5,20 +5,31 @@
 		
 		<div class="hero-body">
 			<div class="clearboth container">
-				<div class="header_title_wrap">	
-					<!--<div class="page_pretitle fadeInUp"><a href="#">Home Hero pre title link</a></div>-->
-					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Vulnerabilities and weaknesses in open source applications and cloud native infrastructure</h1>
-					<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Detailed information and remediation guidance for vulnerabilities and weaknesses published by NVD, software vendor advisories, and Kube-Hunter</h2>
-					<div class="fadeInUp animationDelay_3">
-						<div id="fastSearch">
-							<input id="searchInput" class="avd_large_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
-							<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
-						</div>
+				<div class="columns">
+					<div class="column is-9-desktop is-6-tablet">
+						<div class="header_title_wrap">		
+							<!--<div class="page_pretitle fadeInUp"><a href="#">Home Hero pre title link</a></div>-->
+							<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Vulnerabilities and weaknesses in open source applications and cloud native infrastructure</h1>
+							<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Detailed information and remediation guidance for vulnerabilities and weaknesses published by NVD, software vendor advisories, and Kube-Hunter</h2>
+							<div class="fadeInUp animationDelay_3">
+								<div id="fastSearch">
+									<input id="searchInput" class="avd_large_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
+									<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
+								</div>
+							</div>
+						</div><!-- header_title_wrap -->
 					</div>
-				</div><!-- header_title_wrap -->
+					<div class="column is-3-desktop is-6-tablet home-buttons">
+						<ul>
+							<li class="home-button"><a href="/misconfig">Misconfiguration</a> </li>
+							<li class="home-button"><a href="/tracee">Runtime Security</a> </li>
+							<li class="home-button"><a href="/nvd">Vulnerabilities</a> </li>
+						</ul>
+					</div>
+				</div>
 			</div><!-- container -->
 		</div><!-- hero-body -->
-
+		
 	</div><!-- hero -->
 
 </div><!-- hero_wrap -->

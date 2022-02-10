@@ -25,7 +25,7 @@
     background-color: #fff;
     display: block;
     clear: both;
-    padding: 50px;
+    padding: 30px;
     border-width: 1px;
     border-style: solid;
     border-color: #ccc;
@@ -39,6 +39,9 @@
 .tab-item pre {
     margin-bottom: 0;
     margin-top: 0;
+}
+.tab-item ol li {
+    line-height: 3em;
 }
 .btn {
     display: inline-block !important;

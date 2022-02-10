@@ -64,6 +64,8 @@ github.com/aquasecurity/defsec v0.3.6 h1:svQBvaXn5Xy8J9sNlgtnunwn9wycM7yvZ9NM5zb
 github.com/aquasecurity/defsec v0.3.6/go.mod h1:UxYfQXEX2Qd+SFOo+IFGQhYWfZzLHOb5Xxxv5oKdmYM=
 github.com/aquasecurity/defsec v0.3.7 h1:xzv9p6dbBTd68EngKj10rzmYEPETZVCBPTqldunP+9M=
 github.com/aquasecurity/defsec v0.3.7/go.mod h1:UxYfQXEX2Qd+SFOo+IFGQhYWfZzLHOb5Xxxv5oKdmYM=
+github.com/aquasecurity/defsec v0.3.8 h1:Q3Gh+0xGO/PZ44GCg+8ronF8b8BquDq0K18vCBtPFg0=
+github.com/aquasecurity/defsec v0.3.8/go.mod h1:UxYfQXEX2Qd+SFOo+IFGQhYWfZzLHOb5Xxxv5oKdmYM=
 github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.4/go.mod h1:C6aED/3HEi4aKSyjtCBWC//7EDXVlV/cQAdDgSbF1eM=
 github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5 h1:wqqD2xzSZ6Zgm8qfBortGV4R3qyz0+rsNhaPd1NR6rU=
 github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5/go.mod h1:C6aED/3HEi4aKSyjtCBWC//7EDXVlV/cQAdDgSbF1eM=

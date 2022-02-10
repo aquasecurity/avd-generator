@@ -1,0 +1,15 @@
+{{ $currentPage := .currentPage }}
+{{ if .context.HasChildren }}
+            <details class="node" {{ if in  .currentPage.RelPermalink .context.Identifier  }}open{{ end }}>
+                <summary>{{ .context.Name }}</summary>
+                <ul class="sub-menu">
+                    {{ range .context.Children }}
+                    {{ partial "menu_block.html" ( dict "context" . "currentPage" $currentPage ) }}
+                    {{ end }}
+                </ul>
+            </details>
+{{ else }}
+            <li class="node check {{ if in  .currentPage.RelPermalink .context.URL  }}active{{ end }}">
+                <a href="{{ .context.URL }}">{{ .context.Name }}</a>
+            </li>
+{{ end }}
