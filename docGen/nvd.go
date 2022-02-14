@@ -216,8 +216,7 @@ func generateVulnPages() {
 
 		log.Printf("generating vuln year: %s\n", year)
 		nvdDir := fmt.Sprintf("vuln-list/nvd/%s/", year)
-
-		cweDir := fmt.Sprintf("vuln-list/cwe")
+		cweDir := "vuln-list/cwe"
 
 		go func(year string) {
 			defer wg.Done()
@@ -246,14 +245,16 @@ func generateVulnPages() {
 		},
 		)
 	}
-	vulnIndex.Generate()
+	if err := vulnIndex.Generate(); err != nil {
+		fail(err)
+	}
 }
 
 func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 
 	postsDir = fmt.Sprintf("%s/%s", postsDir, year)
 	if err := os.MkdirAll(postsDir, 0755); err != nil {
-		panic(err)
+		fail(err)
 	}
 
 	files, err := getAllFiles(nvdDir)
@@ -301,7 +302,7 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 		WithMenuID(year).
 		WithMenuParent("vulnerabilities").
 		Generate(); err != nil {
-		panic(err)
+		fail(err)
 	}
 }
 

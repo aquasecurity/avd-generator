@@ -14,22 +14,6 @@ import (
 	"github.com/aquasecurity/avd-generator/docGen/util"
 )
 
-const cloudSploitTableOfContents = `---
-title: Aqua_CSPM_Remediations
-draft: false
-
-display_title: "Aqua CSPM Remediations"
-avd_page_type: cloudsploit_page
----
-
-{{range $provider, $serviceFile := .}}### {{ $provider | upper }} {.listpage_section_title}
-{{ range $service, $files := .}}#### {{ $service }} {.listpage_subsection_title}
-{{ range $file := .}}- [{{ $file }}](/cspm/{{ $provider }}/{{ $service | lower | findreplace " " "-" }}/{{ $file | lower | findreplace " " "-" }})
-{{ end }}{{ end }}{{ end }}`
-
-// {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
-type CloudSploitIndexMap map[string]map[string][]string
-
 func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir string) {
 	log.Printf("generating cloudsploit pages in: %s...", outputPagesDir)
 	var fileList []string
@@ -43,7 +27,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		fileList = append(fileList, path)
 		return nil
 	}); err != nil {
-		panic(err)
+		fail(err)
 	}
 
 	titleRegex := regexp.MustCompile(`(?m)^\s+title:\s?'(.*)'`)
@@ -137,7 +121,9 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 
 		t := template.Must(template.New("defsecPost").Parse(cspmTemplate))
-		t.Execute(outputFile, post)
+		if err := t.Execute(outputFile, post); err != nil {
+			fail(err)
+		}
 
 		misConfigurationMenu.AddNode(providerID, provider, outputPagesDir, "", []string{},
 			[]menu.MenuCategory{

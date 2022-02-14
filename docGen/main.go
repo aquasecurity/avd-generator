@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,7 +23,6 @@ var (
 
 	misConfigurationMenu = menu.New("misconfig", "content/misconfig")
 	runTimeSecurityMenu  = menu.New("runsec", "content/tracee")
-	vulnerabilityMenu    = menu.New("vulnerabilities", "content/nvd")
 )
 
 type Clock interface {
@@ -80,8 +80,12 @@ func main() {
 	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
 	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig", rules.GetRegistered())
-	misConfigurationMenu.Generate()
-	runTimeSecurityMenu.Generate()
+	if err := misConfigurationMenu.Generate(); err != nil {
+		fail(err)
+	}
+	if err := runTimeSecurityMenu.Generate(); err != nil {
+		fail(err)
+	}
 	createTopLevelMenus()
 }
 
@@ -92,7 +96,7 @@ func createTopLevelMenus() {
 		WithIcon("aqua").
 		WithCategory("misconfig").
 		WithMenu("misconfig").Generate(); err != nil {
-		panic(err)
+		fail(err)
 	}
 
 	if err := menu.NewTopLevelMenu("Tracee", "toplevel_page", "content/tracee/_index.md").
@@ -101,25 +105,11 @@ func createTopLevelMenus() {
 		WithCategory("runsec").
 		WithMenu("runsec").
 		Generate(); err != nil {
-		panic(err)
+		fail(err)
 	}
 }
 
-/*
-
-
-  - heading: Infrastucture as Code
-   url: /misconfig/infra
-
-    icon: iac
-    summary: This is where the stuff about IaC will go
-  - heading: Kube Hunter
-    url: /misconfig/infra
-    icon: aqua
-    summary: This is where the stuff about IaC will go
-  - heading: Workload Configuration
-    url: /misconfig/infra
-    icon: appshield
-    summary: This is where the stuff about IaC will go
-
-*/
+func fail(err error) {
+	fmt.Println(err)
+	os.Exit(1)
+}

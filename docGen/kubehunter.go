@@ -16,7 +16,7 @@ func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
 	log.Printf("generating kube-hunter pages in: %s...", outputPagesDir)
 
 	if err := os.MkdirAll(outputPagesDir, 0777); err != nil {
-		panic(err)
+		fail(err)
 	}
 	pages, err := getAllFiles(inputPagesDir)
 	if err != nil {
@@ -70,12 +70,14 @@ Misconfiguration > [Kubernetes](../../) > [Kube Hunter](../) > %s
 	}
 
 	topLevelPath := filepath.Join(outputPagesDir, "_index.md")
-	menu.NewTopLevelMenu("Kube Hunter Misconfiguration", "avd_list", topLevelPath).
+	if err := menu.NewTopLevelMenu("Kube Hunter Misconfiguration", "avd_list", topLevelPath).
 		WithHeading("Kube Hunter").
 		WithIcon("kubehunter").
 		WithCategory("misconfig").
 		WithMenu("Kube Hunter").
 		WithMenuID("kubehunter").
 		WithMenuParent("kubernetes").
-		Generate()
+		Generate(); err != nil {
+		fail(err)
+	}
 }

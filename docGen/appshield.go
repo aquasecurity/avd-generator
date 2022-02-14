@@ -119,7 +119,7 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 
 		postPath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ToLower(rp.Rego.ID)))
 		if err := os.MkdirAll(filepath.Dir(postPath), 0755); err != nil {
-			panic(err)
+			fail(err)
 		}
 		f, err := os.Create(postPath)
 		if err != nil {
