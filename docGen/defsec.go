@@ -14,7 +14,6 @@ import (
 	"github.com/aquasecurity/avd-generator/docGen/menu"
 	"github.com/aquasecurity/avd-generator/docGen/util"
 
-	"github.com/aquasecurity/defsec/provider"
 	"github.com/aquasecurity/defsec/rules"
 )
 
@@ -29,71 +28,6 @@ type DefsecPost struct {
 	Body         string
 	ParentID     string
 	Remediations []string
-}
-
-type RuleSummary struct {
-	AVDID        string
-	DisplayName  string
-	Summary      string
-	Remediations []string
-}
-
-type Providers []*ProviderIndex
-
-type ProviderIndex struct {
-	Provider     provider.Provider
-	Remediations []string
-	Services     Services
-}
-
-type Services []*ServiceIndex
-
-type ServiceIndex struct {
-	ID            string
-	Name          string
-	Remediations  []string
-	RuleSummaries RuleSummaries
-}
-
-type RuleSummaries []RuleSummary
-
-func (p *ProviderIndex) Equals(p2 ProviderIndex) bool {
-
-	return true
-}
-
-func (p *Providers) Get(prov *ProviderIndex) *ProviderIndex {
-	for _, provider := range *p {
-		if provider.Provider.ConstName() == prov.Provider.ConstName() {
-			return provider
-		}
-	}
-	return nil
-}
-
-func (p *Providers) Add(i *ProviderIndex) *ProviderIndex {
-	if existing := p.Get(i); existing != nil {
-		return existing
-	}
-	*p = append(*p, i)
-	return i
-}
-
-func (s *Services) Get(svc *ServiceIndex) *ServiceIndex {
-	for _, service := range *s {
-		if service.Name == svc.Name {
-			return service
-		}
-	}
-	return nil
-}
-
-func (s *Services) Add(svc *ServiceIndex) *ServiceIndex {
-	if existing := s.Get(svc); existing != nil {
-		return existing
-	}
-	*s = append(*s, svc)
-	return svc
 }
 
 func generateDefsecPages(remediationDir, contentDir string, registeredRules []rules.RegisteredRule) {
