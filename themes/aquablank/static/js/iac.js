@@ -64,7 +64,7 @@ jQuery(document).ready(function ($) {
     ids.set('cloudformation', 'CloudFormation')
     ids.set('dockerfile', 'Dockerfile')
     ids.set('kubernetes', 'Kubernetes')
-    ids.set('management_console', 'Management Console')
+    ids.set('management console', 'Management Console')
     ids.set('terraform', 'Terraform')
 
     tabName = document.location.hash.substring(1);

@@ -6,6 +6,9 @@ import (
 	"strings"
 	"time"
 
+	_ "github.com/aquasecurity/defsec/loader"
+	"github.com/aquasecurity/defsec/rules"
+
 	"github.com/aquasecurity/avd-generator/docGen/menu"
 )
 
@@ -74,9 +77,9 @@ func main() {
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
-	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig")
+	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
-	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig", realClock{})
+	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig", rules.GetRegistered())
 	misConfigurationMenu.Generate()
 	runTimeSecurityMenu.Generate()
 	createTopLevelMenus()
@@ -84,7 +87,7 @@ func main() {
 
 func createTopLevelMenus() {
 
-	if err := menu.NewTopLevelMenu("Common Misconfiguration Issues", "toplevel_page", "content/misconfig/_index.md").
+	if err := menu.NewTopLevelMenu("Providers", "toplevel_page", "content/misconfig/_index.md").
 		WithHeading("Misconfiguration").
 		WithIcon("aqua").
 		WithCategory("misconfig").
@@ -92,7 +95,7 @@ func createTopLevelMenus() {
 		panic(err)
 	}
 
-	if err := menu.NewTopLevelMenu("Runtime Security", "toplevel_page", "content/tracee/_index.md").
+	if err := menu.NewTopLevelMenu("Tracee", "toplevel_page", "content/tracee/_index.md").
 		WithHeading("Runtime Security").
 		WithIcon("tracee").
 		WithCategory("runsec").

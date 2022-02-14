@@ -14,7 +14,7 @@ func (fakeClock) Now() string {
 }
 
 func TestGetAllFiles(t *testing.T) {
-	actual, err := getAllFiles("goldens/json/nvd")
+	actual, err := getAllFiles("../goldens/json/nvd")
 	require.NoError(t, err)
-	assert.Equal(t, []string{"goldens/json/nvd/CVE-2020-0001.json", "goldens/json/nvd/CVE-2020-0002.json", "goldens/json/nvd/CVE-2020-11932.json"}, actual)
+	assert.Equal(t, []string{"../goldens/json/nvd/CVE-2020-0001.json", "../goldens/json/nvd/CVE-2020-0002.json", "../goldens/json/nvd/CVE-2020-11932.json"}, actual)
 }

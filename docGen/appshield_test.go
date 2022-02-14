@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -14,151 +15,99 @@ func TestParseAppShieldRegoPolicyFile(t *testing.T) {
 	testCases := []struct {
 		name             string
 		regoFile         string
-		expectedRegoPost RegoPost
+		expectedRegoPost string
 		expectedError    string
 	}{
 		{
 			name:     "happy path",
-			regoFile: "goldens/rego/Baseline #6 - AppArmor policy disabled.rego",
-			expectedRegoPost: RegoPost{
-				Layout: "regoPolicy",
-				Title:  "AppArmor policies disabled",
-				By:     "Aqua Security",
-				Date:   "2021-04-15T20:55:39Z",
-				Rego: RegoMetadata{
-					ID:          "KSV002",
-					Version:     "v1.0.0",
-					Description: "A program inside the container can bypass AppArmor protection policies.",
-					Links:       []string{"https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline"},
-					Severity:    "Informative",
-					Policy: `package appshield.kubernetes.KSV002
+			regoFile: "../goldens/rego/Baseline #6 - AppArmor policy disabled.rego",
+			expectedRegoPost: `---
+title: ""
+aliases: [
+	"/appshield/ksv002"
+]
+sidebar_category: misconfig
+heading: Misconfiguration
+icon: appshield
+draft: false
+date: 2021-04-15T20:55:39Z
+severity: medium
+version: v1.0.0
+shortName: 
 
-import data.lib.kubernetes
+avd_page_type: defsec_page
 
-default failAppArmor = false
+remediations:
+  - kubernetes
 
-__rego_metadata__ := {
-     "id": "KSV002",
-     "title": "AppArmor policies disabled",
-     "version": "v1.0.0",
-     "severity": "Medium",
-     "type": "Kubernetes Security Check",
-     "description": "A program inside the container can bypass AppArmor protection policies.",
-     "recommended_actions": "Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.io'.",
-     "url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline",
-}
 
-# getApparmorContainers returns all containers which have an AppArmor
-# profile set and is profile not set to "unconfined"
-getApparmorContainers[container] {
-  some i
-  keys := [key | key := sprintf("%s/%s", ["container.apparmor.security.beta.kubernetes.io",
-    kubernetes.containers[_].name])]
-  apparmor := object.filter(kubernetes.annotations[_], keys)
-  val := apparmor[i]
-  val != "unconfined"
-  [a, c] := split(i, "/")
-  container = c
-}
+menu:
+  misconfig:
+    identifier: KSV002
+    name: 
+    parent: 
 
-# getNoApparmorContainers returns all containers which do not have
-# an AppArmor profile specified or profile set to "unconfined"
-getNoApparmorContainers[container] {
-  container := kubernetes.containers[_].name
-  not getApparmorContainers[container]
-}
+---
 
-# failApparmor is true if there is ANY container without an AppArmor profile
-# or has an AppArmor profile set to "unconfined"
-failApparmor {
-  count(getNoApparmorContainers) > 0
-}
+Misconfiguration > [Kubernetes](../) > KSV002
 
-deny[res] {
-  failApparmor
+### KSV002
 
-  msg := kubernetes.format(
-    sprintf(
-      "container %s of %s %s in %s namespace should specify an AppArmor profile",
-      [getNoApparmorContainers[_], lower(kubernetes.kind), kubernetes.name, kubernetes.namespace]
-    )
-  )
-    res := {
-    	"msg": msg,
-        "id":  __rego_metadata__.id,
-        "title": __rego_metadata__.title,
-        "severity": __rego_metadata__.severity,
-        "type":  __rego_metadata__.type,
-    }
-}`,
-					RecommendedActions: "Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.io'.",
-				},
-			},
+### AppArmor policies disabled
+A program inside the container can bypass AppArmor protection policies.
+
+### Recommended Actions
+Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.io'.
+
+### Links
+- [REGO Policy Document](https://github.com/aquasecurity/appshield/tree/master/../goldens/rego/Baseline #6 - AppArmor policy disabled.rego)
+- https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline
+`,
 		},
 		{
 			name:     "happy path",
-			regoFile: "goldens/rego/SYS_ADMIN_capability.rego",
-			expectedRegoPost: RegoPost{
-				Layout: "regoPolicy",
-				Title:  "SYS_ADMIN capability added",
-				By:     "Aqua Security",
-				Date:   "2021-04-15T20:55:39Z",
-				Rego: RegoMetadata{
-					ID:          "KSV005",
-					Version:     "v1.0.0",
-					Description: "SYS_ADMIN gives the processes running inside the container privileges that are equivalent to root.",
-					Links:       nil,
-					Severity:    "Informative",
-					Policy: `package appshield.kubernetes.KSV005
+			regoFile: "../goldens/rego/SYS_ADMIN_capability.rego",
+			expectedRegoPost: `---
+title: ""
+aliases: [
+	"/appshield/ksv005"
+]
+sidebar_category: misconfig
+heading: Misconfiguration
+icon: appshield
+draft: false
+date: 2021-04-15T20:55:39Z
+severity: high
+version: v1.0.0
+shortName: 
 
-import data.lib.kubernetes
+avd_page_type: defsec_page
 
-default failCapsSysAdmin = false
+remediations:
+  - kubernetes
 
-__rego_metadata__ := {
-     "id": "KSV005",
-     "title": "SYS_ADMIN capability added",
-     "version": "v1.0.0",
-     "severity": "High",
-     "type": "Kubernetes Security Check",
-     "description": "SYS_ADMIN gives the processes running inside the container privileges that are equivalent to root.",
-     "recommended_actions": "Remove the SYS_ADMIN capability from 'containers[].securityContext.capabilities.add'.",
-}
 
-# getCapsSysAdmin returns the names of all containers which include
-# 'SYS_ADMIN' in securityContext.capabilities.add.
-getCapsSysAdmin[container] {
-  allContainers := kubernetes.containers[_]
-  allContainers.securityContext.capabilities.add[_] == "SYS_ADMIN"
-  container := allContainers.name
-}
+menu:
+  misconfig:
+    identifier: KSV005
+    name: 
+    parent: 
 
-# failCapsSysAdmin is true if securityContext.capabilities.add
-# includes 'SYS_ADMIN'.
-failCapsSysAdmin {
-  count(getCapsSysAdmin) > 0
-}
+---
 
-deny[res] {
-  failCapsSysAdmin
+Misconfiguration > [Kubernetes](../) > KSV005
 
-  msg := kubernetes.format(
-    sprintf(
-      "container %s of %s %s in %s namespace should not include 'SYS_ADMIN' in securityContext.capabilities.add",
-      [getCapsSysAdmin[_], lower(kubernetes.kind), kubernetes.name, kubernetes.namespace]
-    )
-  )
-    res := {
-    	"msg": msg,
-        "id":  __rego_metadata__.id,
-        "title": __rego_metadata__.title,
-        "severity": __rego_metadata__.severity,
-        "type":  __rego_metadata__.type,
-    }
-}`,
-					RecommendedActions: "Remove the SYS_ADMIN capability from 'containers[].securityContext.capabilities.add'.",
-				},
-			},
+### KSV005
+
+### SYS_ADMIN capability added
+SYS_ADMIN gives the processes running inside the container privileges that are equivalent to root.
+
+### Recommended Actions
+Remove the SYS_ADMIN capability from 'containers[].securityContext.capabilities.add'.
+
+### Links
+- [REGO Policy Document](https://github.com/aquasecurity/appshield/tree/master/../goldens/rego/SYS_ADMIN_capability.rego)
+`,
 		},
 		{
 			name:          "sad path",
@@ -168,20 +117,25 @@ deny[res] {
 	}
 
 	for _, tc := range testCases {
-		got, err := parseAppShieldRegoPolicyFile(tc.regoFile, fakeClock{})
+		regoPost, err := parseAppShieldRegoPolicyFile(tc.regoFile, fakeClock{})
 		switch {
 		case tc.expectedError != "":
 			assert.Equal(t, tc.expectedError, err.Error(), tc.name)
+			continue
 		default:
 			assert.NoError(t, err, tc.name)
 		}
-		assert.Equal(t, tc.expectedRegoPost, got, tc.name)
+
+		gotBuffer := bytes.NewBuffer([]byte{})
+		err = regoPostToMarkdown(*regoPost, gotBuffer)
+		require.NoError(t, err)
+		assert.Equal(t, tc.expectedRegoPost, gotBuffer.String(), tc.name)
 	}
 }
 
 func Test_generateAppShieldRegoPolicyPages(t *testing.T) {
 	t.Run("happy path", func(t *testing.T) {
-		policiesDir := "goldens/rego"
+		policiesDir := "../goldens/rego"
 		postsDir, _ := ioutil.TempDir("", "TestGenerateRegoPolicyPages-*")
 		defer func() {
 			_ = os.RemoveAll(postsDir)
@@ -198,12 +152,12 @@ func Test_generateAppShieldRegoPolicyPages(t *testing.T) {
 
 			// check a few files for correctness
 			if strings.Contains(file, "KSV002.md") {
-				want, _ := ioutil.ReadFile("goldens/markdown/KSV002.md")
+				want, _ := ioutil.ReadFile("../goldens/markdown/KSV002.md")
 				assert.Equal(t, string(want), string(got))
 			}
 
 			if strings.Contains(file, "KSV005.md") {
-				want, _ := ioutil.ReadFile("goldens/markdown/KSV005.md")
+				want, _ := ioutil.ReadFile("../goldens/markdown/KSV005.md")
 				assert.Equal(t, string(want), string(got))
 			}
 		}

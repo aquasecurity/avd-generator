@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/aquasecurity/avd-generator/docGen/menu"
 	"github.com/aquasecurity/avd-generator/docGen/util"
+	"github.com/leekchan/gtf"
 )
 
 type RegoMetadata struct {
@@ -32,12 +34,9 @@ type RegoMetadata struct {
 	Policy string `json:"-"`
 }
 type RegoPost struct {
-	Layout       string
-	AliasID      string
 	Title        string
 	By           string
 	Date         string
-	GroupID      string
 	GroupName    string
 	Remediations []string
 	PolicyUrl    string
@@ -53,9 +52,8 @@ func parseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp *RegoPost, e
 	}
 
 	rp = &RegoPost{
-		Layout: "regoPolicy",
-		By:     "Aqua Security",
-		Date:   clock.Now(),
+		By:   "Aqua Security",
+		Date: clock.Now(),
 	}
 
 	metadataReplacer := strings.NewReplacer("\n", "", "\t", "", `\\"`, `"`, ",\n}", "}")
@@ -75,18 +73,16 @@ func parseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp *RegoPost, e
 
 	rp.Title = regoMeta.Title
 	rp.GroupName = strings.Split(regoMeta.Type, " ")[0]
-	rp.GroupID = strings.ToLower(rp.GroupName)
-	rp.Remediations = append(rp.Remediations, strings.ToLower(rp.GroupID))
+	rp.Remediations = append(rp.Remediations, strings.ToLower(rp.GroupName))
 	rp.PolicyUrl = strings.TrimPrefix(fileName, "appshield-repo/")
 	rp.PolicyName = filepath.Base(fileName)
 	rp.Rego = regoMeta
-	rp.AliasID = strings.ToLower(regoMeta.ID)
 	return
 }
 
-func regoPostToMarkdown(rp RegoPost, outputFile *os.File) error {
-	t := template.Must(template.New("regoPost").Parse(regoPolicyPostTemplate))
-	err := t.Execute(outputFile, rp)
+func regoPostToMarkdown(rp RegoPost, output io.Writer) error {
+	t := template.Must(template.New("regoPost").Funcs(template.FuncMap(gtf.GtfTextFuncMap)).Parse(regoPolicyPostTemplate))
+	err := t.Execute(output, rp)
 	if err != nil {
 		return err
 	}
@@ -113,9 +109,9 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 			log.Printf("unable to parse file: %s, err: %s, skipping...\n", file, err)
 			continue
 		}
-		topLevelID := rp.GroupID
+		topLevelID := strings.ToLower(rp.GroupName)
 		misConfigurationMenu.AddNode(topLevelID, strings.Title(topLevelID), postsDir, "", rp.Remediations, []menu.MenuCategory{
-			{"Misconfiguration", "/misconfig"},
+			{Name: "Misconfiguration", Url: "/misconfig"},
 		}, "appshield")
 
 		parentID := topLevelID
@@ -130,6 +126,7 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
 			continue
 		}
+
 		if err := regoPostToMarkdown(*rp, f); err != nil {
 			log.Printf("unable to write file: %s as markdown, err: %s, skipping...\n", file, err)
 			continue
@@ -139,20 +136,16 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 }
 
 const regoPolicyPostTemplate = `---
-title: "{{.Rego.ID}}"
+title: "{{.Rego.ShortName}}"
 aliases: [
-	"/appshield/{{.AliasID}}"
+	"/appshield/{{ lower .Rego.ID}}"
 ]
-parent: {{ .ParentID}}
-category: misconfig
 sidebar_category: misconfig
-heading: Workload Configuration
+heading: Misconfiguration
 icon: appshield
-sub_category: appshield
 draft: false
 date: {{.Date}}
 severity: {{ .Rego.Severity }}
-topLevel: {{ .GroupID }}
 version: {{ .Rego.Version }}
 shortName: {{ .Rego.ShortName }}
 
@@ -171,6 +164,8 @@ menu:
 ---
 
 Misconfiguration > [{{ .GroupName }}](../) > {{ .Rego.ID }}
+
+### {{.Rego.ID}}
 
 ### {{.Title}}
 {{.Rego.Description}}

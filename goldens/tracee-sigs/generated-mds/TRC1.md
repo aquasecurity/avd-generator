@@ -1,25 +1,37 @@
 ---
-title: "Standard-Input-Output-Over-Socket"
-date: 2021-04-15T20:55:39Z
+title: Persistence - Standard Input Output Over Socket
+heading: Runtime Security
+icon: aqua
+shortName: Standard Input Output Over Socket
+severity: high
 draft: false
+version: 0.1.0
 
-avd_page_type: tracee_page
+sidebar_category: runsec
+date: 2021-04-15T20:55:39Z
+
+remediations:
+  
+
+menu:
+  runsec:
+    identifier: TRC-1
+    name: Standard Input Output Over Socket
+    parent: persistence
+
+avd_page_type: defsec_page
 ---
 
-### TRC-1
-#### Standard-Input-Output-Over-Socket
+Runtime Security -> [Persistence](../) >  TRC-1
 
-### Severity
-#### High
+### ID: TRC-1
 
-### Description
+### Standard Input Output Over Socket
 Redirection of process's standard input/output to socket
 
 ### MITRE ATT&CK
 Persistence: Server Software Component
 
-### Version
-0.1.0
 
 ### Go Source
 ```

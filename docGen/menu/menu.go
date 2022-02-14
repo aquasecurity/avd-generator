@@ -12,9 +12,9 @@ import (
 )
 
 var headingMap = map[string]string{
-	"iac":         "Infrastructure as Code",
-	"appshield":   "Workload Configuration",
-	"kube-hunter": "Kube Hunter Findings",
+	"iac":         "Misconfiguration",
+	"appshield":   "Misconfiguration",
+	"kube-hunter": "Misconfiguration",
 	"tracee":      "Runtime Security",
 }
 

@@ -89,8 +89,7 @@ const categoryTemplate = `---
 title: {{ .Name }}
 heading: {{ .Heading }}
 icon: {{ .Icon }}
-category: {{ .Category }}
-sidebar_category: {{ .Menu }}
+sidebar_category: {{ .Category }}
 draft: false
 
 menu:

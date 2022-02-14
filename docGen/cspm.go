@@ -12,7 +12,6 @@ import (
 
 	"github.com/aquasecurity/avd-generator/docGen/menu"
 	"github.com/aquasecurity/avd-generator/docGen/util"
-	"github.com/leekchan/gtf"
 )
 
 const cloudSploitTableOfContents = `---
@@ -31,18 +30,21 @@ avd_page_type: cloudsploit_page
 // {"aws":{"acm":{"foo","bar"},"elb":{"foo2","bar2"}},"google":{"dns"}}
 type CloudSploitIndexMap map[string]map[string][]string
 
-func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
+func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir string) {
 	log.Printf("generating cloudsploit pages in: %s...", outputPagesDir)
 	var fileList []string
-	_ = filepath.Walk(inputPagesDir, func(path string, info os.FileInfo, err error) error {
+	if err := filepath.Walk(inputPagesDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		if info.IsDir() {
 			return nil
 		}
 		fileList = append(fileList, path)
 		return nil
-	})
-
-	csIndexMap := make(CloudSploitIndexMap)
+	}); err != nil {
+		panic(err)
+	}
 
 	titleRegex := regexp.MustCompile(`(?m)^\s+title:\s?'(.*)'`)
 	categoryRegex := regexp.MustCompile(`(?m)^\s+category:\s?'(.*)'`)
@@ -54,6 +56,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 	for _, file := range fileList {
 
 		if strings.HasSuffix(file, ".spec.js") {
+			// not interested in spec files
 			continue
 		}
 
@@ -72,6 +75,10 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 
 		if titleRegex.MatchString(content) {
 			title = titleRegex.FindStringSubmatch(content)[1]
+			if title == "" {
+				fmt.Printf("Error, title not found for file :%s\n", file)
+				continue
+			}
 		}
 		if categoryRegex.MatchString(content) {
 			originalCategory = categoryRegex.FindStringSubmatch(content)[1]
@@ -80,35 +87,28 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 		if descriptionRegex.MatchString(content) {
 			description = descriptionRegex.FindStringSubmatch(content)[1]
 		}
-
 		if moreInfoRegex.MatchString(content) {
 			moreInfo = moreInfoRegex.FindStringSubmatch(content)[1]
 		}
 		if linkRegex.MatchString(content) {
 			link = linkRegex.FindStringSubmatch(content)[1]
 		}
-		if recommendedActionsRegex.MatchString(content) {
-			recommendedActions = fmt.Sprintf(`### Recommended Actions
-			
-%s`, recommendedActionsRegex.FindStringSubmatch(content)[1])
-		}
-
-		if title == "" {
-			fmt.Printf("Error, title not found for file :%s\n", file)
-			continue
-		}
 
 		remediationString = strings.ToLower(strings.ReplaceAll(title, " ", "-"))
-		remediationBody := getRemediationBody(provider, originalCategory, remediationString)
+		remediationBody := getRemediationBodyWhereExists(remediationsDir, provider, originalCategory, remediationString)
 		if remediationBody != "" {
 			recommendedActions = remediationBody
+		} else if recommendedActionsRegex.MatchString(content) {
+			recommendedActions = fmt.Sprintf(`### Recommended Actions
+			
+%s
+`, recommendedActionsRegex.FindStringSubmatch(content)[1])
 		}
 
 		categoryID := strings.ReplaceAll(strings.ToLower(category), " ", "-")
 		providerID := strings.ReplaceAll(strings.ToLower(provider), " ", "-")
 
-		outputFilePath := strings.ToLower(filepath.Join(outputPagesDir, providerID, categoryID, fmt.Sprintf("%s.md", remediationString)))
-
+		outputFilePath := filepath.Join(outputPagesDir, providerID, categoryID, strings.ToLower(fmt.Sprintf("%s.md", remediationString)))
 		if err := os.MkdirAll(filepath.Dir(outputFilePath), 0755); err != nil {
 			fmt.Printf("Could not create directory for %s\n", outputFilePath)
 			continue
@@ -133,6 +133,7 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 			"MoreInfo":           moreInfo,
 			"Links":              []string{link},
 			"RecommendedActions": recommendedActions,
+			"AliasID":            fmt.Sprintf("%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
 		}
 
 		t := template.Must(template.New("defsecPost").Parse(cspmTemplate))
@@ -140,32 +141,25 @@ func generateCloudSploitPages(inputPagesDir string, outputPagesDir string) {
 
 		misConfigurationMenu.AddNode(providerID, provider, outputPagesDir, "", []string{},
 			[]menu.MenuCategory{
-				{"Misconfiguration", "/misconfig"},
+				{
+					Name: "Misconfiguration",
+					Url:  "/misconfig",
+				},
 			}, "iac")
 		misConfigurationMenu.AddNode(categoryID, category, filepath.Join(outputPagesDir, providerID),
 			providerID, []string{},
 			[]menu.MenuCategory{
-				{"Misconfiguration", "/misconfig"},
-				{provider, "/misconfig/" + providerID},
+				{Name: "Misconfiguration", Url: "/misconfig"},
+				{Name: provider, Url: fmt.Sprintf("/misconfig/%s", providerID)},
 			}, "iac")
 
 	}
 
-	// generate a table of contents markdown
-	f, err := os.Create(filepath.Join(outputPagesDir, "_index.md"))
-	if err != nil {
-		log.Fatal("unable to create a table of contents _index.md file: ", err)
-	}
-	t := template.Must(template.New("cloudSploitTableOfContents").Funcs(gtf.GtfTextFuncMap).Parse(cloudSploitTableOfContents))
-	err = t.Execute(f, csIndexMap)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
-func getRemediationBody(provider, category, remediationID string) string {
+func getRemediationBodyWhereExists(remediationsDir, provider, category, remediationID string) string {
 	remediationFile := strings.ReplaceAll(filepath.Join(
-		"remediations-repo", "en", strings.ToLower(provider), strings.ToLower(category),
+		remediationsDir, strings.ToLower(provider), strings.ToLower(category),
 		fmt.Sprintf("%s.md", remediationID)), " ", "")
 
 	remediationFile, err := filepath.Abs(remediationFile)
@@ -189,21 +183,20 @@ func getRemediationBody(provider, category, remediationID string) string {
 		return ""
 	}
 
-	regexp.Compile(`<br `)
-	cleanContent := strings.TrimSpace(components[1])
-	if cleanContent == "" {
+	strippedContent := strings.TrimSpace(components[1])
+	if strippedContent == "" {
 		return ""
 	}
 
-	contentCleaner := regexp.MustCompile(`</br>\s?<img src=\"(.*)"\s?/>`)
-	cleanContent = contentCleaner.ReplaceAllString(cleanContent, "![Step]($1)\n")
+	imageConverterRegex := regexp.MustCompile(`</br>\s?<img src=\"(.*)"\s?/>`)
+	strippedContent = imageConverterRegex.ReplaceAllString(strippedContent, "![Step]($1)\n")
 	body := `### Recommended Actions
 
 Follow the appropriate remediation steps below to resolve the issue.
 `
 	body += "{{< tabs groupId=\"remediation\" >}}\n"
 	body += "{{% tab name=\"Management Console\" %}}\n"
-	body += cleanContent
+	body += strippedContent
 	body += "{{% /tab %}}\n"
 	body += "{{< /tabs >}}\n"
 
@@ -211,11 +204,12 @@ Follow the appropriate remediation steps below to resolve the issue.
 }
 
 const cspmTemplate = `---
-title: "{{.Title}}"
-parent: {{ .ParentID}}
-heading: Cloud Security Posture Management
+title: {{ .ServiceName }} - {{.Title}}
+aliases: [
+	"/cspm/{{ .AliasID}}"
+]
+heading: Misconfiguration
 icon: iac
-category: misconfig
 sidebar_category: misconfig
 draft: false
 shortName: {{.ShortName}}
@@ -224,7 +218,7 @@ severity: "unknown"
 avd_page_type: defsec_page
 
 remediations:
-  - management_console
+  - management console
 
 menu:
   misconfig:

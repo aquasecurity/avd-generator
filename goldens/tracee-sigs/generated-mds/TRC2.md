@@ -1,25 +1,37 @@
 ---
-title: "Anti-Debugging"
-date: 2021-04-15T20:55:39Z
+title: Defense Evasion - Anti-Debugging
+heading: Runtime Security
+icon: aqua
+shortName: Anti-Debugging
+severity: high
 draft: false
+version: 0.1.0
 
-avd_page_type: tracee_page
+sidebar_category: runsec
+date: 2021-04-15T20:55:39Z
+
+remediations:
+  
+
+menu:
+  runsec:
+    identifier: TRC-2
+    name: Anti-Debugging
+    parent: defense-evasion
+
+avd_page_type: defsec_page
 ---
 
-### TRC-2
-#### Anti-Debugging
+Runtime Security -> [Defense Evasion](../) >  TRC-2
 
-### Severity
-#### High
+### ID: TRC-2
 
-### Description
+### Anti-Debugging
 Process uses anti-debugging technique to block debugger
 
 ### MITRE ATT&CK
 Defense Evasion: Execution Guardrails
 
-### Version
-0.1.0
 
 ### Rego Policy
 ```

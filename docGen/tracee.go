@@ -57,7 +57,7 @@ type Signature struct {
 	Description string
 	Severity    string
 	MitreAttack string
-	//Tags        []string
+	// Tags        []string
 	// Properties map[string]interface{}
 	RegoPolicy string
 	GoCode     string
@@ -82,7 +82,7 @@ func TraceePostToMarkdown(tp TraceePost, outputFile *os.File) error {
 }
 
 func generateTraceePages(rulesDir, postsDir string, clock Clock) {
-	err := os.MkdirAll(filepath.Join(postsDir), 0755)
+	err := os.MkdirAll(postsDir, 0755)
 	if err != nil {
 		log.Fatal("unable to create tracee directory ", err)
 	}
@@ -128,11 +128,16 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		topLevelIDName := strings.TrimSpace(strings.Split(sig.MitreAttack, ":")[0])
 		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
 		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.MenuCategory{
-			{"Runtime Security", "/tracee"},
+			{Name: "Runtime Security", Url: "/tracee"},
 		}, "runtime")
 		parentID := topLevelID
 
-		of, err := os.Create(filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(sig.ID, "-", ""))))
+		outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(sig.ID, "-", "")))
+		if err := os.MkdirAll(filepath.Dir(outputFilepath), 0755); err != nil {
+			log.Printf("error occurred while creating target directory: %s, %s", filepath.Dir(outputFilepath), err)
+		}
+
+		f, err := os.Create(outputFilepath)
 		if err != nil {
 			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, sig.ID)
 			continue
@@ -145,7 +150,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 			ParentName: strings.Title(topLevelIDName),
 			Date:       clock.Now(),
 			Signature:  sig,
-		}, of); err != nil {
+		}, f); err != nil {
 			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sig.ID, err)
 			continue
 		}
@@ -197,11 +202,16 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		topLevelIDName := strings.TrimSpace(strings.Split(ma, ":")[0])
 		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
 		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.MenuCategory{
-			{"Runtime Security", "/tracee"},
+			{Name: "Runtime Security", Url: "/tracee"},
 		}, "tracee")
 		parentID := topLevelID
 
-		f, err := os.Create(filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(m.ID, "-", ""))))
+		outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(m.ID, "-", "")))
+		if err := os.MkdirAll(filepath.Dir(outputFilepath), 0755); err != nil {
+			log.Printf("error occurred while creating target directory: %s, %s", filepath.Dir(outputFilepath), err)
+		}
+
+		f, err := os.Create(outputFilepath)
 		if err != nil {
 			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, m.ID)
 			continue
@@ -235,8 +245,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 }
 
 const signaturePostTemplate = `---
-title: {{.Signature.ID}}
-parent: {{ .ParentID}}
+title: {{.ParentName}} - {{.Title}}
 heading: Runtime Security
 icon: aqua
 shortName: {{.Title}}
@@ -245,11 +254,7 @@ draft: false
 version: {{.Signature.Version}}
 
 sidebar_category: runsec
-category: runsec
-sub_category: tracee
 date: {{.Date}}
-
-topLevel: {{ .TopLevelID }}
 
 remediations:
   
@@ -264,6 +269,8 @@ avd_page_type: defsec_page
 ---
 
 Runtime Security -> [{{.ParentName}}](../) >  {{.Signature.ID}}
+
+### ID: {{.Signature.ID}}
 
 ### {{.Title}}
 {{.Signature.Description}}

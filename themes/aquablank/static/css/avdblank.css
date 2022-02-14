@@ -9353,6 +9353,36 @@ pre {
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.aqua:before {
   background-image: url("../images/icon_page_aqua.png");
 }
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.alibaba:before {
+  background-image: url("../images/icon_tile_alibaba.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.aws:before {
+  background-image: url("../images/icon_tile_aws.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.azure:before {
+  background-image: url("../images/icon_tile_azure.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.cloudstack:before {
+  background-image: url("../images/icon_tile_cloudstack.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.digitalocean:before {
+  background-image: url("../images/icon_tile_digitalocean.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.dockerfile:before {
+  background-image: url("../images/icon_tile_dockerfile.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.github:before {
+  background-image: url("../images/icon_tile_github.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.google:before {
+  background-image: url("../images/icon_tile_google.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.openstack:before {
+  background-image: url("../images/icon_tile_openstack.png");
+}
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.oracle:before {
+  background-image: url("../images/icon_tile_oracle.png");
+}
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.tracee:before {
   background-image: url("../images/icon_page_aqua.png");
 }

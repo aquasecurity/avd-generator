@@ -2,7 +2,7 @@ md-build:
 	go build -o generator ./docGen
 
 md-test:
-	go test -v ./...
+	go test -v ./docGen/...
 
 md-clean:
 	rm -f ./generator

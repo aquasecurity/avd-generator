@@ -31,9 +31,13 @@ var (
 
 const vulnerabilityPostTemplate = `---
 title: "{{.Title}}"
+aliases: [
+	"/nvd/{{ lower .Title}}"
+]
+
 shortName: "{{.Vulnerability.CWEInfo.Name}}"
 date: {{.Date}}
-category: vulnerabilities
+sidebar_category: vulnerabilities
 draft: false
 
 avd_page_type: nvd_page
@@ -266,7 +270,7 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 		_ = AddCWEInformation(&bp, cweDir)
 
 		for _, vendor := range []string{"redhat", "ubuntu"} {
-			_ = AddVendorInformation(&bp, vendor, filepath.Join(strings.ReplaceAll(nvdDir, "nvd", vendor)))
+			_ = AddVendorInformation(&bp, vendor, strings.ReplaceAll(nvdDir, "nvd", vendor))
 		}
 
 		// check if file exists first, if does then open, if not create
@@ -360,21 +364,21 @@ func existsInCVEMap(inputMap map[string]map[string]ReservedCVEInfo, target strin
 	return false
 }
 
-func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEInfo, vendor string, fKey string) {
+func addReservedCVE(vendorDir string, cveMap map[string]map[string]ReservedCVEInfo, vendor string, fKey string) {
 	b, _ := ioutil.ReadFile(fmt.Sprintf("%s/%s.json", vendorDir, fKey))
 
 	switch vendor {
 	case "ubuntu":
 		var ua ubuntu.Vulnerability
 		_ = json.Unmarshal(b, &ua)
-		CVEMap[fKey][vendor] = ReservedCVEInfo{
+		cveMap[fKey][vendor] = ReservedCVEInfo{
 			Description: ua.Description,
 			Severity:    ua.Priority,
 		}
 		for pkg, info := range ua.Patches {
 			for release, status := range info {
 				if status.Status == "released" || status.Status == "needed" || status.Status == "ignored" || status.Status == "needs-triage" {
-					rp := CVEMap[fKey][vendor]
+					rp := cveMap[fKey][vendor]
 					as := AffectedSoftware{
 						Name:   string(pkg),
 						Vendor: fmt.Sprintf("%s/%s", vendor, release),
@@ -387,27 +391,27 @@ func addReservedCVE(vendorDir string, CVEMap map[string]map[string]ReservedCVEIn
 						as.EndVersion = status.Note
 					}
 					rp.AffectedSoftwareList = append(rp.AffectedSoftwareList, as)
-					CVEMap[fKey][vendor] = rp
+					cveMap[fKey][vendor] = rp
 				}
 			}
 		}
 	case "redhat":
 		rh := &redhat.RedhatCVEJSON{}
 		_ = json.Unmarshal(b, &rh)
-		CVEMap[fKey][vendor] = ReservedCVEInfo{
+		cveMap[fKey][vendor] = ReservedCVEInfo{
 			Description: rh.Bugzilla.Description,
 			Severity:    rh.ThreatSeverity,
 			Mitigation:  rh.Mitigation,
 		}
 		for _, release := range rh.AffectedRelease {
-			rp := CVEMap[fKey][vendor]
+			rp := cveMap[fKey][vendor]
 			rp.AffectedSoftwareList = append(rp.AffectedSoftwareList, AffectedSoftware{
 				Name:         release.ProductName,
 				Vendor:       "RedHat",
 				StartVersion: release.Package,
 				EndVersion:   release.Package,
 			})
-			CVEMap[fKey][vendor] = rp
+			cveMap[fKey][vendor] = rp
 		}
 	}
 }

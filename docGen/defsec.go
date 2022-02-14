@@ -13,7 +13,7 @@ import (
 
 	"github.com/aquasecurity/avd-generator/docGen/menu"
 	"github.com/aquasecurity/avd-generator/docGen/util"
-	_ "github.com/aquasecurity/defsec/loader"
+
 	"github.com/aquasecurity/defsec/provider"
 	"github.com/aquasecurity/defsec/rules"
 )
@@ -96,10 +96,7 @@ func (s *Services) Add(svc *ServiceIndex) *ServiceIndex {
 	return svc
 }
 
-func generateDefsecPages(remidiationDir, contentDir string, _ Clock) {
-
-	registeredRules := rules.GetRegistered()
-
+func generateDefsecPages(remediationDir, contentDir string, registeredRules []rules.RegisteredRule) {
 	for _, r := range registeredRules {
 
 		avdId := r.Rule().AVDID
@@ -108,7 +105,7 @@ func generateDefsecPages(remidiationDir, contentDir string, _ Clock) {
 		branchID = util.RemapCategory(branchID)
 
 		log.Printf("Getting remediation markdown for %s", avdId)
-		remediationDir := filepath.Join(remidiationDir, strings.ToLower(r.Rule().Provider.ConstName()), strings.ReplaceAll(r.Rule().Service, "-", ""), avdId)
+		remediationDir := filepath.Join(remediationDir, strings.ToLower(r.Rule().Provider.ConstName()), strings.ReplaceAll(r.Rule().Service, "-", ""), avdId)
 
 		remediations := make(map[string]string)
 		docsFile := filepath.Join(remediationDir, "docs.md")
@@ -142,28 +139,19 @@ func generateDefsecPages(remidiationDir, contentDir string, _ Clock) {
 
 		remediationNames := make([]string, 0, len(remediations))
 		for k := range remediations {
-			remediationNames = append(remediationNames, strings.ReplaceAll(strings.ToLower(k), " ", "_"))
+			remediationNames = append(remediationNames, strings.ToLower(k))
 		}
 
 		misConfigurationMenu.AddNode(topLevelID, r.Rule().Provider.DisplayName(), contentDir, "", remediationNames,
 			[]menu.MenuCategory{
-				{"Misconfiguration", "/misconfig"},
+				{Name: "Misconfiguration", Url: "/misconfig"},
 			}, "iac")
 		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID), topLevelID, remediationNames,
 			[]menu.MenuCategory{
-				{"Misconfiguration", "/misconfig"},
-				{r.Rule().Provider.DisplayName(), "/misconfig/" + topLevelID},
+				{Name: "Misconfiguration", Url: "/misconfig"},
+				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig/" + topLevelID},
 			}, "aqua")
 	}
-
-	// if err := menu.NewTopLevelMenu("Infrastructure as Code Misconfigurations", "avd_list", "content/misconfig/infra/_index.md").
-	// 	WithHeading("Infrastructure as Code").
-	// 	WithIcon("iac").
-	// 	WithCategory("misconfig").
-	// 	WithMenu("misconfig").
-	// 	Generate(); err != nil {
-	// 	panic(err)
-	// }
 }
 
 func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]string, contentDir string, docsFile string, menuParent string) error {
@@ -172,7 +160,7 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 	servicePath := strings.ToLower(menuParent)
 	ruleIDPath := strings.ToLower(rule.Rule().AVDID)
 
-	outputFilePath := strings.ToLower(strings.ReplaceAll(filepath.Join(contentDir, providerPath, servicePath, fmt.Sprintf("%s.md", ruleIDPath)), " ", "-"))
+	outputFilePath := strings.ReplaceAll(filepath.Join(contentDir, providerPath, servicePath, strings.ToLower(fmt.Sprintf("%s.md", ruleIDPath))), " ", "-")
 	if err := os.MkdirAll(filepath.Dir(outputFilePath), 0777); err != nil {
 		return err
 	}
@@ -201,6 +189,8 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 	for k := range remediations {
 		remediationKeys = append(remediationKeys, strings.ReplaceAll(strings.ToLower(k), " ", "_"))
 	}
+
+	sort.Strings(remediationKeys)
 
 	post := DefsecPost{
 		AVDID:        rule.Rule().AVDID,
@@ -243,11 +233,9 @@ Follow the appropriate remediation steps below to resolve the issue.
 }
 
 const defsecTemplate = `---
-title: "{{.ShortName}}"
-parent: {{ .ParentID}}
-heading: Infrastructure as Code
+title: {{.ServiceName}} - {{.ShortName}}
+heading: Misconfiguration
 icon: iac
-category: misconfig
 sidebar_category: misconfig
 draft: false
 shortName: {{.ShortName}}
@@ -268,7 +256,7 @@ menu:
 
 Misconfiguration > [{{.ProviderName}}](../../) > [{{.ServiceName}}](../) > {{.AVDID}}
 
-## {{ .AVDID }}
+### ID: {{ .AVDID }}
 
 {{.Body}}
 

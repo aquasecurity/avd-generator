@@ -37,12 +37,9 @@ func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
 
 		newContent := strings.Replace(string(b), "---", fmt.Sprintf(`---
 avd_page_type: kube-hunter_page
-topLevel: kubehunter
-parent: kubehunter
 shortName: %s
-category: misconfig
 sidebar_category: misconfig
-sub_category: kube-hunter
+
 remediations:
   - kubernetes
 
