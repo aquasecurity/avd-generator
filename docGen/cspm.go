@@ -111,7 +111,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 			"ShortName":          remediationString,
 			"Remediations":       []string{},
 			"ProviderID":         providerID,
-			"ProviderName":       provider,
+			"ProviderName":       util.Nicify(strings.Title(provider)),
 			"CategoryID":         categoryID,
 			"ServiceName":        category,
 			"MoreInfo":           moreInfo,
@@ -126,18 +126,10 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 
 		misConfigurationMenu.AddNode(providerID, provider, outputPagesDir, "", []string{},
-			[]menu.MenuCategory{
-				{
-					Name: "Misconfiguration",
-					Url:  "/misconfig",
-				},
-			}, "iac")
+			[]menu.MenuCategory{}, providerID, true)
 		misConfigurationMenu.AddNode(categoryID, category, filepath.Join(outputPagesDir, providerID),
 			providerID, []string{},
-			[]menu.MenuCategory{
-				{Name: "Misconfiguration", Url: "/misconfig"},
-				{Name: provider, Url: fmt.Sprintf("/misconfig/%s", providerID)},
-			}, "iac")
+			[]menu.MenuCategory{{Name: util.Nicify(strings.Title(provider)), Url: providerID}}, "iac", false)
 
 	}
 
@@ -190,32 +182,32 @@ Follow the appropriate remediation steps below to resolve the issue.
 }
 
 const cspmTemplate = `---
-title: {{ .ServiceName }} - {{.Title}}
+title: {{.Title}}
+id: {{.ShortName}}
 aliases: [
 	"/cspm/{{ .AliasID}}"
 ]
-heading: Misconfiguration
-icon: iac
-sidebar_category: misconfig
+source: CloudSploit
+icon: {{ .ProviderID }}
 draft: false
 shortName: {{.ShortName}}
 severity: "unknown"
+category: misconfig
 
-avd_page_type: defsec_page
+avd_page_type: avd_page
+
+breadcrumbs: 
+  - name: {{ .ProviderName }}
+    path: /misconfig/{{ .ProviderID }}
+  - name: {{ .ServiceName }}
+    path: /misconfig/{{ .ProviderID }}/{{ .CategoryID }}
 
 remediations:
   - management console
 
-menu:
-  misconfig:
-    identifier: {{.ProviderID}}/{{.CategoryID}}/{{.ID}}
-    name: {{.Title}}
-    parent: {{.ProviderID}}/{{.CategoryID}}
 ---
 
-Misconfiguration > [{{.ProviderName}}](../../) > [{{.ServiceName}}](../) > {{.Title}}
-
-### {{ .Title }}
+### {{.Title}}
 
 {{ .Description }}
 

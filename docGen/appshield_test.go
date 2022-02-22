@@ -22,18 +22,19 @@ func TestParseAppShieldRegoPolicyFile(t *testing.T) {
 			name:     "happy path",
 			regoFile: "../goldens/rego/Baseline #6 - AppArmor policy disabled.rego",
 			expectedRegoPost: `---
-title: ""
+title: 
+id: KSV002
 aliases: [
 	"/appshield/ksv002"
 ]
-sidebar_category: misconfig
-heading: Misconfiguration
 icon: appshield
+source: Trivy
 draft: false
 date: 2021-04-15T20:55:39Z
 severity: medium
 version: v1.0.0
 shortName: 
+category: misconfig
 
 avd_page_type: defsec_page
 
@@ -41,17 +42,10 @@ remediations:
   - kubernetes
 
 
-menu:
-  misconfig:
-    identifier: KSV002
-    name: 
-    parent: 
-
+breadcrumbs: 
+  - name: Kubernetes
+    path: /misconfig/
 ---
-
-Misconfiguration > [Kubernetes](../) > KSV002
-
-### KSV002
 
 ### AppArmor policies disabled
 A program inside the container can bypass AppArmor protection policies.
@@ -68,18 +62,19 @@ Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.
 			name:     "happy path",
 			regoFile: "../goldens/rego/SYS_ADMIN_capability.rego",
 			expectedRegoPost: `---
-title: ""
+title: 
+id: KSV005
 aliases: [
 	"/appshield/ksv005"
 ]
-sidebar_category: misconfig
-heading: Misconfiguration
 icon: appshield
+source: Trivy
 draft: false
 date: 2021-04-15T20:55:39Z
 severity: high
 version: v1.0.0
 shortName: 
+category: misconfig
 
 avd_page_type: defsec_page
 
@@ -87,17 +82,10 @@ remediations:
   - kubernetes
 
 
-menu:
-  misconfig:
-    identifier: KSV005
-    name: 
-    parent: 
-
+breadcrumbs: 
+  - name: Kubernetes
+    path: /misconfig/
 ---
-
-Misconfiguration > [Kubernetes](../) > KSV005
-
-### KSV005
 
 ### SYS_ADMIN capability added
 SYS_ADMIN gives the processes running inside the container privileges that are equivalent to root.

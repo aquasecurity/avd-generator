@@ -5,8 +5,10 @@
 		<nav class="navbar">
 			<div class="container is-small">
 				<div class="navbar-brand">
-					<a class="navbar-item logo" href="{{ .Site.BaseURL }}" title="{{ .Site.Title }}">{{ .Site.Title }}</a>
-					<div role="button" tabindex="0" class="navbar-burger burger"><span></span><span></span><span></span></div>
+					<a class="navbar-item logo" href="{{ .Site.BaseURL }}" title="{{ .Site.Title }}">{{ .Site.Title
+						}}</a>
+					<div role="button" tabindex="0" class="navbar-burger burger"><span></span><span></span><span></span>
+					</div>
 				</div>
 				<div id="main-navigation-navbar" class="navbar-menu">
 
@@ -23,21 +25,26 @@
 								</p>
 							</div>-->
 
-							{{ if and (not .IsHome) (not (eq "search_page" .Params.avd_page_type)) }}
-							<!--<input type="text" class="avd_header_search" placeholder="{{ .Site.Params.banner.placeholder }}" />-->
-							<div class="navbar-item">
-								<div id="fastSearch" class="search_box_wrap">
-									<input id="searchInput" class="avd_header_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
-									<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
+						{{ if and (not .IsHome) (not (eq "search_page" .Params.avd_page_type)) }}
+						<!--<input type="text" class="avd_header_search" placeholder="{{ .Site.Params.banner.placeholder }}" />-->
+						<div class="navbar-item">
+							<div id="fastSearch" class="search_box_wrap">
+								<input id="searchInput" class="avd_header_search"
+									placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
+								<div class="content search_results_list_wrap">
+									<ul id="search_results_list"></ul>
 								</div>
 							</div>
-							{{ end }}
+						</div>
+						{{ end }}
 
 						<!--<a class="navbar-item search_box">Search</a>-->
-						<a class="navbar-item signin_link" href="https://cloud.aquasec.com/signup" target="_blank">Try Aqua</a>
+						<a class="navbar-item signin_link" href="https://cloud.aquasec.com/signup" target="_blank">Try
+							Aqua</a>
 						<div class="navbar-item">
 							<div class="field is-grouped">
-								<p class="control"><a href="https://www.aquasec.com/demo/" target="_blank" class="button is-primary type_btn">Get Demo</a></p>		
+								<p class="control"><a href="https://www.aquasec.com/demo/" target="_blank"
+										class="button is-primary type_btn">Get Demo</a></p>
 							</div>
 						</div><!-- navbar-item -->
 					</div><!-- navbar-end -->
@@ -48,7 +55,7 @@
 							<div class="search_box_close"></div>
 						</div><!-- search_box_wrap -->
 
-					
+
 
 
 

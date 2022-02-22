@@ -30,6 +30,7 @@ type menuNode struct {
 	remediations []string
 	contentDir   string
 	categories   []MenuCategory
+	topLevel     bool
 	icon         string
 }
 
@@ -47,7 +48,7 @@ func New(rootMenu, contentDir string) *menu {
 	}
 }
 
-func (m *menu) AddNode(id, name, contentDir string, parentID string, remediations []string, categories []MenuCategory, icon string) {
+func (m *menu) AddNode(id, name, contentDir string, parentID string, remediations []string, categories []MenuCategory, icon string, topLevel bool) {
 	id = strings.ToLower(strings.ReplaceAll(id, " ", "-"))
 	key := fmt.Sprintf("%s/%s", parentID, id)
 	var workingNode menuNode
@@ -60,6 +61,7 @@ func (m *menu) AddNode(id, name, contentDir string, parentID string, remediation
 			contentDir:   contentDir,
 			remediations: make([]string, 0),
 			icon:         icon,
+			topLevel:     topLevel,
 		}
 	} else {
 		workingNode = node
@@ -118,6 +120,10 @@ func (m *menu) generateBranchFiles() error {
 			return err
 		}
 
+		pageType := ""
+		if branch.topLevel {
+			pageType = "toplevel_page"
+		}
 		t := template.Must(template.New("service").Parse(branchTemplate))
 		if err := t.Execute(branchFile, map[string]interface{}{
 			"RootMenu":     m.rootMenu,
@@ -126,8 +132,9 @@ func (m *menu) generateBranchFiles() error {
 			"BranchID":     branch.id,
 			"Name":         branch.name,
 			"Remediations": branch.remediations,
-			"Icon":         branch.parentID,
+			"Icon":         branch.icon,
 			"Heading":      headingMap[branch.parentID],
+			"PageType":     pageType,
 		}); err != nil {
 			return err
 		}
@@ -147,6 +154,10 @@ func (m *menu) generateTopLevelFile() error {
 			return err
 		}
 
+		pageType := ""
+		if topLevel.topLevel {
+			pageType = "toplevel_page"
+		}
 		t := template.Must(template.New("provider").Parse(topLevelTemplate))
 		if err := t.Execute(providerFile, map[string]interface{}{
 			"RootMenu":     m.rootMenu,
@@ -154,8 +165,9 @@ func (m *menu) generateTopLevelFile() error {
 			"Categories":   topLevel.categories,
 			"Name":         topLevel.name,
 			"Remediations": topLevel.remediations,
-			"Icon":         strings.ReplaceAll(strings.ToLower(topLevel.name), " ", ""),
+			"Icon":         topLevel.icon,
 			"Heading":      headingMap[topLevel.icon],
+			"PageType":     pageType,
 		}); err != nil {
 			return err
 		}
@@ -195,28 +207,29 @@ func (n *menuNode) addRemediations(remediations []string) {
 
 const topLevelTemplate = `---
 title: {{ .Name }}
-heading: {{ .Heading }}
+heading: {{ .Name }}
 draft: false
 icon: {{ .Icon }}
 category: {{ .RootMenu}}
-sidebar_category: {{ .RootMenu}}
 
 remediations:
 {{ range .Remediations }}  - {{ .}}
 {{ end }}
 
-categories:
+breadcrumbs:
 {{ range .Categories }}  - name: {{ .Name }}
     url: {{ .Url }}
 {{ end }}
 
-avd_page_type: toplevel_page
+avd_page_type: {{ .PageType }}
+
 
 menu:
   {{.RootMenu}}:
     identifier: {{.GroupID}}
     name: {{.Name}}
 ---
+
 `
 
 const branchTemplate = `---
@@ -225,18 +238,18 @@ heading: {{ .Heading }}
 icon: {{ .Icon }}
 draft: false
 category: {{ .RootMenu}}
-sidebar_category: {{ .RootMenu}}
+
 
 remediations:
 {{ range .Remediations }}  - {{ .}}
 {{ end }}
 
-categories:
+breadcrumbs:
 {{ range .Categories }}  - name: {{ .Name }}
-    url: {{ .Url }}
+    path: {{ .Url }}
 {{ end }}
 
-avd_page_type: defsec_page
+avd_page_type: {{ .PageType }}
 
 menu:
   {{.RootMenu}}:

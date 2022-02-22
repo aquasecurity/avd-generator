@@ -110,7 +110,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 		},
 	}
 	for _, tc := range testCases {
-		actual, err := ParseVulnerabilityJSONFile(tc.fileName)
+		actual, err := parseVulnerabilityJSONFile(tc.fileName)
 		require.NoError(t, err, tc.fileName)
 		assert.Equal(t, tc.expectedBlogPost, actual, tc.fileName)
 	}
@@ -167,7 +167,7 @@ aliases: [
 
 shortName: ""
 date: 2020-05-13 12:01:15 +0000
-sidebar_category: vulnerabilities
+category: vulnerabilities
 draft: false
 
 avd_page_type: nvd_page
@@ -265,7 +265,7 @@ aliases: [
 
 shortName: "foo cwe info name"
 date: 2020-01-08 12:19:15 +0000
-sidebar_category: vulnerabilities
+category: vulnerabilities
 draft: false
 
 avd_page_type: nvd_page

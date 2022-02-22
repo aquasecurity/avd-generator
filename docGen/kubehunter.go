@@ -32,35 +32,37 @@ func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
 			continue
 		}
 
-		id := filepath.Base(page)
+		id := strings.ToLower(strings.TrimSuffix(filepath.Base(page), ".md"))
 		title := titleRegex.FindSubmatch(b)[1]
 
 		newContent := strings.Replace(string(b), "---", fmt.Sprintf(`---
-avd_page_type: kube-hunter_page
+avd_page_type: avd_page 
+icon: kube-hunter
 shortName: %s
-sidebar_category: misconfig
+source: Kube Hunter
+severity: n/a
+aliases: [
+	"/kube-hunter/%s"	
+]
+category: misconfig
 
 remediations:
   - kubernetes
 
-menu:
-  misconfig:
-    identifier: %s
-    name: %s
-    parent: kubernetes/kubehunter
+breadcrumbs: 
+  - name: Kubernetes
+    path: /misconfig/kubernetes
 
-`, string(title), id, string(title)), 1)
+
+`, string(title), id), 1)
 		r := strings.NewReplacer(
 			"# {{ page.vid }} - {{ page.title }}", "",
-			"title", "description",
-			"vid", "title",
+			"vid", "id",
 			"categories: ", "types: ",
 			"## Remediation", "### Recommended Actions",
 			"## References", "### Links",
 			"## Issue description", fmt.Sprintf(`
-Misconfiguration > [Kubernetes](../../) > [Kube Hunter](../) > %s
-
-### %s`, id, string(title)))
+### %s`, string(title)))
 		content := r.Replace(newContent)
 
 		err = ioutil.WriteFile(filepath.Join(outputPagesDir, filepath.Base(page)), []byte(content), 0644)
@@ -72,7 +74,7 @@ Misconfiguration > [Kubernetes](../../) > [Kube Hunter](../) > %s
 	topLevelPath := filepath.Join(outputPagesDir, "_index.md")
 	if err := menu.NewTopLevelMenu("Kube Hunter Misconfiguration", "avd_list", topLevelPath).
 		WithHeading("Kube Hunter").
-		WithIcon("kubehunter").
+		WithIcon("kube-hunter").
 		WithCategory("misconfig").
 		WithMenu("Kube Hunter").
 		WithMenuID("kubehunter").

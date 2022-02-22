@@ -6,18 +6,23 @@
 		<!--<div class="hero-head"></div>-->
 		<div class="hero-body">
 			<div class="clearboth container">
-															<!--- header menu -->
-		{{ partial "header_menu.html" (dict "context" . )}}
-		<!--- header menu ends -->
+				<!--- header menu -->
+				{{ partial "header_menu.html" (dict "context" . )}}
+				<!--- header menu ends -->
 				<div class="header_title_wrap">
-					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">{{ .Params.heading }}</div>
-					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Title }} <div
-							style="float: right;">
-							<h2 class="severity-pill {{ .Params.severity }}">
-								{{ .Params.severity }}</h2>
-						</div>
-					</h1>
-					<!--<h2 class="subtitle page_subtitle">AVD Hero Subtitle 012</h2>-->
+					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">
+						{{ if .Params.breadcrumbs }}
+						{{ $page := . }}
+						{{ range $breadcrumb := .Params.breadcrumbs }}
+						{{ if ne $breadcrumb.name $page.Title }}
+						<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
+						{{ end }}
+						{{ end }}
+						{{ .Title }}
+						{{ else }}
+						{{ .Title }}
+						{{ end }}
+					</div>
 				</div><!-- header_title_wrap -->
 			</div><!-- container -->
 		</div><!-- hero-body -->
@@ -50,84 +55,51 @@
 <div class="section avdcve_wrap animatable">
 	<div class="clearboth container page-fill">
 		<div class="columns is-multiline rever*se-columns">
-			<div class="column is-3-desktop">
-				<div>
-					<ul class="menu-treeview">
-						{{ $currentPage := . }}
-						{{ if eq .Params.sidebar_category "none"}}
-						{{ else if eq .Params.sidebar_category "runsec"}}
-							{{ range .Site.Menus.runsec }}
-								{{ if .HasChildren }}
-									{{ partial "iac_menu.html" ( dict "context" . "currentPage" $currentPage ) }}
-								{{ end }}
-							{{ end }}
-						{{ else if eq .Params.sidebar_category "kubehunter"}}
-							{{ range .Site.Menus.kubehunter }}
-								{{ if .HasChildren }}
-									{{ partial "iac_menu.html" ( dict "context" . "currentPage" $currentPage ) }}
-								{{ else }}
-									<li class="node check">
-										<a href="{{ .URL }}">{{ .Name }}</a>
-									</li>
-								{{ end }}
-							{{ end }}
-						{{ else }}
-							{{ range .Site.Menus.misconfig }}
-								{{ if .HasChildren }}
-									{{ partial "iac_menu.html" ( dict "context" . "currentPage" $currentPage ) }}
-								{{ end }}
-							{{ end }}
-						{{ end }}
-						</ul>
-			</div>
-			</div>
-			<div class="column is-9-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_4">
+			<div class="column is-12-desktop is-12-tablet is-12-mobile fadeInUp animationDelay_4">
 				<div class="vulnerability_content_wrap fadeInUp">
 					<!--<h4 class="vulnerability_content_title fadeInUp"></h4>-->
-					<div class="content vulnerability_content">					
-						{{ range $category := .Params.categories }} <a href="{{ $category.url }}">{{ $category.name }}</a> > 	{{end}} {{.Title}}
-						<br />
-						<br />
-					<div >
-					{{ $paginator := .Paginate .Pages }}
-					
-					{{ range .Paginator.Pages }}
-					<div class="list-item">
-							<a href="{{.RelPermalink}}">{{.Title}}</a>{{ if .Params.shortName }} - {{.Params.shortName}} {{ end }}
-							{{ if .Params.remediations}}
-							<div class="remediation-pills">
-								{{ $pageCtx := .}}
-								{{ if  $pageCtx.Params.shortName }}	
-								{{ range $remediation := sort .Params.remediations }}
-								<span class="remediation-pill {{ $remediation }}">							
+					<div class="content vulnerability_content">
+
+						<div>
+
+							{{ range .Paginator.Pages.ByParam "title" }}
+							<div class="list-item">
+								<a href="{{.RelPermalink}}">{{.Title}}</a>
+								<!-- {{ if .Params.remediations}}
+								<div class="remediation-pills">
+									{{ $pageCtx := .}}
+									{{ if $pageCtx.Params.shortName }}
+									{{ range $remediation := sort .Params.remediations }}
+									<span class="remediation-pill {{ $remediation }}">
 										<a href="{{  $pageCtx.RelPermalink }}#{{ $remediation }}">{{ $remediation }}</a>
-									
-								</span>
-								{{ end }}
-								{{ end }}
+
+									</span>
+									{{ end }}
+									{{ end }}
+								</div>
+								{{ end }} -->
 							</div>
 							{{ end }}
+
 						</div>
-					{{ end }}
 
-				</div>
+						<div class="paginated">
+							{{ if .Paginator.HasPrev }}
 
-				<div class="paginated">
-					{{ if .Paginator.HasPrev }}
-					
-						<a href="{{ .Paginator.Prev.URL }}"> &lt;&lt; Prev </a>
-					{{ end }}
-					{{ if .Paginator.HasNext }}
-						<a href="{{ .Paginator.Next.URL }}">  Next &gt;&gt;  </a>
-						
-					{{ end }}
-				</div>
+							<a href="{{ .Paginator.Prev.URL }}"> &lt;&lt; Prev </a>
+							{{ end }}
+							{{ if .Paginator.HasNext }}
+							<a href="{{ .Paginator.Next.URL }}"> Next &gt;&gt; </a>
 
-				</div>
+							{{ end }}
+						</div>
+
 					</div>
-				</div><!-- vulnerability_content_wrap -->
-			</div><!-- column is-9 -->
-		</div><!-- columns -->
-	</div><!-- container -->
+				</div>
+			</div><!-- vulnerability_content_wrap -->
+
+		</div><!-- column is-9 -->
+	</div><!-- columns -->
+</div><!-- container -->
 </div>
 <!-- content ends -->

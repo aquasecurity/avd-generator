@@ -8768,10 +8768,10 @@ pre {
 }
 
 /*.content_wrap h3, */
-.content h3, .generic_title {
+.content h3,
+.generic_title {
   font-size: 1.75rem;
   font-weight: 700;
-  max-width: 90%;
   margin-bottom: 10px;
   margin-top: 20px;
   color: #1904da;
@@ -10692,6 +10692,34 @@ input.avd_large_search {
 }
 
 /* project ctas - used in the homepage and on sidebars */
+.info_card {
+  display: block;
+  position: relative;
+  min-height: 220px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  background: #ebf3fa;
+  box-shadow: 9px 9px 11px #c1c7cd, -9px -9px 11px #fff;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+  max-height: 300px;
+}
+
+.info_card_details {
+  padding: 30px;
+}
+
+.info_card_details_part {
+  margin: 10px;
+  border-bottom: 1px whitesmoke solid;
+  padding-bottom: 10px;
+}
+
+.info_card_details_part h2 {
+  font-weight: bold;
+  padding-bottom: 3px;
+}
+
 .project_item {
   display: block;
   position: relative;
@@ -10753,11 +10781,17 @@ input.avd_large_search {
 }
 
 .severity-pill {
-  border-radius: 8px;
-  padding: 6px 10px;
+  border-radius: 4px 4px 0px 0px;
+  padding: 12px;
   text-transform: uppercase;
-  font-size: 0.6em;
+  text-align: center;
+  font-size: 1.2em !important;
   font-weight: bold;
+  min-height: 50px;
+}
+
+.severity-pill h2 {
+  font-size: 0.6em !important;
 }
 
 .rego-version {
@@ -10766,10 +10800,12 @@ input.avd_large_search {
 
 .severity-pill.critical {
   background-color: red;
+  color: #fff;
 }
 
 .severity-pill.high {
   background-color: orangered;
+  color: #fff;
 }
 
 .severity-pill.medium {
@@ -11029,6 +11065,7 @@ aside.side-nav {
   min-width: 30px;
   display: inline-block;
   text-align: center;
+  margin: 2px;
 }
 
 .remediation-pill a {
@@ -11087,6 +11124,7 @@ aside.side-nav {
   font-size: 2em;
   align-content: center;
   padding: 2em 0.5em;
+  height: 6em;
 }
 
 .config-tile:hover {
@@ -11204,6 +11242,19 @@ aside.side-nav {
 
 .home-button:hover {
   background: #ff445f;
+}
+
+.projectLink {
+  text-decoration: underline;
+  color: #1904da;
+}
+
+.projectLink:hover {
+  color: #ff445f;
+}
+
+.breadcrumb:hover {
+  text-decoration: unerline;
 }
 
 .tab-nav-button {

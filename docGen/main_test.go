@@ -9,7 +9,7 @@ import (
 
 type fakeClock struct{}
 
-func (fakeClock) Now() string {
+func (fakeClock) Now(format ...string) string {
 	return "2021-04-15T20:55:39Z"
 }
 

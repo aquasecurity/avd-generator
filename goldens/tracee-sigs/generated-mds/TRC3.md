@@ -1,30 +1,29 @@
 ---
-title: Defense Evasion - Code injection
-heading: Runtime Security
+title: Code injection
+id: TRC-3
+aliases: [
+    "/tracee/trc3"
+]
+source: Tracee
 icon: aqua
 shortName: Code injection
 severity: high
 draft: false
 version: 0.1.0
 
-sidebar_category: runsec
+category: runsec
 date: 2021-04-15T20:55:39Z
 
 remediations:
-  
 
-menu:
-  runsec:
-    identifier: TRC-3
-    name: Code injection
-    parent: defense-evasion
+breadcrumbs: 
+  - name: Tracee
+    path: /tracee
+  - name: Defense Evasion
+    path: /tracee/defense-evasion
 
-avd_page_type: defsec_page
+avd_page_type: avd_page
 ---
-
-Runtime Security -> [Defense Evasion](../) >  TRC-3
-
-### ID: TRC-3
 
 ### Code injection
 Possible code injection into another process

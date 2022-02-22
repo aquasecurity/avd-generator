@@ -6,17 +6,23 @@
 		<!--<div class="hero-head"></div>-->
 		<div class="hero-body">
 			<div class="clearboth container">
-															<!--- header menu -->
-		{{ partial "header_menu.html" (dict "context" . )}}
-		<!--- header menu ends -->
+				<!--- header menu -->
+				{{ partial "header_menu.html" (dict "context" . )}}
+				<!--- header menu ends -->
 				<div class="header_title_wrap">
-					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">{{ .Params.heading }}</div>
-					<h1 class="title page_title is-spaced fadeInUp animationDelay_1">{{ .Title }} <div
-							style="float: right;">
-							<h2 class="severity-pill {{ .Params.severity }}">
-								{{ .Params.severity }}</h2>
-						</div>
-					</h1>
+					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">
+						{{ if .Params.breadcrumbs }}
+						{{ $page := . }}
+						{{ range $breadcrumb := .Params.breadcrumbs }}
+						{{ if ne $breadcrumb.name $page.Title }}
+						<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
+						{{ end }}
+						{{ end }}
+						{{ .Title }}
+						{{ else }}
+						{{ .Title }}
+						{{ end }}
+					</div>
 					<!--<h2 class="subtitle page_subtitle">AVD Hero Subtitle 012</h2>-->
 				</div><!-- header_title_wrap -->
 			</div><!-- container -->
@@ -53,43 +59,42 @@
 
 
 			{{ if .Params.tiles }}
-				{{ range $tile := .Params.tiles }}
-				<div class="column is-4-desktop is-6-tablet">
-					<a href="{{ $tile.url }}" class="config-item fadeInUp animationDelay_6">
-						<h2 class="config-tile {{ $tile.icon }}">{{ $tile.heading }}</h2>
-						<div class="config-subtitle">{{ $tile.summary }}</div>
-					</a>
-				</div>
-				{{ end }}
+			{{ range $tile := .Params.tiles }}
+			<div class="column is-4-desktop is-6-tablet">
+				<a href="{{ $tile.url }}" class="config-item fadeInUp animationDelay_6">
+					<h2 class="config-tile {{ $tile.icon }}">{{ $tile.heading }}</h2>
+				</a>
+			</div>
+			{{ end }}
 			{{ else }}
 			{{ $paginator := .Paginate .Pages }}
-					
+
 			{{ range .Paginator.Pages.ByParam "title" }}
 			<div class="column is-4-desktop is-6-tablet">
 				<a href="{{ .RelPermalink }}" class="config-item fadeInUp animationDelay_6">
 					<h2 class="config-tile {{ .Params.icon }}">{{ .Params.Title }}</h2>
 				</a>
 			</div>
-					{{ end }}
-					<div class="paginated">
-						{{ if .Paginator.HasPrev }}
-					
-						<a href="{{ .Paginator.Prev.URL }}"> &lt;&lt; Prev </a>
-					{{ end }}
-					{{ if .Paginator.HasNext }}
-						<a href="{{ .Paginator.Next.URL }}">  Next &gt;&gt;  </a>
-						
-					{{ end }}
-				</div>
-				</div>
 			{{ end }}
+			<div class="paginated">
+				{{ if .Paginator.HasPrev }}
+
+				<a href="{{ .Paginator.Prev.URL }}"> &lt;&lt; Prev </a>
+				{{ end }}
+				{{ if .Paginator.HasNext }}
+				<a href="{{ .Paginator.Next.URL }}"> Next &gt;&gt; </a>
+
+				{{ end }}
+			</div>
+		</div>
+		{{ end }}
 
 
 
-			
-			 <!-- </div> -->
-			<!-- column is-9 -->
-		</div><!-- columns -->
-	</div><!-- container -->
+
+		<!-- </div> -->
+		<!-- column is-9 -->
+	</div><!-- columns -->
+</div><!-- container -->
 </div>
 <!-- content ends -->

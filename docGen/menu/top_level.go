@@ -13,16 +13,17 @@ type Tile struct {
 }
 
 type TopLevelMenu struct {
-	Name       string
-	Heading    string
-	Icon       string
-	Category   string
-	Menu       string
-	MenuID     string
-	MenuParent string
-	Layout     string
-	Path       string
-	Tiles      []Tile
+	Name        string
+	Heading     string
+	Icon        string
+	Category    string
+	BreadCrumbs []string
+	Menu        string
+	MenuID      string
+	MenuParent  string
+	Layout      string
+	Path        string
+	Tiles       []Tile
 }
 
 func NewTopLevelMenu(name, layout, path string) *TopLevelMenu {
@@ -89,15 +90,13 @@ const categoryTemplate = `---
 title: {{ .Name }}
 heading: {{ .Heading }}
 icon: {{ .Icon }}
-sidebar_category: {{ .Category }}
+category: {{ .Category }}
 draft: false
 
-menu:
-  {{ .Category }}:
-    identifier: {{.MenuParent}}/{{ .MenuID }}
-    weight: 100
-    name: {{ .Menu }}
-    parent: {{ .MenuParent }}
+breadcrumbs:
+{{ range .BreadCrumbs }}  - name: {{ .Name }}
+    path: {{ .Url }}
+{{ end }}
 
 avd_page_type: {{ .Layout }}
 

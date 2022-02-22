@@ -40,8 +40,3 @@ func Test_generateTraceePages(t *testing.T) {
 		assert.Equal(t, string(want), string(got))
 	}
 }
-
-/*
-
-(?m).+MITRE ATT&CK\n(.*):
-*/

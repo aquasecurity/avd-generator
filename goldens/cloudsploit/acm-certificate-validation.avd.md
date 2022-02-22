@@ -1,28 +1,28 @@
 ---
-title: ACM - ACM Certificate Validation
+title: ACM Certificate Validation
+id: acm-certificate-validation
 aliases: [
 	"/cspm/aws/acm/acm-certificate-validation"
 ]
-heading: Misconfiguration
-icon: iac
-sidebar_category: misconfig
+source: CloudSploit
+icon: aws
 draft: false
 shortName: acm-certificate-validation
 severity: "unknown"
+category: misconfig
 
-avd_page_type: defsec_page
+avd_page_type: avd_page
+
+breadcrumbs: 
+  - name: AWS
+    path: /misconfig/aws
+  - name: ACM
+    path: /misconfig/aws/acm
 
 remediations:
   - management console
 
-menu:
-  misconfig:
-    identifier: aws/acm/acm-certificate-validation
-    name: ACM Certificate Validation
-    parent: aws/acm
 ---
-
-Misconfiguration > [aws](../../) > [ACM](../) > ACM Certificate Validation
 
 ### ACM Certificate Validation
 

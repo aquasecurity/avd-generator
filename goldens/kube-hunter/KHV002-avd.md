@@ -1,27 +1,30 @@
 ---
-avd_page_type: kube-hunter_page
+avd_page_type: avd_page 
+icon: kube-hunter
 shortName: Kubernetes version disclosure
-sidebar_category: misconfig
+source: Kube Hunter
+severity: n/a
+aliases: [
+	"/kube-hunter/khv002-orig"	
+]
+category: misconfig
 
 remediations:
   - kubernetes
 
-menu:
-  misconfig:
-    identifier: KHV002-orig.md
-    name: Kubernetes version disclosure
-    parent: kubernetes/kubehunter
+breadcrumbs: 
+  - name: Kubernetes
+    path: /misconfig/kubernetes
 
 
-title: KHV002
-description: Kubernetes version disclosure
+
+id: KHV002
+title: Kubernetes version disclosure
 types: [Information Disclosure]
 ---
 
 
 
-
-Misconfiguration > [Kubernetes](../../) > [Kube Hunter](../) > KHV002-orig.md
 
 ### Kubernetes version disclosure
 

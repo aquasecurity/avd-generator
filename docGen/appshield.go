@@ -53,7 +53,7 @@ func parseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp *RegoPost, e
 
 	rp = &RegoPost{
 		By:   "Aqua Security",
-		Date: clock.Now(),
+		Date: clock.Now("2006-01-02"),
 	}
 
 	metadataReplacer := strings.NewReplacer("\n", "", "\t", "", `\\"`, `"`, ",\n}", "}")
@@ -110,9 +110,7 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 			continue
 		}
 		topLevelID := strings.ToLower(rp.GroupName)
-		misConfigurationMenu.AddNode(topLevelID, strings.Title(topLevelID), postsDir, "", rp.Remediations, []menu.MenuCategory{
-			{Name: "Misconfiguration", Url: "/misconfig"},
-		}, "appshield")
+		misConfigurationMenu.AddNode(topLevelID, strings.Title(topLevelID), postsDir, "", rp.Remediations, []menu.MenuCategory{}, "appshield", false)
 
 		parentID := topLevelID
 		rp.ParentID = parentID
@@ -136,18 +134,19 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 }
 
 const regoPolicyPostTemplate = `---
-title: "{{.Rego.ShortName}}"
+title: {{.Rego.ShortName}}
+id: {{.Rego.ID}}
 aliases: [
 	"/appshield/{{ lower .Rego.ID}}"
 ]
-sidebar_category: misconfig
-heading: Misconfiguration
 icon: appshield
+source: Trivy
 draft: false
 date: {{.Date}}
 severity: {{ .Rego.Severity }}
 version: {{ .Rego.Version }}
 shortName: {{ .Rego.ShortName }}
+category: misconfig
 
 avd_page_type: defsec_page
 
@@ -155,17 +154,10 @@ remediations:
 {{ range .Remediations }}  - {{ .}}
 {{ end }}
 
-menu:
-  misconfig:
-    identifier: {{.Rego.ID}}
-    name: {{.Rego.ShortName}}
-    parent: {{.ParentID}}
-
+breadcrumbs: 
+  - name: {{ .GroupName }}
+    path: /misconfig/{{ .ParentID }}
 ---
-
-Misconfiguration > [{{ .GroupName }}](../) > {{ .Rego.ID }}
-
-### {{.Rego.ID}}
 
 ### {{.Title}}
 {{.Rego.Description}}

@@ -1,10 +1,38 @@
 /* project ctas - used in the homepage and on sidebars */
 
+.info_card {
+	display: block;
+	position: relative;
+	min-height: 220px;
+	margin-bottom: 20px;
+	border-radius: 4px;
+	background: #ebf3fa;
+	box-shadow: 9px 9px 11px #c1c7cd, -9px -9px 11px #fff;
+	transition: all 0.2s ease;
+	background-color: #ffffff;
+	max-height: 300px;
+}
+
+.info_card_details {
+	padding: 30px;
+}
+
+.info_card_details_part {
+	margin: 10px;
+	border-bottom: 1px whitesmoke solid;
+	padding-bottom: 10px;
+}
+
+.info_card_details_part h2 {
+	font-weight: bold;
+	padding-bottom: 3px;
+}
+
 .project_item {
 	display: block;
 	position: relative;
-	min-height:220px;
-	margin-bottom:20px;
+	min-height: 220px;
+	margin-bottom: 20px;
 	border-radius: 4px;
 	@include neo_linkbox_subtle_light-bg;
 	background-color: #ffffff;
@@ -16,12 +44,12 @@
 	}
 
 	.project_icon {
-		height:90px;
-		width:90px;
-		background-position:center center;
-		background-repeat:no-repeat;
-		margin-top:0px;
-		margin-bottom:2px;
+		height: 90px;
+		width: 90px;
+		background-position: center center;
+		background-repeat: no-repeat;
+		margin-top: 0px;
+		margin-bottom: 2px;
 		position: relative;
 		left: -4px;
 	}
@@ -55,12 +83,11 @@
 	&:hover {
 		.button.arrowlinkbutton {
 			color: $aq-royal-blue;
-			
+
 			&:after {
 				border-color: $aq-royal-blue;
 				margin-left: 8px;
 			}
 		}
 	}
-
 } //project_item

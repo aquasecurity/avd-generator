@@ -2,19 +2,25 @@
 <div class="avd_hero_wrap homepage_hero animatable">
 	<div class="hero header_wrap is-primary">
 		<!-- header starts -->
-		
+
 		<div class="hero-body">
 			<div class="clearboth container">
 				<div class="columns">
 					<div class="column is-9-desktop is-6-tablet">
-						<div class="header_title_wrap">		
+						<div class="header_title_wrap">
 							<!--<div class="page_pretitle fadeInUp"><a href="#">Home Hero pre title link</a></div>-->
-							<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Vulnerabilities and weaknesses in open source applications and cloud native infrastructure</h1>
-							<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Detailed information and remediation guidance for vulnerabilities and weaknesses published by NVD, software vendor advisories, and Kube-Hunter</h2>
+							<h1 class="title page_title is-spaced fadeInUp animationDelay_1">Vulnerabilities and
+								weaknesses in open source applications and cloud native infrastructure</h1>
+							<h2 class="subtitle page_subtitle fadeInUp animationDelay_2">Detailed information and
+								remediation guidance for vulnerabilities and weaknesses published by NVD, software
+								vendor advisories, and Kube-Hunter</h2>
 							<div class="fadeInUp animationDelay_3">
 								<div id="fastSearch">
-									<input id="searchInput" class="avd_large_search" placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
-									<div class="content search_results_list_wrap"><ul id="search_results_list"></ul></div>
+									<input id="searchInput" class="avd_large_search"
+										placeholder="{{ .Site.Params.banner.placeholder }}" tabindex="0">
+									<div class="content search_results_list_wrap">
+										<ul id="search_results_list"></ul>
+									</div>
 								</div>
 							</div>
 						</div><!-- header_title_wrap -->
@@ -29,7 +35,7 @@
 				</div>
 			</div><!-- container -->
 		</div><!-- hero-body -->
-		
+
 	</div><!-- hero -->
 
 </div><!-- hero_wrap -->
@@ -40,39 +46,21 @@
 	<div class="clearboth container">
 
 
-		<h3 class="title projects_title fadeInUp animationDelay_5">Learn more about our projects</h3>
-		
-		<div class="columns is-multiline">
+		<h3 class="title projects_title fadeInUp animationDelay_5">Learn more about our <a
+				href="https://www.aquasec.com/products/open-source-projects/" class="projectLink fadeInUp
+				animationDelay_6" target="_blank">open source</a> projects:
+			<a href="https://github.com/aquasecurity/trivy" target="_blank"
+				class="projectLink fadeInUp animationDelay_6">Trivy</a>,
+			<a href="https://github.com/aquasecurity/tracee" target="_blank"
+				class="projectLink fadeInUp animationDelay_6"> Tracee</a>,
+			<a href="https://github.com/aquasecurity/starboard" target="_blank"
+				class="projectLink fadeInUp animationDelay_6"> Starboard</a>
+		</h3>
 
-			<div class="column is-4-desktop is-6-tablet">
-				<a href="https://github.com/aquasecurity/trivy" target="_blank" class="project_item fadeInUp animationDelay_6">
-					<div class="project_icon" style="background-image:url('{{ "images/project_logo_trivy_color.png" | relURL }}');"></div>
-					<h2 class="project_title">Trivy</h2>
-					<div class="project_subtitle">A Simple and Comprehensive Vulnerability Scanner for Containers and other Artifacts, Suitable for CI</div>
-					<div class="button arrowlinkbutton">Learn more</div>
-				</a>
-			</div>
 
-			<div class="column is-4-desktop is-6-tablet">
-				<a href="https://github.com/aquasecurity/kube-bench" target="_blank" class="project_item fadeInUp animationDelay_7">
-					<div class="project_icon" style="background-image:url('{{ "images/project_logo_kubebench_color.png" | relURL }}');"></div>
-					<h2 class="project_title">Kube Bench</h2>
-					<div class="project_subtitle">Checks whether Kubernetes is deployed according to security best practices as defined in the CIS Kubernetes Benchmark</div>
-					<div class="button arrowlinkbutton">Learn more</div>
-				</a>
-			</div>
 
-			<div class="column is-4-desktop is-6-tablet">
-				<a href="https://github.com/aquasecurity/kube-hunter" target="_blank" class="project_item fadeInUp animationDelay_8">
-					<div class="project_icon" style="background-image:url('{{ "images/project_logo_kubehunter_color.png" | relURL }}');"></div>
-					<h2 class="project_title">Kube Hunter</h2>
-					<div class="project_subtitle">Kube Hunter hunts for security weaknesses in Kubernetes clusters</div>
-					<div class="button arrowlinkbutton">Learn more</div>
-				</a>
-			</div>
+	</div><!-- columns -->
 
-		</div><!-- columns -->
-
-	</div><!-- container -->
+</div><!-- container -->
 
 </div><!-- projects_wrap -->

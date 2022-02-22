@@ -1,13 +1,16 @@
 <div>
-    <div class="clearboth container main-menu">
-        <div class="dropdown">
-            <span class="dropbtn {{ if eq .context.Params.sidebar_category "misconfig" }}active{{ end }}"><a href="/misconfig">Misconfiguration</a></span>
-          </div>
-          <div class="dropdown">
-            <span class="dropbtn {{ if eq .context.Params.sidebar_category "runsec" }}active{{ end }}"><a href="/tracee">Runtime Security</a></span>
-          </div>
-          <div class="dropdown">
-            <span class="dropbtn {{ if eq .context.Params.sidebar_category "vulnerabilities" }}active{{ end }}"><a href="/nvd">Vulnerabilities</a></span>
-          </div>
+  <div class="clearboth container main-menu">
+    <div class="dropdown">
+      <a href="/misconfig"><span class="dropbtn {{ if eq .context.Params.category "misconfig" }}active{{ end
+          }}">Misconfiguration</span></a>
     </div>
+    <div class="dropdown">
+      <a href="/tracee"><span class="dropbtn {{ if eq .context.Params.category "runsec" }}active{{ end }}">Runtime
+        Security</span></a>
+    </div>
+    <div class="dropdown">
+      <a href="/nvd"><span class="dropbtn {{ if eq .context.Params.category "vulnerabilities" }}active{{ end
+          }}">Vulnerabilities</span></a>
+    </div>
+  </div>
 </div>

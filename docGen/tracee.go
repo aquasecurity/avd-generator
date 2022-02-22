@@ -18,7 +18,7 @@ import (
 
 var (
 	SeverityNames = []string{
-		"informative",
+		"info",
 		"low",
 		"medium",
 		"high",
@@ -69,6 +69,7 @@ type TraceePost struct {
 	TopLevelID string
 	ParentID   string
 	ParentName string
+	AliasID    string
 	Signature  Signature
 }
 
@@ -129,7 +130,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
 		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.MenuCategory{
 			{Name: "Runtime Security", Url: "/tracee"},
-		}, "runtime")
+		}, "runtime", true)
 		parentID := topLevelID
 
 		outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(sig.ID, "-", "")))
@@ -148,7 +149,8 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 			TopLevelID: parentID,
 			ParentID:   parentID,
 			ParentName: strings.Title(topLevelIDName),
-			Date:       clock.Now(),
+			AliasID:    strings.ToLower(strings.ReplaceAll(sig.ID, "-", "")),
+			Date:       clock.Now("2006-01-02"),
 			Signature:  sig,
 		}, f); err != nil {
 			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sig.ID, err)
@@ -201,9 +203,9 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 
 		topLevelIDName := strings.TrimSpace(strings.Split(ma, ":")[0])
 		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
-		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.MenuCategory{
-			{Name: "Runtime Security", Url: "/tracee"},
-		}, "tracee")
+		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "tracee", []string{"runtime"}, []menu.MenuCategory{
+			{Name: "Tracee", Url: "/tracee"},
+		}, "tracee", false)
 		parentID := topLevelID
 
 		outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(m.ID, "-", "")))
@@ -221,13 +223,13 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 			Title:      m.Name,
 			ParentID:   parentID,
 			ParentName: strings.Title(topLevelIDName),
+			AliasID:    strings.ToLower(strings.ReplaceAll(m.ID, "-", "")),
 			TopLevelID: parentID,
-			Date:       clock.Now(),
+			Date:       clock.Now("2006-01-02"),
 			Signature: Signature{
-				ID:      m.ID,
-				Version: m.Version,
-				Name:    strings.ReplaceAll(m.Name, " ", "-"),
-
+				ID:          m.ID,
+				Version:     m.Version,
+				Name:        strings.ReplaceAll(m.Name, " ", "-"),
 				Description: m.Description,
 				Severity:    SeverityNames[severity],
 				MitreAttack: ma,
@@ -245,32 +247,31 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 }
 
 const signaturePostTemplate = `---
-title: {{.ParentName}} - {{.Title}}
-heading: Runtime Security
+title: {{.Title}}
+id: {{.Signature.ID}}
+aliases: [
+    "/tracee/{{ .AliasID}}"
+]
+source: Tracee
 icon: aqua
 shortName: {{.Title}}
 severity: {{.Signature.Severity}}
 draft: false
 version: {{.Signature.Version}}
 
-sidebar_category: runsec
+category: runsec
 date: {{.Date}}
 
 remediations:
-  
 
-menu:
-  runsec:
-    identifier: {{.Signature.ID}}
-    name: {{.Title}}
-    parent: {{.ParentID}}
+breadcrumbs: 
+  - name: Tracee
+    path: /tracee
+  - name: {{ .ParentName }}
+    path: /tracee/{{ .ParentID }}
 
-avd_page_type: defsec_page
+avd_page_type: avd_page
 ---
-
-Runtime Security -> [{{.ParentName}}](../) >  {{.Signature.ID}}
-
-### ID: {{.Signature.ID}}
 
 ### {{.Title}}
 {{.Signature.Description}}

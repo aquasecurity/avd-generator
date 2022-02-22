@@ -29,119 +29,6 @@ var (
 	CVEMap map[string]map[string]ReservedCVEInfo
 )
 
-const vulnerabilityPostTemplate = `---
-title: "{{.Title}}"
-aliases: [
-	"/nvd/{{ lower .Title}}"
-]
-
-shortName: "{{.Vulnerability.CWEInfo.Name}}"
-date: {{.Date}}
-sidebar_category: vulnerabilities
-draft: false
-
-avd_page_type: nvd_page
-
-date_published: {{.Vulnerability.Dates.Published}}
-date_modified: {{.Vulnerability.Dates.Modified}}
-
-header_subtitle: "{{.Vulnerability.CWEInfo.Name}}"
-
-sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
-sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"
-
-cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "N/A"}}"
-cvss_nvd_v3_score: "{{.Vulnerability.CVSS.V3Score}}"
-cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "N/A"}}"
-
-cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "N/A"}}"
-cvss_nvd_v2_score: "{{.Vulnerability.CVSS.V2Score}}"
-cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "N/A"}}"
-
-redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "N/A"}}"
-redhat_v2_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}}"
-redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
-
-redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "N/A"}}"
-redhat_v3_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}}"
-redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
-
-ubuntu_vector: "N/A"
-ubuntu_score: "N/A"
-ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "N/A"}}"
-
----
-
-{{.Vulnerability.Description}}
-
-
-{{- if .Vulnerability.CWEInfo.Description}}
-### Weakness {.with_icon .weakness}
-{{.Vulnerability.CWEInfo.Description}}
-{{end}}
-
-{{- if .Vulnerability.AffectedSoftware}}
-### Affected Software {.with_icon .affected_software}
-| Name | Vendor           | Start Version | End Version |
-| ------------- |-------------|-----|----|{{range $s := .Vulnerability.AffectedSoftware}}
-| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}} | {{$s.EndVersion}}|{{end}}
-{{end}}
-
-{{- if .Vulnerability.CWEInfo.ExtendedDescription}}
-### Extended Description{{range $ed := .Vulnerability.CWEInfo.ExtendedDescription}}
-{{$ed}}{{end}}
-{{end}}
-
-{{- if .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
-### Potential Mitigations {.with_icon .mitigations}{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
-{{- if $mitigation.Description}}{{range $d := $mitigation.Description}}
-- {{$d}}{{end}}{{end}}{{end}}
-{{end}}
-
-{{- if .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
-### Related Attack Patterns {.with_icon .related_patterns}{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
-- https://cwe.mitre.org/data/definitions/{{$attack.CAPECID}}.html{{end}}
-{{end}}
-
-### References  {.with_icon .references}{{range $element := .Vulnerability.References}}
-- {{$element}}{{end}}
-
-<!--- Add Aqua content below --->`
-
-const reservedPostTemplate = `---
-title: "{{.ID}}"
-date: {{.Date}}
-draft: false
-
-avd_page_type: reserved_page
----
-
-This vulnerability is marked as __RESERVED__ by NVD. This means that the CVE-ID is reserved for future use
-by the [CVE Numbering Authority (CNA)](https://cve.mitre.org/cve/cna.html) or a security researcher, but the details of it are not yet publicly available yet. 
-
-This page will reflect the classification results once they are available through NVD. 
-
-Any vendor information available is shown as below.
-
-||||
-| ------------- |-------------|-----|
-
-{{ range $vendor, $reservedCVEInfo := .CVEMap }}
-### {{ $vendor | capfirst }}
-{{ $reservedCVEInfo.Description }}
-
-{{if  $reservedCVEInfo.Mitigation}}
-#### Mitigation
-{{ $reservedCVEInfo.Mitigation }}
-{{end}}
-{{if $reservedCVEInfo.AffectedSoftwareList}}
-#### Affected Software List
-| Name | Vendor           | Version |
-| ------------- |-------------|-----|{{range $s := $reservedCVEInfo.AffectedSoftwareList}}
-| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}|{{end}}
-{{end}}
-{{end}}`
-
 type ReservedPage struct {
 	ID     string
 	Date   string
@@ -262,7 +149,7 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 		log.Fatal(err)
 	}
 	for _, file := range files {
-		bp, err := ParseVulnerabilityJSONFile(file)
+		bp, err := parseVulnerabilityJSONFile(file)
 		if err != nil {
 			log.Printf("unable to parse file: %s, err: %s, skipping...\n", file, err)
 			continue
@@ -505,7 +392,7 @@ func AddVendorInformation(bp *VulnerabilityPost, vendor string, vendorDir string
 	return nil
 }
 
-func ParseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
+func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	b, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return VulnerabilityPost{}, err
@@ -613,3 +500,116 @@ func GetCustomContentFromMarkdown(fileName string) string {
 		return strings.TrimSpace(content[1])
 	}
 }
+
+const vulnerabilityPostTemplate = `---
+title: "{{.Title}}"
+aliases: [
+	"/nvd/{{ lower .Title}}"
+]
+
+shortName: "{{.Vulnerability.CWEInfo.Name}}"
+date: {{.Date}}
+category: vulnerabilities
+draft: false
+
+avd_page_type: nvd_page
+
+date_published: {{.Vulnerability.Dates.Published}}
+date_modified: {{.Vulnerability.Dates.Modified}}
+
+header_subtitle: "{{.Vulnerability.CWEInfo.Name}}"
+
+sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
+sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"
+
+cvss_nvd_v3_vector: "{{.Vulnerability.CVSS.V3Vector | default "N/A"}}"
+cvss_nvd_v3_score: "{{.Vulnerability.CVSS.V3Score}}"
+cvss_nvd_v3_severity: "{{.Vulnerability.NVDSeverityV3 | upper | default "N/A"}}"
+
+cvss_nvd_v2_vector: "{{.Vulnerability.CVSS.V2Vector | default "N/A"}}"
+cvss_nvd_v2_score: "{{.Vulnerability.CVSS.V2Score}}"
+cvss_nvd_v2_severity: "{{.Vulnerability.NVDSeverityV2 | upper | default "N/A"}}"
+
+redhat_v2_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Vector | default "N/A"}}"
+redhat_v2_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V2Score}}"
+redhat_v2_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
+
+redhat_v3_vector: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Vector | default "N/A"}}"
+redhat_v3_score: "{{.Vulnerability.RedHatCVSSInfo.CVSS.V3Score}}"
+redhat_v3_severity: "{{.Vulnerability.RedHatCVSSInfo.Severity | upper | default "N/A" }}"
+
+ubuntu_vector: "N/A"
+ubuntu_score: "N/A"
+ubuntu_severity: "{{.Vulnerability.UbuntuCVSSInfo.Severity | upper | default "N/A"}}"
+
+---
+
+{{.Vulnerability.Description}}
+
+
+{{- if .Vulnerability.CWEInfo.Description}}
+### Weakness {.with_icon .weakness}
+{{.Vulnerability.CWEInfo.Description}}
+{{end}}
+
+{{- if .Vulnerability.AffectedSoftware}}
+### Affected Software {.with_icon .affected_software}
+| Name | Vendor           | Start Version | End Version |
+| ------------- |-------------|-----|----|{{range $s := .Vulnerability.AffectedSoftware}}
+| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}} | {{$s.EndVersion}}|{{end}}
+{{end}}
+
+{{- if .Vulnerability.CWEInfo.ExtendedDescription}}
+### Extended Description{{range $ed := .Vulnerability.CWEInfo.ExtendedDescription}}
+{{$ed}}{{end}}
+{{end}}
+
+{{- if .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
+### Potential Mitigations {.with_icon .mitigations}{{range $mitigation := .Vulnerability.CWEInfo.PotentialMitigations.Mitigation}}
+{{- if $mitigation.Description}}{{range $d := $mitigation.Description}}
+- {{$d}}{{end}}{{end}}{{end}}
+{{end}}
+
+{{- if .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
+### Related Attack Patterns {.with_icon .related_patterns}{{range $attack := .Vulnerability.CWEInfo.RelatedAttackPatterns.RelatedAttackPattern}}
+- https://cwe.mitre.org/data/definitions/{{$attack.CAPECID}}.html{{end}}
+{{end}}
+
+### References  {.with_icon .references}{{range $element := .Vulnerability.References}}
+- {{$element}}{{end}}
+
+<!--- Add Aqua content below --->`
+
+const reservedPostTemplate = `---
+title: "{{.ID}}"
+date: {{.Date}}
+draft: false
+
+avd_page_type: reserved_page
+---
+
+This vulnerability is marked as __RESERVED__ by NVD. This means that the CVE-ID is reserved for future use
+by the [CVE Numbering Authority (CNA)](https://cve.mitre.org/cve/cna.html) or a security researcher, but the details of it are not yet publicly available yet. 
+
+This page will reflect the classification results once they are available through NVD. 
+
+Any vendor information available is shown as below.
+
+||||
+| ------------- |-------------|-----|
+
+{{ range $vendor, $reservedCVEInfo := .CVEMap }}
+### {{ $vendor | capfirst }}
+{{ $reservedCVEInfo.Description }}
+
+{{if  $reservedCVEInfo.Mitigation}}
+#### Mitigation
+{{ $reservedCVEInfo.Mitigation }}
+{{end}}
+{{if $reservedCVEInfo.AffectedSoftwareList}}
+#### Affected Software List
+| Name | Vendor           | Version |
+| ------------- |-------------|-----|{{range $s := $reservedCVEInfo.AffectedSoftwareList}}
+| {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}|{{end}}
+{{end}}
+{{end}}`

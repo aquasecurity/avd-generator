@@ -1,29 +1,28 @@
 ---
-title: Codebuild - Enable Encryption
-heading: Misconfiguration
-icon: iac
-sidebar_category: misconfig
+title: Enable Encryption
+id: AVD-AWS-0018
+source: Trivy
+icon: aws
 draft: false
 shortName: Enable Encryption
 severity: ""
+category: misconfig
 
-avd_page_type: defsec_page
+breadcrumbs: 
+  - name: AWS
+    path: /misconfig/aws
+  - name: Codebuild
+    path: /misconfig/aws/codebuild
+
+avd_page_type: avd_page
 
 remediations:
   - cloudformation
   - terraform
 
-
-menu:
-  misconfig:
-    identifier: codebuild/AVD-AWS-0018
-    name: Enable Encryption
-    parent: aws/codebuild
 ---
 
-Misconfiguration > [AWS](../../) > [Codebuild](../) > AVD-AWS-0018
-
-### ID: AVD-AWS-0018
+### CodeBuild Project artifacts encryption should not be disabled
 
 
 ### CodeBuild Project artifacts encryption should not be disabled

@@ -17,19 +17,6 @@ import (
 	"github.com/aquasecurity/defsec/rules"
 )
 
-type DefsecPost struct {
-	AVDID        string
-	ShortName    string
-	Severity     string
-	Provider     string
-	ProviderName string
-	Service      string
-	ServiceName  string
-	Body         string
-	ParentID     string
-	Remediations []string
-}
-
 func generateDefsecPages(remediationDir, contentDir string, registeredRules []rules.RegisteredRule) {
 	for _, r := range registeredRules {
 
@@ -78,13 +65,13 @@ func generateDefsecPages(remediationDir, contentDir string, registeredRules []ru
 
 		misConfigurationMenu.AddNode(topLevelID, r.Rule().Provider.DisplayName(), contentDir, "", remediationNames,
 			[]menu.MenuCategory{
-				{Name: "Misconfiguration", Url: "/misconfig"},
-			}, "iac")
+				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig"},
+			}, strings.ToLower(r.Rule().Provider.ConstName()), true)
 		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID), topLevelID, remediationNames,
 			[]menu.MenuCategory{
-				{Name: "Misconfiguration", Url: "/misconfig"},
+				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig"},
 				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig/" + topLevelID},
-			}, "aqua")
+			}, strings.ToLower(r.Rule().Provider.ConstName()), false)
 	}
 }
 
@@ -126,16 +113,18 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 
 	sort.Strings(remediationKeys)
 
-	post := DefsecPost{
-		AVDID:        rule.Rule().AVDID,
-		ShortName:    rule.Rule().ShortCodeDisplayName(),
-		Provider:     strings.ToLower(rule.Rule().Provider.ConstName()),
-		ProviderName: rule.Rule().Provider.DisplayName(),
-		ServiceName:  rule.Rule().ServiceDisplayName(),
-		Body:         documentBody.String(),
-		Severity:     strings.ToLower(string(rule.Rule().Severity)),
-		ParentID:     strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
-		Remediations: remediationKeys,
+	post := map[string]interface{}{
+		"AVDID":        rule.Rule().AVDID,
+		"ShortName":    rule.Rule().ShortCodeDisplayName(),
+		"Provider":     strings.ToLower(rule.Rule().Provider.ConstName()),
+		"ProviderName": rule.Rule().Provider.DisplayName(),
+		"ServiceName":  rule.Rule().ServiceDisplayName(),
+		"Service":      strings.ToLower(strings.ReplaceAll(rule.Rule().Service, " ", "-")),
+		"Summary":      rule.Rule().Summary,
+		"Body":         documentBody.String(),
+		"Severity":     strings.ToLower(string(rule.Rule().Severity)),
+		"ParentID":     strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
+		"Remediations": remediationKeys,
 	}
 
 	t = template.Must(template.New("defsecPost").Parse(defsecTemplate))
@@ -166,31 +155,30 @@ Follow the appropriate remediation steps below to resolve the issue.
 	return body
 }
 
-const defsecTemplate = `---
-title: {{.ServiceName}} - {{.ShortName}}
-heading: Misconfiguration
-icon: iac
-sidebar_category: misconfig
+const defsecTemplate string = `---
+title: {{.ShortName}}
+id: {{ .AVDID }}
+source: Trivy
+icon: {{ .Provider }}
 draft: false
 shortName: {{.ShortName}}
 severity: "{{.Severity}}"
+category: misconfig
 
-avd_page_type: defsec_page
+breadcrumbs: 
+  - name: {{ .ProviderName }}
+    path: /misconfig/{{ .Provider }}
+  - name: {{ .ServiceName }}
+    path: /misconfig/{{ .Provider }}/{{ .Service }}
+
+avd_page_type: avd_page
 
 remediations:
 {{ range .Remediations }}  - {{ .}}
 {{ end }}
-
-menu:
-  misconfig:
-    identifier: {{.ParentID}}/{{.AVDID}}
-    name: {{.ShortName}}
-    parent: {{.Provider}}/{{.ParentID}}
 ---
 
-Misconfiguration > [{{.ProviderName}}](../../) > [{{.ServiceName}}](../) > {{.AVDID}}
-
-### ID: {{ .AVDID }}
+### {{ .Summary }}
 
 {{.Body}}
 

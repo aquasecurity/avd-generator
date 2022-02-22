@@ -1,9 +1,15 @@
 .severity-pill {
-    border-radius: 8px;
-    padding: 6px 10px;
+    border-radius: 4px 4px 0px 0px;
+    padding: 12px;
     text-transform: uppercase;
-    font-size: 0.6em;
+    text-align: center;
+    font-size: 1.2em !important;
     font-weight: bold;
+    min-height: 50px;
+}
+
+.severity-pill h2 {
+    font-size: 0.6em !important;
 }
 
 .rego-version {
@@ -12,10 +18,12 @@
 
 .severity-pill.critical {
     background-color: red;
+    color: #fff;
 }
 
 .severity-pill.high {
     background-color: orangered;
+    color: #fff;
 }
 
 .severity-pill.medium {
@@ -274,6 +282,7 @@ aside.side-nav {
     min-width: 30px;
     display: inline-block;
     text-align: center;
+    margin: 2px;
 }
 
 .remediation-pill a {
@@ -332,6 +341,7 @@ aside.side-nav {
     font-size: 2em;
     align-content: center;
     padding: 2em 0.5em;
+    height: 6em;
 }
 
 .config-tile:hover {
@@ -449,4 +459,17 @@ aside.side-nav {
 
 .home-button:hover {
     background: $aq-coral-red;
+}
+
+.projectLink {
+    text-decoration: underline;
+    color: #1904da;
+}
+
+.projectLink:hover {
+    color: #ff445f;
+}
+
+.breadcrumb:hover {
+    text-decoration: unerline;
 }

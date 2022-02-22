@@ -26,13 +26,18 @@ var (
 )
 
 type Clock interface {
-	Now() string
+	Now(format ...string) string
 }
 
 type realClock struct{}
 
-func (realClock) Now() string {
-	return time.Now().UTC().Format(time.RFC3339)
+func (realClock) Now(format ...string) string {
+	formatString := time.RFC3339
+	if len(format) > 0 {
+		formatString = format[0]
+	}
+
+	return time.Now().Format(formatString)
 }
 
 func getAllFiles(dir string) ([]string, error) {
@@ -72,7 +77,7 @@ func getAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 
 func main() {
 	generateAppShieldPages("appshield-repo", "content/misconfig", realClock{})
-	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes/kubehunter")
+	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
 	generateVulnPages()
 	for _, year := range Years {
 		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
@@ -91,11 +96,10 @@ func main() {
 
 func createTopLevelMenus() {
 
-	if err := menu.NewTopLevelMenu("Providers", "toplevel_page", "content/misconfig/_index.md").
-		WithHeading("Misconfiguration").
+	if err := menu.NewTopLevelMenu("Misconfiguration", "toplevel_page", "content/misconfig/_index.md").
+		WithHeading("Misconfiguration Categories").
 		WithIcon("aqua").
-		WithCategory("misconfig").
-		WithMenu("misconfig").Generate(); err != nil {
+		WithCategory("misconfig").Generate(); err != nil {
 		fail(err)
 	}
 
@@ -103,7 +107,6 @@ func createTopLevelMenus() {
 		WithHeading("Runtime Security").
 		WithIcon("tracee").
 		WithCategory("runsec").
-		WithMenu("runsec").
 		Generate(); err != nil {
 		fail(err)
 	}
