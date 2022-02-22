@@ -26,7 +26,7 @@ update-all-repos:
 	cd avd-repo/defsec-repo && git pull
 	cd avd-repo/cloudsploit-repo && git pull
 
-sync-all: compile-theme-sass
+sync-all:
 	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
 md-generate:
