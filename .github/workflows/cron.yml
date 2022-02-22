@@ -66,6 +66,20 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/tracee-repo
 
+      - name: Checkout public cloudsploit-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/cloudsploit
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/cloudsploit-repo
+
+      - name: Checkout public defsec-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/defsec
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/defsec-repo
+
       - name: Build generator
         run: make md-clean md-build
 
