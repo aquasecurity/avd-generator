@@ -1,0 +1,14 @@
+{{ $currentPage := .currentPage }}
+{{ $remediations := "" }}
+{{ if .currentPage.Params.remediations }}
+    {{ $remediations = delimit $currentPage.Params.remediations " " }}
+{{ end }}
+
+<details class="node {{ $remediations }}" {{ if in  .currentPage.RelPermalink .context.Identifier  }}open{{ end }}>
+    <summary>{{ .context.Name }}</summary>
+    <ul class="sub-menu">
+        {{ range .context.Children }}
+        {{ partial "menu_block.html" ( dict "context" . "currentPage" $currentPage ) }}
+        {{ end }}
+    </ul>
+</details>

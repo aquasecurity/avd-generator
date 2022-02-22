@@ -1,25 +1,36 @@
 ---
-title: "Standard-Input-Output-Over-Socket"
-date: 2021-04-15T20:55:39Z
+title: Standard Input Output Over Socket
+id: TRC-1
+aliases: [
+    "/tracee/trc1"
+]
+source: Tracee
+icon: aqua
+shortName: Standard Input Output Over Socket
+severity: high
 draft: false
+version: 0.1.0
 
-avd_page_type: tracee_page
+category: runsec
+date: 2021-04-15T20:55:39Z
+
+remediations:
+
+breadcrumbs: 
+  - name: Tracee
+    path: /tracee
+  - name: Persistence
+    path: /tracee/persistence
+
+avd_page_type: avd_page
 ---
 
-### TRC-1
-#### Standard-Input-Output-Over-Socket
-
-### Severity
-#### High
-
-### Description
+### Standard Input Output Over Socket
 Redirection of process's standard input/output to socket
 
 ### MITRE ATT&CK
 Persistence: Server Software Component
 
-### Version
-0.1.0
 
 ### Go Source
 ```

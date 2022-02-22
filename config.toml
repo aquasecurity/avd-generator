@@ -16,6 +16,7 @@ summaryLength = 15
 disableKinds = ["RSS", "taxonomy", "sitemap"]
 ignoreErrors = ["error-disable-taxonomy"]
 publishDir = "docs"
+paginate = 100
 
 [outputFormats]
   [outputFormats.SearchIndex]
@@ -106,3 +107,16 @@ copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security Software L
 [Languages.en.params.banner]
 title = "Aqua Vulnerability Database"
 placeholder = "Search by Keyword or CVE-ID..."
+
+################################ Markdown ###############################
+
+[markup.highlight]
+codeFences = true
+guessSyntax = true
+hl_Lines = ""
+lineNoStart = 1
+lineNos = true
+lineNumbersInTable = true
+tabWidth = 4
+noClasses = false
+pygmentsCodefences = true

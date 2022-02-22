@@ -1,0 +1,105 @@
+<!-- hero starts -->
+<div class="avd_hero_wrap animatable">
+	<div class="hero header_wrap is-primary">
+		<!--  is-small -->
+		<!-- header starts -->
+		<!--<div class="hero-head"></div>-->
+		<div class="hero-body">
+			<div class="clearboth container">
+				<!--- header menu -->
+				{{ partial "header_menu.html" (dict "context" . )}}
+				<!--- header menu ends -->
+				<div class="header_title_wrap">
+					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">
+						{{ if .Params.breadcrumbs }}
+						{{ $page := . }}
+						{{ range $breadcrumb := .Params.breadcrumbs }}
+						{{ if ne $breadcrumb.name $page.Title }}
+						<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
+						{{ end }}
+						{{ end }}
+						{{ .Title }}
+						{{ else }}
+						{{ .Title }}
+						{{ end }}
+					</div>
+				</div><!-- header_title_wrap -->
+			</div><!-- container -->
+		</div><!-- hero-body -->
+
+		{{ if or (.Params.date_published) (.Params.date_modified) }}
+		<div class="hero-foot">
+
+			<div class="container fadeInUp animationDelay_2">
+
+				{{ if .Params.date_published }}
+				<div class="pagetitle_metaitem"><strong>Published:</strong> {{ dateFormat "Jan 02, 2006"
+					.Params.date_published }}</div>
+				{{ end }}
+
+				{{ if .Params.date_modified }}
+				<div class="pagetitle_metaitem"><strong>Modified:</strong> {{ dateFormat "Jan 02, 2006"
+					.Params.date_modified }}</div>
+				{{ end }}
+			</div>
+		</div><!-- hero-foot -->
+		{{ end }}
+
+	</div><!-- hero -->
+
+</div><!-- hero_wrap -->
+<!-- hero ends -->
+
+<!-- content starts -->
+
+<div class="section avdcve_wrap animatable">
+	<div class="clearboth container page-fill">
+		<div class="columns is-multiline rever*se-columns">
+			<div class="column is-12-desktop is-12-tablet is-12-mobile fadeInUp animationDelay_4">
+				<div class="vulnerability_content_wrap fadeInUp">
+					<!--<h4 class="vulnerability_content_title fadeInUp"></h4>-->
+					<div class="content vulnerability_content">
+
+						<div>
+
+							{{ range .Paginator.Pages.ByParam "title" }}
+							<div class="list-item">
+								<a href="{{.RelPermalink}}">{{.Title}}</a>
+								<!-- {{ if .Params.remediations}}
+								<div class="remediation-pills">
+									{{ $pageCtx := .}}
+									{{ if $pageCtx.Params.shortName }}
+									{{ range $remediation := sort .Params.remediations }}
+									<span class="remediation-pill {{ $remediation }}">
+										<a href="{{  $pageCtx.RelPermalink }}#{{ $remediation }}">{{ $remediation }}</a>
+
+									</span>
+									{{ end }}
+									{{ end }}
+								</div>
+								{{ end }} -->
+							</div>
+							{{ end }}
+
+						</div>
+
+						<div class="paginated">
+							{{ if .Paginator.HasPrev }}
+
+							<a href="{{ .Paginator.Prev.URL }}"> &lt;&lt; Prev </a>
+							{{ end }}
+							{{ if .Paginator.HasNext }}
+							<a href="{{ .Paginator.Next.URL }}"> Next &gt;&gt; </a>
+
+							{{ end }}
+						</div>
+
+					</div>
+				</div>
+			</div><!-- vulnerability_content_wrap -->
+
+		</div><!-- column is-9 -->
+	</div><!-- columns -->
+</div><!-- container -->
+</div>
+<!-- content ends -->

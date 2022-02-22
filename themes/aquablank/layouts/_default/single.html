@@ -1,30 +1,15 @@
 {{ define "main" }}
 
-
-	{{ if eq "nvd_page" .Params.avd_page_type }}
-		{{ partial "page_nvd.html" . }}
-	{{ else if eq "kube-hunter_page" .Params.avd_page_type }}
-		{{ partial "page_kube-hunter.html" . }}
-	{{ else if eq "cloudsploit_page" .Params.avd_page_type }}
+	{{ if eq "cloudsploit_page" .Params.avd_page_type }}
 		{{ partial "page_cloudsploit.html" . }}
-	{{ else if eq "appshield_page" .Params.avd_page_type }}
-		{{ partial "page_appshield.html" . }}
 	{{ else if eq "search_page" .Params.avd_page_type }}
 		{{ partial "page_search.html" . }}
 	{{ else if eq "reserved_page" .Params.avd_page_type }}
 		{{ partial "page_reserved.html" . }}
-	{{ else if eq "tracee_page" .Params.avd_page_type }}
-		{{ partial "page_tracee.html" . }}
-	{{else}}
-		<main>
-			<article>
-				<h1>{{ .Title }}</h1>
-				<time>{{ .Date.Format "02.01.2006 15:04" }}</time>
-				<div>
-					{{ .Content }}
-				</div>
-			</article>
-		</main>
+	{{ else if eq "nvd_page" .Params.avd_page_type }}
+		{{ partial "page_nvd.html" . }}
+	{{ else }}
+		{{ partial "page_avd.html" . }}
 	{{ end }}
 
 {{ end }}

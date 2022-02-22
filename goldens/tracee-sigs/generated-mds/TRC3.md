@@ -1,25 +1,36 @@
 ---
-title: "Code-injection"
-date: 2021-04-15T20:55:39Z
+title: Code injection
+id: TRC-3
+aliases: [
+    "/tracee/trc3"
+]
+source: Tracee
+icon: aqua
+shortName: Code injection
+severity: high
 draft: false
+version: 0.1.0
 
-avd_page_type: tracee_page
+category: runsec
+date: 2021-04-15T20:55:39Z
+
+remediations:
+
+breadcrumbs: 
+  - name: Tracee
+    path: /tracee
+  - name: Defense Evasion
+    path: /tracee/defense-evasion
+
+avd_page_type: avd_page
 ---
 
-### TRC-3
-#### Code-injection
-
-### Severity
-#### High
-
-### Description
+### Code injection
 Possible code injection into another process
 
 ### MITRE ATT&CK
 Defense Evasion: Process Injection
 
-### Version
-0.1.0
 
 ### Rego Policy
 ```

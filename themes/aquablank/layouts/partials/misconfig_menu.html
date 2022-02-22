@@ -1,0 +1,21 @@
+<aside class="side-nav">
+    <ul class="menu-treeview">
+        {{ $currentPage := . }}
+        {{ range .Site.Menus.misconfig }}
+        {{ if .HasChildren }}
+        {{ partial "iac_menu.html" ( dict "context" . "currentPage" $currentPage ) }}
+        {{ end }}
+        {{ end }}
+    </ul>
+</aside>
+
+<style>
+    .top-level-menu {
+        background-color: #1904da;
+        color: white;
+        font-size: 1.15em;
+    }
+</style>
+
+
+

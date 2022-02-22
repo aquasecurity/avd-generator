@@ -1,0 +1,124 @@
+<!-- hero starts -->
+<div class="avd_hero_wrap animatable">
+	<div class="hero header_wrap is-primary">
+		<div class="hero-body">
+			<div class="clearboth container">
+				{{ partial "header_menu.html" (dict "context" . )}}
+				<div class="header_title_wrap">
+					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">
+						{{ if .Params.breadcrumbs }}
+						{{ $page := . }}
+						{{ range $breadcrumb := .Params.breadcrumbs }}
+						{{ if ne $breadcrumb.name $page.Title }}
+						<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
+						{{ end }}
+						{{ end }}
+						{{ .Title }}
+						{{ else }}
+						{{ .Params.heading }}
+						{{ end }}
+					</div>
+
+				</div><!-- header_title_wrap -->
+			</div><!-- container -->
+		</div><!-- hero-body -->
+		{{ if or (.Params.date_published) (.Params.date_modified) }}
+		<div class="hero-foot">
+			<div class="container fadeInUp animationDelay_2">
+				{{ if .Params.date_published }}
+				<div class="pagetitle_metaitem"><strong>Published:</strong> {{ dateFormat "Jan 02, 2006"
+					.Params.date_published }}</div>
+				{{ end }}
+				{{ if .Params.date_modified }}
+				<div class="pagetitle_metaitem"><strong>Modified:</strong> {{ dateFormat "Jan 02, 2006"
+					.Params.date_modified }}</div>
+				{{ end }}
+			</div>
+		</div><!-- hero-foot -->
+		{{ end }}
+	</div><!-- hero -->
+</div><!-- hero_wrap -->
+<!-- hero ends -->
+<!-- content starts -->
+<div class="section avdcve_wrap animatable">
+	<div class="clearboth container page-fill">
+		<div class="columns is-multiline rever*se-columns">
+
+			<div class="column is-9-desktop is-12-tablet is-12-mobile fadeInUp animationDelay_4">
+				<div class="vulnerability_content_wrap fadeInUp">
+					<div class="content vulnerability_content">
+
+						{{ .Content }}
+					</div><!-- vulnerability_content -->
+				</div><!-- vulnerability_content_wrap -->
+			</div><!-- column is-8 -->
+			<div class="column is-3-desktop is-0-tablet is-0-mobile fadeInUp animationDelay_4">
+				<div class="avdcve_sidebar_wrap">
+					<div class="avd_sidebar_widget avdcve_scores_wrap">
+						<div class="avdcve_scores_cvss cvss_{{ if eq .Params.severity " critical"}}10{{end}}{{ if eq
+							.Params.severity "high" }}7{{end}}{{ if eq .Params.severity "medium" }}5{{end}}{{ if eq
+							.Params.severity "low" }}3{{end}}{{ if eq .Params.severity "info" }}1{{end}}{{ if eq
+							.Params.severity "unknown" }}0{{end}}">
+
+							<div class=" large_score_wrap">
+
+								<div class="large_score_gauge_wrap">
+									<div class="large_score_gague">
+										<div class="score_gague_content">
+											<div class="score_label">{{ upper .Params.severity }}</div>
+										</div><!-- large_score_gague -->
+										<div class="score_bg"></div>
+									</div>
+								</div><!-- large_score_gague_wrap -->
+
+
+							</div>
+
+
+
+						</div><!-- large_score_wrap -->
+						<div class="avdcve_scores_additional">
+							<div class="score_bar">
+								<div class="score_bar_name">Source</div>
+								<div class="score_bar_label">{{ .Params.source }}</div>
+							</div><!-- score_bar -->
+							<div class="score_bar">
+								<div class="score_bar_name">ID</div>
+								<div class="score_bar_label">{{ .Params.id }}</div>
+							</div><!-- score_bar -->
+							{{ if .Params.version }}
+							<div class="score_bar">
+								<div class="score_bar_name">Version</div>
+								<div class="score_bar_label">{{ .Params.version }}</div>
+							</div><!-- score_bar -->
+							{{end}}
+							{{ if .Params.date }}
+							<div class="score_bar">
+								<div class="score_bar_name">Date</div>
+								<div class="score_bar_label">{{ dateFormat "2 Jan 2006" .Params.date }}</div>
+							</div><!-- score_bar -->
+							{{end}}
+							{{ if .Params.remediations}}
+							<div class="score_bar">
+								{{ $pageCtx := .}}
+								{{ if $pageCtx.Params.shortName }}
+								{{ range $remediation := sort .Params.remediations }}
+								<span class="remediation-pill {{ replace $remediation " " " _" }}">
+									<a href="{{  $pageCtx.RelPermalink }}#{{ $remediation }}">{{ $remediation }}</a>
+
+								</span>
+								{{ end }}
+								{{ end }}
+							</div>
+							{{ end }}
+						</div>
+					</div>
+
+
+				</div><!-- avdcve_scores_cvss -->
+			</div>
+
+		</div>
+	</div><!-- columns -->
+</div><!-- container -->
+</div>

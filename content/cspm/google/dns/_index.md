@@ -1,1 +1,0 @@
-this file is needed to be kept for hugo to include this dir and pages in the build.

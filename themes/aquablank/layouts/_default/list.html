@@ -2,11 +2,10 @@
 
 	{{ if eq "cloudsploit_page" .Params.avd_page_type }}
 		{{ partial "list_cloudsploit.html" . }}
+	{{ else if eq "toplevel_page" .Params.avd_page_type }}
+		{{ partial "list_toplevel.html" . }}
 	{{else}}
-		<script type='text/javascript'>
-		//alert("list.html");
-		window.location.replace("{{ "/" | relURL }}");
-		</script>
+		{{ partial "list_avd.html" . }}
 	{{ end }}
 	
 {{ end }}
