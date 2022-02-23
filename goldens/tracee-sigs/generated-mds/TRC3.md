@@ -1,12 +1,12 @@
 ---
-title: Code injection
+title: Code Injection
 id: TRC-3
 aliases: [
     "/tracee/trc3"
 ]
 source: Tracee
 icon: aqua
-shortName: Code injection
+shortName: Code Injection
 severity: high
 draft: false
 version: 0.1.0
@@ -25,7 +25,7 @@ breadcrumbs:
 avd_page_type: avd_page
 ---
 
-### Code injection
+### Code Injection
 Possible code injection into another process
 
 ### MITRE ATT&CK
