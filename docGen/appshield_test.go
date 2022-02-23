@@ -35,6 +35,7 @@ severity: medium
 version: v1.0.0
 shortName: 
 category: misconfig
+keywords: "KSV002"
 
 avd_page_type: defsec_page
 
@@ -75,6 +76,7 @@ severity: high
 version: v1.0.0
 shortName: 
 category: misconfig
+keywords: "KSV005"
 
 avd_page_type: defsec_page
 

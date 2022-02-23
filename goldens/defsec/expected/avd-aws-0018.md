@@ -7,6 +7,7 @@ draft: false
 shortName: Enable Encryption
 severity: ""
 category: misconfig
+keywords: "AVD-AWS-0018"
 
 breadcrumbs: 
   - name: AWS

@@ -10,6 +10,7 @@ shortName: Code Injection
 severity: high
 draft: false
 version: 0.1.0
+keywords: "TRC-3"
 
 category: runsec
 date: 2021-04-15T20:55:39Z

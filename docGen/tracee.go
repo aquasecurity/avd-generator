@@ -259,6 +259,7 @@ shortName: {{.Title}}
 severity: {{.Signature.Severity}}
 draft: false
 version: {{.Signature.Version}}
+keywords: "{{.Signature.ID}}"
 
 category: runsec
 date: {{.Date}}

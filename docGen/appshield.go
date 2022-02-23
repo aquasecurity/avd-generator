@@ -147,6 +147,7 @@ severity: {{ .Rego.Severity }}
 version: {{ .Rego.Version }}
 shortName: {{ .Rego.ShortName }}
 category: misconfig
+keywords: "{{ .Rego.ID }}"
 
 avd_page_type: defsec_page
 
