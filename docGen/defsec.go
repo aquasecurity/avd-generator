@@ -63,15 +63,12 @@ func generateDefsecPages(remediationDir, contentDir string, registeredRules []ru
 			remediationNames = append(remediationNames, strings.ToLower(k))
 		}
 
-		misConfigurationMenu.AddNode(topLevelID, r.Rule().Provider.DisplayName(), contentDir, "", remediationNames,
-			[]menu.MenuCategory{
-				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig"},
-			}, strings.ToLower(r.Rule().Provider.ConstName()), true)
-		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID), topLevelID, remediationNames,
-			[]menu.MenuCategory{
-				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig"},
-				{Name: r.Rule().Provider.DisplayName(), Url: "/misconfig/" + topLevelID},
-			}, strings.ToLower(r.Rule().Provider.ConstName()), false)
+		providerName := r.Rule().Provider.DisplayName()
+		misConfigurationMenu.AddNode(topLevelID, providerName, contentDir, "", []string{},
+			[]menu.MenuCategory{}, topLevelID, true)
+		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID),
+			topLevelID, []string{},
+			[]menu.MenuCategory{{Name: util.Nicify(strings.Title(providerName)), Url: fmt.Sprintf("/misconfig/%s", topLevelID)}}, topLevelID, false)
 	}
 }
 

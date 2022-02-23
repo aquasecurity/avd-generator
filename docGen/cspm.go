@@ -129,7 +129,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 			[]menu.MenuCategory{}, providerID, true)
 		misConfigurationMenu.AddNode(categoryID, category, filepath.Join(outputPagesDir, providerID),
 			providerID, []string{},
-			[]menu.MenuCategory{{Name: util.Nicify(strings.Title(provider)), Url: providerID}}, "iac", false)
+			[]menu.MenuCategory{{Name: util.Nicify(strings.Title(provider)), Url: fmt.Sprintf("/misconfig/%s", providerID)}}, providerID, false)
 
 	}
 

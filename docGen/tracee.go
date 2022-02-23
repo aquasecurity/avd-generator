@@ -13,6 +13,7 @@ import (
 	"text/template"
 
 	"github.com/aquasecurity/avd-generator/docGen/menu"
+	"github.com/aquasecurity/avd-generator/docGen/util"
 	"github.com/aquasecurity/tracee/tracee-rules/signatures/rego/regosig"
 )
 
@@ -145,7 +146,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		}
 
 		if err = TraceePostToMarkdown(TraceePost{
-			Title:      strings.ReplaceAll(sig.Name, "-", " "),
+			Title:      util.Nicify(strings.Title(strings.ReplaceAll(sig.Name, "-", " "))),
 			TopLevelID: parentID,
 			ParentID:   parentID,
 			ParentName: strings.Title(topLevelIDName),
@@ -220,7 +221,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 		}
 
 		if err = TraceePostToMarkdown(TraceePost{
-			Title:      m.Name,
+			Title:      util.Nicify(strings.Title(m.Name)),
 			ParentID:   parentID,
 			ParentName: strings.Title(topLevelIDName),
 			AliasID:    strings.ToLower(strings.ReplaceAll(m.ID, "-", "")),
