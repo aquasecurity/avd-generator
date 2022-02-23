@@ -42,17 +42,9 @@
 <!-- content starts -->
 <div class="section avdcve_wrap animatable">
 	<div class="clearboth container page-fill">
-		<div class="columns is-multiline rever*se-columns">
+		<div class="columns is-multiline reverse-columns">
 
-			<div class="column is-9-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_4">
-				<div class="vulnerability_content_wrap fadeInUp">
-					<div class="content vulnerability_content">
-
-						{{ .Content }}
-					</div><!-- vulnerability_content -->
-				</div><!-- vulnerability_content_wrap -->
-			</div><!-- column is-8 -->
-			<div class="column is-3-desktop is-6-tablet is-12-mobile fadeInUp animationDelay_4">
+			<div class="column is-3-desktop is-12-tablet is-12-mobile fadeInUp animationDelay_4">
 				<div class="avdcve_sidebar_wrap">
 					<div class="avd_sidebar_widget avdcve_scores_wrap">
 						<div class="avdcve_scores_cvss cvss_{{ if eq .Params.severity "critical"}}10{{end}}{{ if eq
@@ -117,6 +109,16 @@
 
 				</div><!-- avdcve_scores_cvss -->
 			</div>
+
+			<div class="column is-9-desktop is-12-tablet is-12-mobile fadeInUp animationDelay_4">
+				<div class="vulnerability_content_wrap fadeInUp">
+					<div class="content vulnerability_content">
+
+						{{ .Content }}
+					</div><!-- vulnerability_content -->
+				</div><!-- vulnerability_content_wrap -->
+			</div><!-- column is-8 -->
+			
 
 		</div>
 	</div><!-- columns -->
