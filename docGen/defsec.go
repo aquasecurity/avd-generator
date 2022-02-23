@@ -58,11 +58,6 @@ func generateDefsecPages(remediationDir, contentDir string, registeredRules []ru
 			log.Printf("an error occurred writing the page for %s. %v", r.Rule().AVDID, err)
 		}
 
-		remediationNames := make([]string, 0, len(remediations))
-		for k := range remediations {
-			remediationNames = append(remediationNames, strings.ToLower(k))
-		}
-
 		providerName := r.Rule().Provider.DisplayName()
 		misConfigurationMenu.AddNode(topLevelID, providerName, contentDir, "", []string{},
 			[]menu.MenuCategory{}, topLevelID, true)
