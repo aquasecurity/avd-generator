@@ -1,12 +1,12 @@
 ---
-title: Anti-Debugging
+title: Anti Debugging
 id: TRC-2
 aliases: [
     "/tracee/trc2"
 ]
 source: Tracee
 icon: aqua
-shortName: Anti-Debugging
+shortName: Anti Debugging
 severity: high
 draft: false
 version: 0.1.0
@@ -25,7 +25,7 @@ breadcrumbs:
 avd_page_type: avd_page
 ---
 
-### Anti-Debugging
+### Anti Debugging
 Process uses anti-debugging technique to block debugger
 
 ### MITRE ATT&CK
