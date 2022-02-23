@@ -156,6 +156,7 @@ draft: false
 shortName: {{.ShortName}}
 severity: "{{.Severity}}"
 category: misconfig
+keywords: "{{ .AVDID }}"
 
 breadcrumbs: 
   - name: {{ .ProviderName }}

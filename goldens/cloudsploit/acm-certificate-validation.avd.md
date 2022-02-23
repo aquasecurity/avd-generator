@@ -10,6 +10,7 @@ draft: false
 shortName: acm-certificate-validation
 severity: "unknown"
 category: misconfig
+keywords: "aws/acm/acm-certificate-validation"
 
 avd_page_type: avd_page
 

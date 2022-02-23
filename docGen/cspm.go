@@ -193,6 +193,7 @@ draft: false
 shortName: {{.ShortName}}
 severity: "unknown"
 category: misconfig
+keywords: "{{ .AliasID}}"
 
 avd_page_type: avd_page
 

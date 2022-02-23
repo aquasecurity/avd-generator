@@ -1,5 +1,5 @@
 {{- $.Scratch.Add "searchindex" slice -}}
 {{- range .Site.RegularPages -}}
-{{- $.Scratch.Add "searchindex" (dict "title" .Title "permalink" .Permalink "summary" .Summary) -}}
+{{- $.Scratch.Add "searchindex" (dict "title" .Title "permalink" .Permalink "summary" .Summary "keywords" .Keywords | default "" ) -}}
 {{- end -}}
 {{- $.Scratch.Get "searchindex" | jsonify -}}
