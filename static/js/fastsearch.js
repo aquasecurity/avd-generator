@@ -60,7 +60,7 @@ document.addEventListener('keydown', function (event) {
 
 
 // execute on every keystroke
-document.getElementById("searchInput").onkeyup = function(e) {
+document.getElementById("searchInput").onkeyup = function (e) {
     executeSearch(this.value);
 }
 
@@ -81,7 +81,7 @@ function loadMeiliSearch() {
 // in the search box
 //
 async function executeSearch(term) {
-    let results = await meilisearchIndex.search(term, {attributesToHighlight: '*'});
+    let results = await meilisearchIndex.search(term, { attributesToHighlight: '*' });
     let searchitems = ''; // our results bucket
 
     if (results.length === 0) { // no results based on what was typed into the input box
@@ -94,7 +94,7 @@ async function executeSearch(term) {
                 + results.hits[item].permalink
                 + '" tabindex="0">'
                 + '<span class="result_title">'
-                + results.hits[item].title
+                + results.hits[item].pageTitle
                 + '</span><br />'
                 + results.hits[item]._formatted.summary
                 + '</a>'
