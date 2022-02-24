@@ -73,7 +73,7 @@ function loadMeiliSearch() {
         host: 'https://avdsearch.aquasec.com',
         apiKey: "96c29e9ddef066567a2ab370fd175fd4951099df32860aaa2213eb818a090e89", // this is a read-only public key, *not a secret*
     })
-    meilisearchIndex = meilisearch.getIndex('content');
+    meilisearchIndex = meilisearch.getIndex('avd');
 }
 
 // ==========================================
