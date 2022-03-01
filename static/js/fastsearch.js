@@ -71,7 +71,7 @@ document.getElementById("searchInput").onkeyup = function (e) {
 function loadMeiliSearch() {
     meilisearch = new MeiliSearch({
         host: 'https://avdsearch.aquasec.com',
-        apiKey: "96c29e9ddef066567a2ab370fd175fd4951099df32860aaa2213eb818a090e89", // this is a read-only public key, *not a secret*
+        apiKey: "d182155a23f2f0acaafbb882a68cbd0080a5b1a47749712d4b704dad03899303", // this is a read-only public key, *not a secret*
     })
     meilisearchIndex = meilisearch.getIndex('avd');
 }

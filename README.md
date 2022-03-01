@@ -33,7 +33,7 @@ This is needed to avoid tripping the Aqua Custom content logic.
 `docker run -p 7700:7700 -v $(pwd)/data.ms:/data.ms getmeili/meilisearch`
 
 2. Setup search index
-`curl -X POST 'http://127.0.0.1:7700/indexes' --data '{ "uid" : "avd", "primaryKey": "title"}'`
+`curl -X POST 'http://127.0.0.1:7700/indexes' -H 'Content-Type: application/json' --data '{ "uid" : "avd", "primaryKey": "title"}'`
 
 3. Add generated index.json to build search indexes
 `curl -X POST 'http://127.0.0.1:7700/indexes/avd/documents' --data @docs/index.json`
