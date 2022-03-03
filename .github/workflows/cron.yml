@@ -98,10 +98,7 @@ jobs:
       - name: Deploy Search Index to MeiliSearch Instance
         run: |
           cd avd-repo
-          curl -H X-Meili-API-Key:\ ${{ secrets.SEARCHAPITOKEN }} -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents --data @docs/searchindex.json
-#        uses: wei/curl@v1
-#        with:
-#          args: -H X-Meili-API-Key:\ ${{ secrets.SEARCHAPITOKEN }} -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/content/documents --data @docs/searchindex.json
+          curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents --data @docs/searchindex.json
 
       - name: Commit files to AVD repo
         run: |
@@ -111,8 +108,3 @@ jobs:
           git add -A
           git commit -m "Add changes"
           git push
-
-#      - name: Push changes
-#        uses: ad-m/github-push-action@master
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
