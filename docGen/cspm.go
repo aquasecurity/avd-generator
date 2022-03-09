@@ -79,7 +79,18 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 
 		remediationString = strings.ToLower(strings.ReplaceAll(title, " ", "-"))
-		remediationBody := getRemediationBodyWhereExists(remediationsDir, provider, originalCategory, remediationString)
+
+		remediationFile := strings.ReplaceAll(filepath.Join(
+			remediationsDir, strings.ToLower(provider), strings.ToLower(category),
+			fmt.Sprintf("%s.md", remediationString)), " ", "")
+
+		if hasDefsecOverride(strings.ReplaceAll(filepath.Join(
+			"en", strings.ToLower(provider), strings.ToLower(category),
+			fmt.Sprintf("%s.md", remediationString)), " ", "")) {
+			continue
+		}
+
+		remediationBody := getRemediationBodyWhereExists(remediationFile)
 		if remediationBody != "" {
 			recommendedActions = remediationBody
 		} else if recommendedActionsRegex.MatchString(content) {
@@ -135,10 +146,16 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 
 }
 
-func getRemediationBodyWhereExists(remediationsDir, provider, category, remediationID string) string {
-	remediationFile := strings.ReplaceAll(filepath.Join(
-		remediationsDir, strings.ToLower(provider), strings.ToLower(category),
-		fmt.Sprintf("%s.md", remediationID)), " ", "")
+func hasDefsecOverride(remediationFile string) bool {
+	if avdID := getAVDIDByCSPMPath(remediationFile); avdID != "" {
+		log.Printf("Override detected: '%s' has been overridden by '%s'\n", remediationFile, avdID)
+		return true
+	}
+	return false
+
+}
+
+func getRemediationBodyWhereExists(remediationFile string) string {
 
 	remediationFile, err := filepath.Abs(remediationFile)
 	if err != nil {
@@ -147,7 +164,6 @@ func getRemediationBodyWhereExists(remediationsDir, provider, category, remediat
 	}
 
 	if _, err := os.Stat(remediationFile); err != nil {
-		fmt.Printf("Could not get remediation file %s %s\n", remediationFile, err.Error())
 		return ""
 	}
 

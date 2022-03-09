@@ -76,7 +76,7 @@ func getAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 }
 
 func main() {
-	generateAppShieldPages("appshield-repo", "content/misconfig", realClock{})
+	generateAppShieldPages("defsec-repo", "content/misconfig", realClock{})
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
 	generateVulnPages()
 	for _, year := range Years {
