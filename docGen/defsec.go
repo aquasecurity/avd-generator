@@ -54,6 +54,15 @@ func generateDefsecPages(remediationDir, contentDir string, registeredRules []ru
 			os.Exit(1)
 		}
 
+		if _, ok := remediations["Management Console"]; !ok {
+			if remediationFile, ok := crossOver[avdId]; ok {
+				if remediationContent := getRemediationBodyWhereExists(fmt.Sprintf("remediations-repo/%s", remediationFile)); remediationContent != "" {
+					log.Printf("Can use %s for %s\n", remediationFile, avdId)
+					remediations["Management Console"] = remediationContent
+				}
+			}
+		}
+
 		if err := generateDefsecCheckPage(r, remediations, contentDir, docsFile, branchID); err != nil {
 			log.Printf("an error occurred writing the page for %s. %v", r.Rule().AVDID, err)
 		}
@@ -119,6 +128,11 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 		"Remediations": remediationKeys,
 	}
 
+	if remediationPath, ok := crossOver[rule.Rule().AVDID]; ok {
+		id := strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(remediationPath, "en/", ""), ".md", ""))
+		post["AliasID"] = id
+	}
+
 	t = template.Must(template.New("defsecPost").Parse(defsecTemplate))
 	return t.Execute(outputFile, post)
 }
@@ -150,6 +164,11 @@ Follow the appropriate remediation steps below to resolve the issue.
 const defsecTemplate string = `---
 title: {{.ShortName}}
 id: {{ .AVDID }}
+{{ if .AliasID}}
+aliases: [
+	"/cspm/{{ .AliasID}}"
+]
+{{ end }}
 source: Trivy
 icon: {{ .Provider }}
 draft: false

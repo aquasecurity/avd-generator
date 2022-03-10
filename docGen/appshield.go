@@ -91,7 +91,7 @@ func regoPostToMarkdown(rp RegoPost, output io.Writer) error {
 
 func generateAppShieldPages(policyDir, postsDir string, clock Clock) {
 	for _, p := range []string{"kubernetes", "docker"} {
-		policiesDir := filepath.Join(policyDir, p, "policies")
+		policiesDir := filepath.Join(policyDir, "rules", p, "policies")
 		log.Printf("generating policies in: %s...", policiesDir)
 		generateAppShieldRegoPolicyPages(policyDir, policiesDir, postsDir, clock)
 	}

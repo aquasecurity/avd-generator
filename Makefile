@@ -10,7 +10,6 @@ md-clean:
 md-clone-all:
 	git clone git@github.com:aquasecurity/avd.git avd-repo/
 	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
-	git clone git@github.com:aquasecurity/appshield.git avd-repo/appshield-repo
 	git clone git@github.com:aquasecurity/kube-hunter.git avd-repo/kube-hunter-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 	git clone git@github.com:aquasecurity/tracee.git avd-repo/tracee-repo
@@ -19,7 +18,6 @@ md-clone-all:
 
 update-all-repos:
 	cd avd-repo/vuln-list && git pull
-	cd avd-repo/appshield-repo && git pull
 	cd avd-repo/kube-hunter-repo && git pull
 	cd avd-repo/remediations-repo && git pull
 	cd avd-repo/tracee-repo && git pull
