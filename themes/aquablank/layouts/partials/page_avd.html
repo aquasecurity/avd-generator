@@ -74,6 +74,12 @@
 								<div class="score_bar_name">Source</div>
 								<div class="score_bar_label">{{ .Params.source }}</div>
 							</div><!-- score_bar -->
+							{{ if .Params.cspmID}}
+							<div class="score_bar">
+								<div class="score_bar_name">CSPM ID</div>
+								<div class="score_bar_label">{{ .Params.cspmID }}</div>
+							</div>
+							{{ end }}
 							<div class="score_bar">
 								<div class="score_bar_name">ID</div>
 								<div class="score_bar_label">{{ .Params.id }}</div>

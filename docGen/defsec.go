@@ -126,11 +126,16 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 		"Severity":     strings.ToLower(string(rule.Rule().Severity)),
 		"ParentID":     strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
 		"Remediations": remediationKeys,
+		"Source":       "Trivy",
 	}
 
 	if remediationPath, ok := crossOver[rule.Rule().AVDID]; ok {
 		id := strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(remediationPath, "en/", ""), ".md", ""))
 		post["AliasID"] = id
+		post["Source"] = "Trivy/CSPM"
+		parts := strings.Split(id, "/")
+		post["CSPMID"] = parts[len(parts)-1]
+
 	}
 
 	t = template.Must(template.New("defsecPost").Parse(defsecTemplate))
@@ -169,7 +174,10 @@ aliases: [
 	"/cspm/{{ .AliasID}}"
 ]
 {{ end }}
-source: Trivy
+source: {{ .Source }}
+{{ if .CSPMID}}
+cspmID: {{ .CSPMID}}
+{{ end }}
 icon: {{ .Provider }}
 draft: false
 shortName: {{.ShortName}}
