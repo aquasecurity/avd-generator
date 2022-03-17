@@ -89,6 +89,11 @@ func (m *TopLevelMenu) Generate() error {
 const categoryTemplate = `---
 title: {{ .Name }}
 heading: {{ .Heading }}
+{{ if eq .Category "misconfig" }}
+aliases: [
+	"/cspm"
+]
+{{ end }}
 icon: {{ .Icon }}
 category: {{ .Category }}
 draft: false
