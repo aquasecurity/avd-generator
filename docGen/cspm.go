@@ -80,11 +80,9 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 
 		remediationString = strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 
-
-
-			remediationPathKey := strings.ReplaceAll(filepath.Join(
-				"en", strings.ToLower(provider), strings.ToLower(category),
-				fmt.Sprintf("%s.md", remediationString)), " ", "")
+		remediationPathKey := strings.ReplaceAll(filepath.Join(
+			"en", strings.ToLower(provider), strings.ToLower(category),
+			fmt.Sprintf("%s.md", remediationString)), " ", "")
 
 		if hasDefsecOverride(remediationPathKey) {
 			continue

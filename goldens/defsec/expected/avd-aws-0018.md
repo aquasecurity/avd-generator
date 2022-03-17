@@ -3,6 +3,7 @@ title: Enable Encryption
 id: AVD-AWS-0018
 
 source: Trivy
+
 icon: aws
 draft: false
 shortName: Enable Encryption

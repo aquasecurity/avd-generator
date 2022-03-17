@@ -208,6 +208,11 @@ func (n *menuNode) addRemediations(remediations []string) {
 const topLevelTemplate = `---
 title: {{ .Name }}
 heading: {{ .Name }}
+{{ if eq .RootMenu "misconfig" }}
+aliases: [
+	"/cspm/{{.GroupID}}"
+]
+{{ end }}
 draft: false
 icon: {{ .Icon }}
 category: {{ .RootMenu}}
@@ -235,6 +240,11 @@ menu:
 const branchTemplate = `---
 title: {{ .Name }}
 heading: {{ .Heading }}
+{{ if eq .RootMenu "misconfig" }}
+aliases: [
+	"/cspm/{{.ParentID}}/{{.BranchID}}"
+]
+{{ end }}
 icon: {{ .Icon }}
 draft: false
 category: {{ .RootMenu}}
@@ -258,4 +268,5 @@ menu:
     weight: 100
     parent: {{.ParentID}}
 ---
+
 `
