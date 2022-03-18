@@ -20,6 +20,10 @@ import (
 func generateDefsecPages(remediationDir, contentDir string, registeredRules []rules.RegisteredRule) {
 	for _, r := range registeredRules {
 
+		if r.Rule().RegoPackage != "" {
+			continue
+		}
+
 		avdId := r.Rule().AVDID
 		topLevelID := strings.ToLower(r.Rule().Provider.ConstName())
 		branchID := r.Rule().Service
@@ -51,7 +55,7 @@ func generateDefsecPages(remediationDir, contentDir string, registeredRules []ru
 			return nil
 		}); err != nil {
 			fmt.Println(err.Error())
-			os.Exit(1)
+			continue
 		}
 
 		if _, ok := remediations["Management Console"]; !ok {

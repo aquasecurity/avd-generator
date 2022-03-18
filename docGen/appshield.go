@@ -74,7 +74,7 @@ func parseAppShieldRegoPolicyFile(fileName string, clock Clock) (rp *RegoPost, e
 	rp.Title = regoMeta.Title
 	rp.GroupName = strings.Split(regoMeta.Type, " ")[0]
 	rp.Remediations = append(rp.Remediations, strings.ToLower(rp.GroupName))
-	rp.PolicyUrl = strings.TrimPrefix(fileName, "appshield-repo/")
+	rp.PolicyUrl = strings.TrimPrefix(fileName, "defsec-repo/")
 	rp.PolicyName = filepath.Base(fileName)
 	rp.Rego = regoMeta
 	return
@@ -167,6 +167,6 @@ breadcrumbs:
 {{ .Rego.RecommendedActions }}
 
 ### Links
-{{ if .PolicyUrl}}- [REGO Policy Document](https://github.com/aquasecurity/appshield/tree/master/{{ .PolicyUrl }}){{ end }}{{range $element := .Rego.Links}}
+{{ if .PolicyUrl}}- [REGO Policy Document](https://github.com/aquasecurity/defsec/tree/master/{{ .PolicyUrl }}){{ end }}{{range $element := .Rego.Links}}
 - {{$element}}{{end}}
 `

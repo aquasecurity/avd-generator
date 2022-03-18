@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/aquasecurity/defsec/provider"
+	"github.com/aquasecurity/defsec/providers"
 	"github.com/aquasecurity/defsec/rules"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +17,7 @@ func TestLoadsAsExpected(t *testing.T) {
 	rules := []rules.RegisteredRule{
 		rules.Register(rules.Rule{
 			AVDID:       "AVD-AWS-0018",
-			Provider:    provider.AWSProvider,
+			Provider:    providers.AWSProvider,
 			Service:     "codebuild",
 			ShortCode:   "enable-encryption",
 			Summary:     "CodeBuild Project artifacts encryption should not be disabled",
