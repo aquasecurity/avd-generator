@@ -40,7 +40,6 @@ avd_page_type: avd_page
 icon: kube-hunter
 shortName: %s
 source: Kube Hunter
-severity: n/a
 aliases: [
 	"/kube-hunter/%s"	
 ]
