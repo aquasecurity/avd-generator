@@ -21,6 +21,7 @@ var categoryRemap = map[string]string{
 
 var acronyms = []string{
 	"ack",
+	"aks",
 	"acl",
 	"acm",
 	"alb",
@@ -28,6 +29,7 @@ var acronyms = []string{
 	"apt",
 	"arn",
 	"aws",
+	"cis",
 	"clb",
 	"cd",
 	"cdn",
@@ -111,6 +113,7 @@ var specials = map[string]string{
 	"codestar":       "Code Star",
 	"xray":           "XRay",
 	"memorydb":       "MemoryDB",
+	"rh":             "RedHat",
 }
 
 func Nicify(input string) string {

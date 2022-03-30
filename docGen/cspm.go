@@ -10,8 +10,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/aquasecurity/avd-generator/docGen/menu"
-	"github.com/aquasecurity/avd-generator/docGen/util"
+	"github.com/aquasecurity/avd-generator/menu"
+	"github.com/aquasecurity/avd-generator/util"
 )
 
 func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir string) {

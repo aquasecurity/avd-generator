@@ -10,7 +10,7 @@ import (
 	_ "github.com/aquasecurity/defsec/loader"
 	"github.com/aquasecurity/defsec/rules"
 
-	"github.com/aquasecurity/avd-generator/docGen/menu"
+	"github.com/aquasecurity/avd-generator/menu"
 )
 
 var (
@@ -76,15 +76,16 @@ func getAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 }
 
 func main() {
-	generateAppShieldPages("defsec-repo", "content/misconfig", realClock{})
+	// generateAppShieldPages("defsec-repo", "content/misconfig", realClock{})
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
-	generateVulnPages()
-	for _, year := range Years {
-		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
-	}
-	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
-	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
+	// generateVulnPages()
+	// for _, year := range Years {
+	// 	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+	// }
+	// generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
+	// generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
 	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig", rules.GetRegistered())
+	generateKubeBenchPages("kube-bench-repo/cfg", "content/misconfig/kubernetes")
 	if err := misConfigurationMenu.Generate(); err != nil {
 		fail(err)
 	}

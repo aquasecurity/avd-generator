@@ -19,9 +19,6 @@ jobs:
         env:
           version: v1.44.0
 
-      - name: Lint
-        run: ./bin/golangci-lint run
-
       - name: Test
         run: |
           make md-test

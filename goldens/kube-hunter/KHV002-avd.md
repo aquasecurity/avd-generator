@@ -1,9 +1,8 @@
 ---
 avd_page_type: avd_page 
-icon: kube-hunter
+icon: kubernetes
 shortName: Kubernetes version disclosure
 source: Kube Hunter
-severity: n/a
 aliases: [
 	"/kube-hunter/khv002-orig"	
 ]

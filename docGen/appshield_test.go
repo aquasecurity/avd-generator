@@ -55,7 +55,7 @@ A program inside the container can bypass AppArmor protection policies.
 Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.io'.
 
 ### Links
-- [REGO Policy Document](https://github.com/aquasecurity/appshield/tree/master/../goldens/rego/Baseline #6 - AppArmor policy disabled.rego)
+- [REGO Policy Document](https://github.com/aquasecurity/defsec/tree/master/../goldens/rego/Baseline #6 - AppArmor policy disabled.rego)
 - https://kubernetes.io/docs/concepts/security/pod-security-standards/#baseline
 `,
 		},
@@ -96,7 +96,7 @@ SYS_ADMIN gives the processes running inside the container privileges that are e
 Remove the SYS_ADMIN capability from 'containers[].securityContext.capabilities.add'.
 
 ### Links
-- [REGO Policy Document](https://github.com/aquasecurity/appshield/tree/master/../goldens/rego/SYS_ADMIN_capability.rego)
+- [REGO Policy Document](https://github.com/aquasecurity/defsec/tree/master/../goldens/rego/SYS_ADMIN_capability.rego)
 `,
 		},
 		{

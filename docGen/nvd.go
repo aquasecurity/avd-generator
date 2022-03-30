@@ -20,7 +20,7 @@ import (
 
 	"github.com/valyala/fastjson"
 
-	"github.com/aquasecurity/avd-generator/docGen/menu"
+	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/vuln-list-update/redhat"
 	"github.com/aquasecurity/vuln-list-update/ubuntu"
 )

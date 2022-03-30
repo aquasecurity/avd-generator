@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-
-	"github.com/aquasecurity/avd-generator/docGen/menu"
 )
 
 func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
@@ -37,7 +35,7 @@ func generateKubeHunterPages(inputPagesDir string, outputPagesDir string) {
 
 		newContent := strings.Replace(string(b), "---", fmt.Sprintf(`---
 avd_page_type: avd_page 
-icon: kube-hunter
+icon: kubernetes
 shortName: %s
 source: Kube Hunter
 aliases: [
@@ -57,6 +55,11 @@ breadcrumbs:
 		r := strings.NewReplacer(
 			"# {{ page.vid }} - {{ page.title }}", "",
 			"vid", "id",
+			"severity: CRITICAL", "severity: critical",
+			"severity: HIGH", "severity: high",
+			"severity: MEDIUM", "severity: medium",
+			"severity: LOW", "severity: low",
+			"severity: UNKOWN", "severity: unknown",
 			"categories: ", "types: ",
 			"## Remediation", "### Recommended Actions",
 			"## References", "### Links",
@@ -68,17 +71,5 @@ breadcrumbs:
 		if err != nil {
 			log.Fatalln("unable to write kube hunter page: ", err)
 		}
-	}
-
-	topLevelPath := filepath.Join(outputPagesDir, "_index.md")
-	if err := menu.NewTopLevelMenu("Kube Hunter Misconfiguration", "avd_list", topLevelPath).
-		WithHeading("Kube Hunter").
-		WithIcon("kube-hunter").
-		WithCategory("misconfig").
-		WithMenu("Kube Hunter").
-		WithMenuID("kubehunter").
-		WithMenuParent("kubernetes").
-		Generate(); err != nil {
-		fail(err)
 	}
 }

@@ -1,0 +1,4 @@
+run:
+  skip-files:
+  - "goldens/*"
+  - "avd-repo/*"
