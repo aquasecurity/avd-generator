@@ -80,6 +80,13 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/defsec-repo
 
+      - name: Checkout public kube-bench-repo
+        uses: actions/checkout@v2
+        with:
+          repository: aquasecurity/kube-bench
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/kube-bench-repo
+
       - name: Build generator
         run: make md-clean md-build
 
