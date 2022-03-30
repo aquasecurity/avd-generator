@@ -4,11 +4,9 @@ go 1.17
 
 require (
 	github.com/aquasecurity/defsec v0.23.0
-	github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5
 	github.com/aquasecurity/tracee/tracee-rules v0.6.5
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
-	github.com/open-policy-agent/opa v0.37.2
 	github.com/stretchr/testify v1.7.0
 	github.com/umisama/go-cpe v0.0.0-20190323060751-cdd6c3c28a23
 	github.com/valyala/fastjson v1.5.3
@@ -20,6 +18,7 @@ require (
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
+	github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5 // indirect
 	github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
@@ -36,6 +35,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
+	github.com/open-policy-agent/opa v0.37.2 // indirect
 	github.com/owenrumney/squealer v0.3.1 // indirect
 	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

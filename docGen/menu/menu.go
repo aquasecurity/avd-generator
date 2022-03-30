@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/aquasecurity/avd-generator/docGen/util"
+	"github.com/aquasecurity/avd-generator/util"
 )
 
 var headingMap = map[string]string{
@@ -227,12 +227,6 @@ breadcrumbs:
 {{ end }}
 
 avd_page_type: {{ .PageType }}
-
-
-menu:
-  {{.RootMenu}}:
-    identifier: {{.GroupID}}
-    name: {{.Name}}
 ---
 
 `
@@ -260,13 +254,6 @@ breadcrumbs:
 {{ end }}
 
 avd_page_type: {{ .PageType }}
-
-menu:
-  {{.RootMenu}}:
-    identifier: {{.ParentID}}/{{.BranchID}}
-    name: {{.Name}}
-    weight: 100
-    parent: {{.ParentID}}
 ---
 
 `
