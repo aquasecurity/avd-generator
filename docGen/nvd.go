@@ -584,6 +584,7 @@ const reservedPostTemplate = `---
 title: "{{.ID}}"
 date: {{.Date}}
 draft: false
+category: vulnerabilities
 
 avd_page_type: reserved_page
 ---
