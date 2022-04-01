@@ -119,18 +119,19 @@ func generateDefsecCheckPage(rule rules.RegisteredRule, remediations map[string]
 	sort.Strings(remediationKeys)
 
 	post := map[string]interface{}{
-		"AVDID":        rule.Rule().AVDID,
-		"ShortName":    rule.Rule().ShortCodeDisplayName(),
-		"Provider":     strings.ToLower(rule.Rule().Provider.ConstName()),
-		"ProviderName": rule.Rule().Provider.DisplayName(),
-		"ServiceName":  rule.Rule().ServiceDisplayName(),
-		"Service":      strings.ToLower(strings.ReplaceAll(rule.Rule().Service, " ", "-")),
-		"Summary":      rule.Rule().Summary,
-		"Body":         documentBody.String(),
-		"Severity":     strings.ToLower(string(rule.Rule().Severity)),
-		"ParentID":     strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
-		"Remediations": remediationKeys,
-		"Source":       "Trivy",
+		"AVDID":         rule.Rule().AVDID,
+		"AVDID_Lowered": strings.ToLower(rule.Rule().AVDID),
+		"ShortName":     rule.Rule().ShortCodeDisplayName(),
+		"Provider":      strings.ToLower(rule.Rule().Provider.ConstName()),
+		"ProviderName":  rule.Rule().Provider.DisplayName(),
+		"ServiceName":   rule.Rule().ServiceDisplayName(),
+		"Service":       strings.ToLower(strings.ReplaceAll(rule.Rule().Service, " ", "-")),
+		"Summary":       rule.Rule().Summary,
+		"Body":          documentBody.String(),
+		"Severity":      strings.ToLower(string(rule.Rule().Severity)),
+		"ParentID":      strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
+		"Remediations":  remediationKeys,
+		"Source":        "Trivy",
 	}
 
 	if remediationPath, ok := crossOver[rule.Rule().AVDID]; ok {
@@ -176,7 +177,7 @@ id: {{ .AVDID }}
 {{ if .AliasID}}
 aliases: [
 	"/cspm/{{ .AliasID}}",
-	"/misconfig/{{ .AVDID }}"
+	"/misconfig/{{ .AVDID_Lowered }}"
 ]
 {{ end }}
 source: {{ .Source }}
