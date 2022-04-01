@@ -9378,6 +9378,9 @@ pre {
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.github:before {
   background-image: url("../images/icon_tile_github.png");
 }
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.kubernetes:before {
+  background-image: url("../images/icon_tile_kubernetes.png");
+}
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.google:before {
   background-image: url("../images/icon_tile_google.png");
 }
