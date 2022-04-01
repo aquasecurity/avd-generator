@@ -57,7 +57,7 @@
 	<div class="clearboth container page-fill">
 		<div class="columns is-multiline rever*se-columns">
 
-
+			
 			{{ if .Params.tiles }}
 			{{ range $tile := .Params.tiles }}
 			<div class="column is-4-desktop is-6-tablet">
@@ -67,6 +67,8 @@
 			</div>
 			{{ end }}
 			{{ else }}
+
+			{{ $paginator := .Paginate .Pages }}
 
 			{{ range .Paginator.Pages.ByParam "title" }}
 			<div class="column is-4-desktop is-6-tablet">

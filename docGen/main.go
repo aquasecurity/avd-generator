@@ -85,6 +85,7 @@ func main() {
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
 	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig", rules.GetRegistered())
 	generateAppShieldPages("defsec-repo", "content/misconfig", realClock{})
+
 	if err := misConfigurationMenu.Generate(); err != nil {
 		fail(err)
 	}
