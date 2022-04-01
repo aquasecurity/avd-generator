@@ -25,7 +25,8 @@ func TestParseAppShieldRegoPolicyFile(t *testing.T) {
 title: 
 id: KSV002
 aliases: [
-	"/appshield/ksv002"
+	"/appshield/ksv002",
+	"/misconfig/ksv002"
 ]
 icon: appshield
 source: Trivy
@@ -66,7 +67,8 @@ Remove the 'unconfined' value from 'container.apparmor.security.beta.kubernetes.
 title: 
 id: KSV005
 aliases: [
-	"/appshield/ksv005"
+	"/appshield/ksv005",
+	"/misconfig/ksv005"
 ]
 icon: appshield
 source: Trivy

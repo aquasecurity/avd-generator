@@ -62,23 +62,10 @@
 
 						<div>
 
-							{{ range .Paginator.Pages.ByParam "title" }}
+							{{ range .Pages.ByParam "title" }}
 							<div class="list-item">
-								<a href="{{.RelPermalink}}">{{.Title}}</a>
-								<!-- {{ if .Params.remediations}}
-								<div class="remediation-pills">
-									{{ $pageCtx := .}}
-									{{ if $pageCtx.Params.shortName }}
-									{{ range $remediation := sort .Params.remediations }}
-									<span class="remediation-pill {{ $remediation }}">
-										<a href="{{  $pageCtx.RelPermalink }}#{{ $remediation }}">{{ $remediation }}</a>
-
-									</span>
-									{{ end }}
-									{{ end }}
+								<a href="{{ .RelPermalink }}">{{ .Params.Title }}</a>
 								</div>
-								{{ end }} -->
-							</div>
 							{{ end }}
 
 						</div>

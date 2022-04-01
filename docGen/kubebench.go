@@ -34,6 +34,12 @@ type KubeBenchConfig struct {
 
 func generateKubeBenchPages(configDir, outputDir string) {
 
+	misConfigurationMenu.AddNode("kubernetes", "Kubernetes", outputDir, "", []string{}, []menu.MenuCategory{}, "kubernetes", false)
+
+	misConfigurationMenu.AddNode("benchmarks", "Benchmarks", filepath.Join(outputDir, "kubernetes"),
+		"kubernetes", []string{},
+		[]menu.MenuCategory{{Name: "Kubernetes", Url: "/misconfig/kubernetes"}}, "kubernetes", true)
+
 	var configs []KubeBenchConfig
 
 	if err := filepath.Walk(configDir, func(path string, info fs.FileInfo, err error) error {
@@ -83,12 +89,11 @@ func generateKubeBenchPages(configDir, outputDir string) {
 func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outputDir string) error {
 
 	t := template.Must(template.New("bodyContent").Parse(kubeBenchTemplate))
-	// vt := template.Must(template.New("versionContent").Parse(versionPageTemplate))
 
 	for version, grouping := range versionedConfigs {
 		for group, config := range grouping {
 
-			targetFilePath := filepath.Join(outputDir, "benchmarks", version, fmt.Sprintf("%s.md", group))
+			targetFilePath := filepath.Join(outputDir, "kubernetes", "benchmarks", version, fmt.Sprintf("%s.md", group))
 			if err := os.MkdirAll(filepath.Dir(targetFilePath), os.ModePerm); err != nil {
 				return err
 			}
@@ -112,10 +117,7 @@ func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outp
 			}
 		}
 
-		misConfigurationMenu.AddNode("benchmarks", "Benchmarks", outputDir,
-			"kubernetes", []string{},
-			[]menu.MenuCategory{{Name: "Kubernetes", Url: "/misconfig/kubernetes"}}, "kubernetes", true)
-		misConfigurationMenu.AddNode(version, util.Nicify(version), filepath.Join(outputDir, "benchmarks"),
+		misConfigurationMenu.AddNode(version, util.Nicify(version), filepath.Join(outputDir, "kubernetes", "benchmarks"),
 			"benchmarks", []string{},
 			[]menu.MenuCategory{{Name: "Kubernetes", Url: "/misconfig/kubernetes"},
 				{Name: "Benchmarks", Url: "/misconfig/kubernetes/benchmarks"}}, "kubernetes", true)

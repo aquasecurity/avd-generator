@@ -67,7 +67,6 @@
 			</div>
 			{{ end }}
 			{{ else }}
-			{{ $paginator := .Paginate .Pages }}
 
 			{{ range .Paginator.Pages.ByParam "title" }}
 			<div class="column is-4-desktop is-6-tablet">

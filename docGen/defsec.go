@@ -175,7 +175,8 @@ title: {{.ShortName}}
 id: {{ .AVDID }}
 {{ if .AliasID}}
 aliases: [
-	"/cspm/{{ .AliasID}}"
+	"/cspm/{{ .AliasID}}",
+	"/misconfig/{{ .AVDID }}"
 ]
 {{ end }}
 source: {{ .Source }}

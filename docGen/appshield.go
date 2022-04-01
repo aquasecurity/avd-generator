@@ -137,7 +137,8 @@ const regoPolicyPostTemplate = `---
 title: {{.Rego.ShortName}}
 id: {{.Rego.ID}}
 aliases: [
-	"/appshield/{{ lower .Rego.ID}}"
+	"/appshield/{{ lower .Rego.ID}}",
+	"/misconfig/{{ lower .Rego.ID}}"
 ]
 icon: appshield
 source: Trivy
