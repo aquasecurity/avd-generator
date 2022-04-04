@@ -77,10 +77,10 @@ func getAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 func main() {
 	generateKubeBenchPages("kube-bench-repo/cfg", "content/misconfig")
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
-	// generateVulnPages()
-	// for _, year := range Years {
-	// 	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
-	// }
+	generateVulnPages()
+	for _, year := range Years {
+	 	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+	}
 	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
 	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig", rules.GetRegistered())
