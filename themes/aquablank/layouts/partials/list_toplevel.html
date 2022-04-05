@@ -60,7 +60,7 @@
 			
 			{{ if .Params.tiles }}
 			{{ range $tile := .Params.tiles }}
-			<div class="column is-4-desktop is-6-tablet">
+			<div class="column is-6-desktop is-6-tablet">
 				<a href="{{ $tile.url }}" class="config-item fadeInUp animationDelay_6">
 					<h2 class="config-tile {{ $tile.icon }}">{{ $tile.heading }}</h2>
 				</a>
@@ -71,7 +71,7 @@
 			{{ $paginator := .Paginate .Pages }}
 
 			{{ range .Paginator.Pages.ByParam "title" }}
-			<div class="column is-4-desktop is-6-tablet">
+			<div class="column is-6-desktop is-6-tablet">
 				<a href="{{ .RelPermalink }}" class="config-item fadeInUp animationDelay_6">
 					<h2 class="config-tile {{ .Params.icon }}">{{ .Params.Title }}</h2>
 				</a>

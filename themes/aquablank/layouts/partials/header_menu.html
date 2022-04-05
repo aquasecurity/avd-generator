@@ -1,6 +1,10 @@
 <div>
   <div class="clearboth container main-menu">
     <div class="dropdown">
+      <a href="/nvd"><span class="dropbtn {{ if eq .context.Params.category "vulnerabilities" }}active{{ end
+          }}">Vulnerabilities</span></a>
+    </div>
+    <div class="dropdown">
       <a href="/misconfig"><span class="dropbtn {{ if eq .context.Params.category "misconfig" }}active{{ end
           }}">Misconfiguration</span></a>
     </div>
@@ -9,8 +13,7 @@
         Security</span></a>
     </div>
     <div class="dropdown">
-      <a href="/nvd"><span class="dropbtn {{ if eq .context.Params.category "vulnerabilities" }}active{{ end
-          }}">Vulnerabilities</span></a>
+      <a href="/compliance"><span class="dropbtn {{ if eq .context.Params.category "compliance" }}active{{ end }}">Compliance</span></a>
     </div>
   </div>
 </div>

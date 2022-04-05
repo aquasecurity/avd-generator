@@ -21,6 +21,7 @@ var (
 	}
 
 	misConfigurationMenu = menu.New("misconfig", "content/misconfig")
+	complianceMenu       = menu.New("compliance", "content/compliance")
 	runTimeSecurityMenu  = menu.New("runsec", "content/tracee")
 )
 
@@ -75,11 +76,11 @@ func getAllFilesOfKind(dir string, include string, exclude string) ([]string, er
 }
 
 func main() {
-	generateKubeBenchPages("kube-bench-repo/cfg", "content/misconfig")
+	generateKubeBenchPages("kube-bench-repo/cfg", "content/compliance")
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
 	generateVulnPages()
 	for _, year := range Years {
-	 	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
 	}
 	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
@@ -92,6 +93,9 @@ func main() {
 	if err := runTimeSecurityMenu.Generate(); err != nil {
 		fail(err)
 	}
+	if err := complianceMenu.Generate(); err != nil {
+		fail(err)
+	}
 	createTopLevelMenus()
 }
 
@@ -101,6 +105,13 @@ func createTopLevelMenus() {
 		WithHeading("Misconfiguration Categories").
 		WithIcon("aqua").
 		WithCategory("misconfig").Generate(); err != nil {
+		fail(err)
+	}
+
+	if err := menu.NewTopLevelMenu("Compliance", "toplevel_page", "content/compliance/_index.md").
+		WithHeading("Compliance").
+		WithIcon("aqua").
+		WithCategory("compliance").Generate(); err != nil {
 		fail(err)
 	}
 

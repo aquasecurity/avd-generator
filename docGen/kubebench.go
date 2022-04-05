@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"strings"
 	"text/template"
 
 	"path/filepath"
@@ -33,8 +34,6 @@ type KubeBenchConfig struct {
 }
 
 func generateKubeBenchPages(configDir, outputDir string) {
-
-	misConfigurationMenu.AddNode("kubernetes", "Kubernetes", outputDir, "", []string{}, []menu.MenuCategory{}, "kubernetes", false)
 
 	var configs []KubeBenchConfig
 
@@ -82,52 +81,57 @@ func generateKubeBenchPages(configDir, outputDir string) {
 	}
 }
 
+func cisVersion(version string) string {
+
+	if strings.HasPrefix(version, "cis") {
+		return util.Nicify(version)
+	}
+	return fmt.Sprintf("CIS - %s", util.Nicify(version))
+}
+
 func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outputDir string) error {
-
 	t := template.Must(template.New("bodyContent").Parse(kubeBenchTemplate))
-
 	for version, grouping := range versionedConfigs {
+
+		complianceMenu.AddNode(version, cisVersion(version), filepath.Join(outputDir),
+			"compliance", []string{},
+			[]menu.MenuCategory{{Name: "Compliance", Url: "/compliance"}}, "kubernetes", true)
+
 		for group, config := range grouping {
-			misConfigurationMenu.AddNode(fmt.Sprintf("%s-%s", version, group), config.Text, filepath.Join(outputDir, "kubernetes", version),
+
+			complianceMenu.AddNode(fmt.Sprintf("%s-%s", version, group), config.Text, filepath.Join(outputDir, version),
 				version, []string{},
-				[]menu.MenuCategory{{Name: "Kubernetes", Url: "/misconfig/kubernetes"}, {Name: fmt.Sprintf("Benchmarks - %s", util.Nicify(version)), Url: fmt.Sprintf("/misconfig/kubernetes/%s", version)}}, "kubernetes", false)
+				[]menu.MenuCategory{
+					{Name: "Compliance", Url: "/compliance"},
+					{Name: cisVersion(version), Url: fmt.Sprintf("/compliance/%s", version)},
+				}, "aqua", false)
+
 			for _, checkGroup := range config.Groups {
 
-				targetFilePath := filepath.Join(outputDir, "kubernetes", version, fmt.Sprintf("%s-%s", version, group), checkGroup.ID, fmt.Sprintf("%s.md", group))
+				targetFilePath := filepath.Join(outputDir, version, fmt.Sprintf("%s-%s", version, group), checkGroup.ID, fmt.Sprintf("%s.md", checkGroup.ID))
 				if err := os.MkdirAll(filepath.Dir(targetFilePath), os.ModePerm); err != nil {
 					return err
 				}
 				var documentBody bytes.Buffer
-
-				postDetails := map[string]interface{}{
+				if err := t.Execute(&documentBody, map[string]interface{}{
 					"ShortName":   checkGroup.Text,
 					"ID":          checkGroup.ID,
 					"Version":     config.Version,
-					"NiceVersion": util.Nicify(config.Version),
+					"NiceVersion": cisVersion(config.Version),
 					"Category":    config.Type,
 					"Checks":      checkGroup.Checks,
 					"ParentID":    group,
 					"ParentTitle": config.Text,
-				}
-
-				if err := t.Execute(&documentBody, postDetails); err != nil {
+				}); err != nil {
 					return err
 				}
 
 				if err := os.WriteFile(targetFilePath, documentBody.Bytes(), os.ModePerm); err != nil {
 					return err
 				}
-				misConfigurationMenu.AddNode(checkGroup.ID, checkGroup.Text, filepath.Join(outputDir, "kubernetes", version, group),
-					fmt.Sprintf("%s-%s", version, group), []string{},
-					[]menu.MenuCategory{{Name: "Kubernetes", Url: "/misconfig/kubernetes"},
-						{Name: config.Text, Url: fmt.Sprintf("/misconfig/kubernetes/%s-%s", version, group)}}, "kubernetes", false)
 			}
 
 		}
-
-		misConfigurationMenu.AddNode(version, fmt.Sprintf("Benchmarks - %s", util.Nicify(version)), filepath.Join(outputDir, "kubernetes"),
-			"benchmarks", []string{},
-			[]menu.MenuCategory{{Name: "Kubernetes", Url: "/misconfig/kubernetes"}}, "kubernetes", false)
 
 	}
 
@@ -143,16 +147,16 @@ draft: false
 shortName: {{.ShortName}}
 severity: "n/a"
 version: {{ .Version}}
-category: misconfig
+category: compliance
 keywords: "{{ .Category }}"
 
 breadcrumbs: 
-  - name: Kubernetes
-    path: /misconfig/kubernetes
-  - name: Benchmarks - {{ .NiceVersion }}
-    path: /misconfig/kubernetes/{{ .Version}}
+  - name: Compliance
+    path: /compliance
+  - name: {{ .NiceVersion }}
+    path: /compliance/{{ .Version}}
   - name: {{ .ParentTitle }}
-    path: /misconfig/kubernetes/{{ .Version}}/{{ .Version}}-{{ .ParentID}}
+    path: /compliance/{{ .Version}}/{{ .Version}}-{{ .ParentID}}
 
 
 avd_page_type: avd_page
