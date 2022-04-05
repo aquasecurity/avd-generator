@@ -3,13 +3,14 @@ module github.com/aquasecurity/avd-generator
 go 1.17
 
 require (
-	github.com/aquasecurity/defsec v0.23.0
+	github.com/aquasecurity/defsec v0.28.4
 	github.com/aquasecurity/tracee/tracee-rules v0.6.5
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/umisama/go-cpe v0.0.0-20190323060751-cdd6c3c28a23
 	github.com/valyala/fastjson v1.5.3
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
 
 require (
@@ -35,8 +36,8 @@ require (
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
-	github.com/open-policy-agent/opa v0.37.2 // indirect
-	github.com/owenrumney/squealer v0.3.1 // indirect
+	github.com/open-policy-agent/opa v0.38.1 // indirect
+	github.com/owenrumney/squealer v0.3.2 // indirect
 	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -55,6 +56,5 @@ require (
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	moul.io/http2curl v1.0.0 // indirect
 )

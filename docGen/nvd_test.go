@@ -628,6 +628,7 @@ func TestGenerateReservedPages(t *testing.T) {
 title: "CVE-2020-0569"
 date: 2021-04-15T20:55:39Z
 draft: false
+category: vulnerabilities
 
 avd_page_type: reserved_page
 ---

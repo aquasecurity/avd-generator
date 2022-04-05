@@ -17,7 +17,7 @@ func TestKubeBenchPages(t *testing.T) {
 	}()
 
 	generateKubeBenchPages("../goldens/kube-bench/originals", pagesDir)
-	gotBytes, err := ioutil.ReadFile(filepath.Join(pagesDir, "kubernetes", "benchmarks", "ack-1.0", "controlplane.md"))
+	gotBytes, err := ioutil.ReadFile(filepath.Join(pagesDir, "ack-1.0", "ack-1.0-controlplane", "3.1", "3.1.md"))
 	require.NoError(t, err)
 
 	wantBytes, err := ioutil.ReadFile("../goldens/kube-bench/expected/controlplane.md")
