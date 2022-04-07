@@ -174,12 +174,11 @@ Follow the appropriate remediation steps below to resolve the issue.
 const defsecTemplate string = `---
 title: {{.ShortName}}
 id: {{ .AVDID }}
-{{ if .AliasID}}
-aliases: [
-	"/cspm/{{ .AliasID}}",
+
+aliases: [	{{ if .AliasID}}"/cspm/{{ .AliasID}}",{{ end }}
 	"/misconfig/{{ .AVDID_Lowered }}"
 ]
-{{ end }}
+
 source: {{ .Source }}
 {{ if .CSPMID}}
 cspmID: {{ .CSPMID}}
