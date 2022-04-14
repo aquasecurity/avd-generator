@@ -194,3 +194,18 @@ meilisearch = new MeiliSearch({
 
 ## Daily Build
 
+The daily build is configured in [cron.yml](.github/workflows/cron.yml). 
+
+The process has the following workflow
+
+1. Download the latest repos for source content
+
+2. Runs docGen code to create Markdown
+
+3. Runs Hugo to generate static site and search index
+
+4. Updates the index in the Meilesearch appliance
+
+5. Commits new docs to `githubc.om/aquasecurity/avd`
+
+At this point, gh-pages actions kick in and generate the site.
