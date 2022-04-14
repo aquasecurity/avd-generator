@@ -34,7 +34,6 @@ type KubeBenchConfig struct {
 }
 
 func generateKubeBenchPages(configDir, outputDir string) {
-
 	var configs []KubeBenchConfig
 
 	if err := filepath.Walk(configDir, func(path string, info fs.FileInfo, err error) error {
@@ -81,27 +80,18 @@ func generateKubeBenchPages(configDir, outputDir string) {
 	}
 }
 
-func cisVersion(version string) string {
-
-	if strings.HasPrefix(version, "cis") {
-		return util.Nicify(version)
-	}
-	return fmt.Sprintf("CIS - %s", util.Nicify(version))
-}
-
 func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outputDir string) error {
 	t := template.Must(template.New("bodyContent").Parse(kubeBenchTemplate))
 	for version, grouping := range versionedConfigs {
-
 		complianceMenu.AddNode(version, cisVersion(version), filepath.Join(outputDir),
 			"compliance", []string{},
-			[]menu.MenuCategory{{Name: "Compliance", Url: "/compliance"}}, "kubernetes", true)
+			[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"}}, "kubernetes", true)
 
 		for group, config := range grouping {
 
 			complianceMenu.AddNode(fmt.Sprintf("%s-%s", version, group), config.Text, filepath.Join(outputDir, version),
 				version, []string{},
-				[]menu.MenuCategory{
+				[]menu.BreadCrumb{
 					{Name: "Compliance", Url: "/compliance"},
 					{Name: cisVersion(version), Url: fmt.Sprintf("/compliance/%s", version)},
 				}, "aqua", false)
@@ -130,12 +120,16 @@ func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outp
 					return err
 				}
 			}
-
 		}
-
 	}
-
 	return nil
+}
+
+func cisVersion(version string) string {
+	if strings.HasPrefix(version, "cis") {
+		return util.Nicify(version)
+	}
+	return fmt.Sprintf("CIS - %s", util.Nicify(version))
 }
 
 const kubeBenchTemplate string = `---

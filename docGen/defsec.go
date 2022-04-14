@@ -73,10 +73,10 @@ func generateDefsecPages(remediationDir, contentDir string, registeredRules []ru
 
 		providerName := r.Rule().Provider.DisplayName()
 		misConfigurationMenu.AddNode(topLevelID, providerName, contentDir, "", []string{},
-			[]menu.MenuCategory{}, topLevelID, true)
+			[]menu.BreadCrumb{}, topLevelID, true)
 		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID),
 			topLevelID, []string{},
-			[]menu.MenuCategory{{Name: util.Nicify(strings.Title(providerName)), Url: fmt.Sprintf("/misconfig/%s", topLevelID)}}, topLevelID, false)
+			[]menu.BreadCrumb{{Name: util.Nicify(strings.Title(providerName)), Url: fmt.Sprintf("/misconfig/%s", topLevelID)}}, topLevelID, false)
 	}
 }
 

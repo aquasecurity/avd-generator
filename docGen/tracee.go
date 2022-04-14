@@ -129,7 +129,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 
 		topLevelIDName := strings.TrimSpace(strings.Split(sig.MitreAttack, ":")[0])
 		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
-		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.MenuCategory{
+		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.BreadCrumb{
 			{Name: "Runtime Security", Url: "/tracee"},
 		}, "runtime", true)
 		parentID := topLevelID
@@ -204,7 +204,7 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 
 		topLevelIDName := strings.TrimSpace(strings.Split(ma, ":")[0])
 		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
-		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "tracee", []string{"runtime"}, []menu.MenuCategory{
+		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "tracee", []string{"runtime"}, []menu.BreadCrumb{
 			{Name: "Tracee", Url: "/tracee"},
 		}, "tracee", false)
 		parentID := topLevelID

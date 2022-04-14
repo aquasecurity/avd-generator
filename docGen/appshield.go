@@ -110,7 +110,7 @@ func generateAppShieldRegoPolicyPages(policyDir, policiesDir string, postsDir st
 			continue
 		}
 		topLevelID := strings.ToLower(rp.GroupName)
-		misConfigurationMenu.AddNode(topLevelID, strings.Title(topLevelID), postsDir, "", rp.Remediations, []menu.MenuCategory{}, "appshield", false)
+		misConfigurationMenu.AddNode(topLevelID, strings.Title(topLevelID), postsDir, "", rp.Remediations, []menu.BreadCrumb{}, "appshield", false)
 
 		parentID := topLevelID
 		rp.ParentID = parentID

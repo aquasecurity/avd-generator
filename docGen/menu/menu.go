@@ -18,7 +18,7 @@ var headingMap = map[string]string{
 	"tracee":      "Runtime Security",
 }
 
-type MenuCategory struct {
+type BreadCrumb struct {
 	Name string
 	Url  string
 }
@@ -29,7 +29,7 @@ type menuNode struct {
 	parentID     string
 	remediations []string
 	contentDir   string
-	categories   []MenuCategory
+	breadcrumbs  []BreadCrumb
 	topLevel     bool
 	icon         string
 }
@@ -48,7 +48,7 @@ func New(rootMenu, contentDir string) *menu {
 	}
 }
 
-func (m *menu) AddNode(id, name, contentDir string, parentID string, remediations []string, categories []MenuCategory, icon string, topLevel bool) {
+func (m *menu) AddNode(id, name, contentDir string, parentID string, remediations []string, categories []BreadCrumb, icon string, topLevel bool) {
 	id = strings.ToLower(strings.ReplaceAll(id, " ", "-"))
 	key := fmt.Sprintf("%s/%s", parentID, id)
 	var workingNode menuNode
@@ -57,7 +57,7 @@ func (m *menu) AddNode(id, name, contentDir string, parentID string, remediation
 			id:           id,
 			name:         util.Nicify(name),
 			parentID:     parentID,
-			categories:   make([]MenuCategory, 0),
+			breadcrumbs:  make([]BreadCrumb, 0),
 			contentDir:   contentDir,
 			remediations: make([]string, 0),
 			icon:         icon,
@@ -127,7 +127,7 @@ func (m *menu) generateBranchFiles() error {
 		t := template.Must(template.New("service").Parse(branchTemplate))
 		if err := t.Execute(branchFile, map[string]interface{}{
 			"RootMenu":     m.rootMenu,
-			"Categories":   branch.categories,
+			"Categories":   branch.breadcrumbs,
 			"ParentID":     branch.parentID,
 			"BranchID":     branch.id,
 			"Name":         branch.name,
@@ -162,7 +162,7 @@ func (m *menu) generateTopLevelFile() error {
 		if err := t.Execute(providerFile, map[string]interface{}{
 			"RootMenu":     m.rootMenu,
 			"GroupID":      topLevel.id,
-			"Categories":   topLevel.categories,
+			"Categories":   topLevel.breadcrumbs,
 			"Name":         topLevel.name,
 			"Remediations": topLevel.remediations,
 			"Icon":         topLevel.icon,
@@ -175,17 +175,17 @@ func (m *menu) generateTopLevelFile() error {
 	return nil
 }
 
-func (n *menuNode) addCategories(categories []MenuCategory) {
+func (n *menuNode) addCategories(categories []BreadCrumb) {
 	for _, newCategory := range categories {
 		var found bool
-		for _, category := range n.categories {
+		for _, category := range n.breadcrumbs {
 			if newCategory.Name == category.Name {
 				found = true
 				break
 			}
 		}
 		if !found {
-			n.categories = append(n.categories, newCategory)
+			n.breadcrumbs = append(n.breadcrumbs, newCategory)
 		}
 	}
 }
