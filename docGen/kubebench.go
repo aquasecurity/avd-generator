@@ -81,11 +81,17 @@ func generateKubeBenchPages(configDir, outputDir string) {
 }
 
 func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outputDir string) error {
+	complianceMenu.AddNode("kubernetes", "Kubernetes", outputDir, "compliance", []string{},
+		[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"}}, "kubernetes", true)
+
+	outputDir = filepath.Join(outputDir, "kubernetes")
+
 	t := template.Must(template.New("bodyContent").Parse(kubeBenchTemplate))
 	for version, grouping := range versionedConfigs {
 		complianceMenu.AddNode(version, cisVersion(version), filepath.Join(outputDir),
-			"compliance", []string{},
-			[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"}}, "kubernetes", true)
+			"kubernetes", []string{},
+			[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"},
+				{Name: "Kubernetes", Url: "/compliance/kubernetes"}}, "kubernetes", true)
 
 		for group, config := range grouping {
 
@@ -93,12 +99,14 @@ func writeTemplates(versionedConfigs map[string]map[string]KubeBenchConfig, outp
 				version, []string{},
 				[]menu.BreadCrumb{
 					{Name: "Compliance", Url: "/compliance"},
-					{Name: cisVersion(version), Url: fmt.Sprintf("/compliance/%s", version)},
+					{Name: "Kubernetes", Url: "/compliance/kubernetes"},
+					{Name: cisVersion(version), Url: fmt.Sprintf("/compliance/kubernetes/%s", version)},
 				}, "aqua", false)
 
 			for _, checkGroup := range config.Groups {
 
-				targetFilePath := filepath.Join(outputDir, version, fmt.Sprintf("%s-%s", version, group), checkGroup.ID, fmt.Sprintf("%s.md", checkGroup.ID))
+				targetFilePath := filepath.Join(outputDir, version, fmt.Sprintf("%s-%s", version, group),
+					fmt.Sprintf("%s.md", checkGroup.ID))
 				if err := os.MkdirAll(filepath.Dir(targetFilePath), os.ModePerm); err != nil {
 					return err
 				}
@@ -147,10 +155,12 @@ keywords: "{{ .Category }}"
 breadcrumbs: 
   - name: Compliance
     path: /compliance
+  - name: Kubernetes
+    path: /compliance/kubernetes
   - name: {{ .NiceVersion }}
-    path: /compliance/{{ .Version}}
+    path: /compliance/kubernetes/{{ .Version}}
   - name: {{ .ParentTitle }}
-    path: /compliance/{{ .Version}}/{{ .Version}}-{{ .ParentID}}
+    path: /compliance/kubernetes/{{ .Version}}/{{ .Version}}-{{ .ParentID}}
 
 
 avd_page_type: avd_page

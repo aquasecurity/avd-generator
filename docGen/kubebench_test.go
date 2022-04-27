@@ -2,7 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -11,13 +10,10 @@ import (
 )
 
 func TestKubeBenchPages(t *testing.T) {
-	pagesDir, _ := ioutil.TempDir("", "TestKubeBenchPages-*")
-	defer func() {
-		_ = os.RemoveAll(pagesDir)
-	}()
 
+	pagesDir := t.TempDir()
 	generateKubeBenchPages("../goldens/kube-bench/originals", pagesDir)
-	gotBytes, err := ioutil.ReadFile(filepath.Join(pagesDir, "ack-1.0", "ack-1.0-controlplane", "3.1", "3.1.md"))
+	gotBytes, err := ioutil.ReadFile(filepath.Join(pagesDir, "kubernetes", "ack-1.0", "ack-1.0-controlplane", "3.1.md"))
 	require.NoError(t, err)
 
 	wantBytes, err := ioutil.ReadFile("../goldens/kube-bench/expected/controlplane.md")
