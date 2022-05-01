@@ -13,10 +13,12 @@ keywords: "controlplane"
 breadcrumbs: 
   - name: Compliance
     path: /compliance
+  - name: Kubernetes
+    path: /compliance/kubernetes
   - name: CIS - ACK 1.0
-    path: /compliance/ack-1.0
+    path: /compliance/kubernetes/ack-1.0
   - name: Control Plane Configuration
-    path: /compliance/ack-1.0/ack-1.0-controlplane
+    path: /compliance/kubernetes/ack-1.0/ack-1.0-controlplane
 
 
 avd_page_type: avd_page
