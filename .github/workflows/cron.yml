@@ -87,6 +87,13 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/kube-bench-repo
 
+      - name: Checkout private chain-bench-repo
+        uses: actions/checkout@v2
+        with:
+          repository: argonsecurity/chain-bench
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: avd-repo/chain-bench-repo
+
       - name: Build generator
         run: make md-clean md-build
 
