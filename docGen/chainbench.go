@@ -86,12 +86,12 @@ func generateChainBenchPages(configDir, outputDir string) {
 
 	versioned := make(map[string]map[string]ChainBenchSectionsConfig)
 	versioned["cis-1.0"] = versionedConf
-	if err := writeTemplatess(versioned, outputDir); err != nil {
+	if err := writeSupplyChainTemplates(versioned, outputDir); err != nil {
 		fmt.Println(err)
 	}
 }
 
-func writeTemplatess(versionedConfigs map[string]map[string]ChainBenchSectionsConfig, outputDir string) error {
+func writeSupplyChainTemplates(versionedConfigs map[string]map[string]ChainBenchSectionsConfig, outputDir string) error {
 	complianceMenu.AddNode("softwaresupplychain", "Software Supply Chain", outputDir, "compliance", []string{},
 		[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"}}, "softwaresupplychain", true)
 
