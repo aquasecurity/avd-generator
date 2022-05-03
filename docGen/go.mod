@@ -3,6 +3,7 @@ module github.com/aquasecurity/avd-generator
 go 1.17
 
 require (
+	github.com/Masterminds/semver v1.5.0
 	github.com/aquasecurity/defsec v0.28.4
 	github.com/aquasecurity/tracee/tracee-rules v0.6.5
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
