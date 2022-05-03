@@ -148,7 +148,7 @@ const chainBenchTemplate string = `---
 title: {{.ShortName}}
 id: {{ .ID }}
 source: Chain Bench
-icon: softwaresupplychain
+icon: chain-bench
 draft: false
 shortName: {{.ShortName}}
 severity: "n/a"
