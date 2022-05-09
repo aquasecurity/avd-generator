@@ -9338,6 +9338,9 @@ pre {
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.nvd:before {
   background-image: url("../images/icon_page_cve.png");
 }
+.avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.chainbench:before {
+  background-image: url("../images/icon_page_chain_bench.png");
+}
 .avd_hero_wrap .hero.header_wrap .hero-body .header_title_wrap .page_pretitle.with_icon.appshield:before {
   background-image: url("../images/icon_page_appshield.png");
 }
@@ -11155,6 +11158,11 @@ aside.side-nav {
 
 .config-tile.appshield::before {
   content: url("../images/icon_page_appshield.png");
+  padding-right: 0.4em;
+}
+
+.config-tile.chainbench::before {
+  content: url("../images/icon_page_chain_bench.png");
   padding-right: 0.4em;
 }
 

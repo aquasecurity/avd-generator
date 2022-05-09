@@ -93,7 +93,7 @@ func generateChainBenchPages(configDir, outputDir string) {
 
 func writeSupplyChainTemplates(versionedConfigs map[string]map[string]ChainBenchSectionsConfig, outputDir string) error {
 	complianceMenu.AddNode("softwaresupplychain", "Software Supply Chain", outputDir, "compliance", []string{},
-		[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"}}, "softwaresupplychain", true)
+		[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"}}, "chainbench", true)
 
 	outputDir = filepath.Join(outputDir, "softwaresupplychain")
 
@@ -102,7 +102,7 @@ func writeSupplyChainTemplates(versionedConfigs map[string]map[string]ChainBench
 		complianceMenu.AddNode(version, cisVersion(version), filepath.Join(outputDir),
 			"softwaresupplychain", []string{},
 			[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"},
-				{Name: "Software Supply Chain", Url: "/compliance/softwaresupplychain"}}, "softwaresupplychain", true)
+				{Name: "Software Supply Chain", Url: "/compliance/softwaresupplychain"}}, "chainbench", true)
 
 		for group, config := range grouping {
 
@@ -112,25 +112,26 @@ func writeSupplyChainTemplates(versionedConfigs map[string]map[string]ChainBench
 					{Name: "Compliance", Url: "/compliance"},
 					{Name: "Software Supply Chain", Url: "/compliance/softwaresupplychain"},
 					{Name: cisVersion(version), Url: fmt.Sprintf("/compliance/softwaresupplychain/%s", version)},
-				}, "aqua", false)
+				}, "chainbench", false)
 
 			for id, checkGroup := range config.Sections {
 
-				targetFilePath := filepath.Join(outputDir, version, fmt.Sprintf("%s-%s", version, config.Type),
+				targetFilePath := filepath.Join(outputDir, version, fmt.Sprintf("%s-%s", version, strings.ToLower(config.Type)),
 					fmt.Sprintf("%s.md", checkGroup.ID))
 				if err := os.MkdirAll(filepath.Dir(targetFilePath), os.ModePerm); err != nil {
 					return err
 				}
 				var documentBody bytes.Buffer
 				if err := t.Execute(&documentBody, map[string]interface{}{
-					"ShortName":   checkGroup.Name,
-					"ID":          id,
-					"Version":     version,
-					"NiceVersion": cisVersion(version),
-					"Category":    config.Type,
-					"Checks":      checkGroup.Checks,
-					"ParentID":    group,
-					"ParentTitle": config.Text,
+					"ShortName":        checkGroup.Name,
+					"ID":               id,
+					"Version":          version,
+					"NiceVersion":      cisVersion(version),
+					"Category":         config.Type,
+					"Category_Lowered": strings.ToLower(config.Type),
+					"Checks":           checkGroup.Checks,
+					"ParentID":         group,
+					"ParentTitle":      config.Text,
 				}); err != nil {
 					return err
 				}
@@ -148,7 +149,7 @@ const chainBenchTemplate string = `---
 title: {{.ShortName}}
 id: {{ .ID }}
 source: Chain Bench
-icon: chain-bench
+icon: chainbench
 draft: false
 shortName: {{.ShortName}}
 severity: "n/a"
@@ -164,7 +165,7 @@ breadcrumbs:
   - name: {{ .NiceVersion }}
     path: /compliance/softwaresupplychain/{{ .Version}}
   - name: {{ .ParentTitle }}
-    path: /compliance/softwaresupplychain/{{ .Version}}/{{ .Version}}-{{ .Category}}
+    path: /compliance/softwaresupplychain/{{ .Version}}/{{ .Version}}-{{ .Category_Lowered}}
 
 
 avd_page_type: avd_page

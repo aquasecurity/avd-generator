@@ -60,25 +60,25 @@
     content: " >> ";
 }
 
-details > summary {
+details>summary {
     list-style-type: none;
     outline: none;
     cursor: pointer;
     padding: 4px;
 }
 
-details > summary::-webkit-details-marker {
+details>summary::-webkit-details-marker {
     display: none;
 }
 
-details > summary::before {
+details>summary::before {
     content: "+ ";
     font-weight: bold;
     color: #405a75;
     font-family: monospace;
 }
 
-details[open] > summary::before {
+details[open]>summary::before {
     content: "- ";
     font-weight: bold;
     font-family: monospace;
@@ -155,6 +155,7 @@ dd {
 .dropdown-check-list {
     float: right;
 }
+
 .dropdown-check-list .anchor {
     float: right;
     background: #fff;
@@ -365,6 +366,11 @@ aside.side-nav {
 
 .config-tile.appshield::before {
     content: url("../images/icon_page_appshield.png");
+    padding-right: 0.4em;
+}
+
+.config-tile.chainbench::before {
+    content: url("../images/icon_page_chain_bench.png");
     padding-right: 0.4em;
 }
 
