@@ -19,7 +19,9 @@
 				.header_navbar_wrap {
 					//_header_main_navbar.scss
 				}
-			} //hero-head
+			}
+
+			//hero-head
 
 			.hero-body {
 				padding-top: 1.5rem;
@@ -47,15 +49,19 @@
 							&.nvd:before {
 								background-image: url("../images/icon_page_cve.png");
 							}
-							&.chain-bench:before {
+
+							&.chainbench:before {
 								background-image: url("../images/icon_page_chain_bench.png");
 							}
+
 							&.appshield:before {
 								background-image: url("../images/icon_page_appshield.png");
 							}
+
 							&.iac:before {
 								background-image: url("../images/icon_page_defsec.png");
 							}
+
 							&.kube-hunter:before {
 								background-image: url("../images/icon_page_kube-hunter.png");
 								width: 32px;
@@ -63,51 +69,68 @@
 								margin-bottom: -5px;
 								margin-right: 6px;
 							}
+
 							&.cloudsploit:before {
 								background-image: url("../images/icon_page_cloudsploit.png");
 							}
+
 							&.aqua:before {
 								background-image: url("../images/icon_page_aqua.png");
 							}
+
 							&.alibaba:before {
 								background-image: url("../images/icon_tile_alibaba.png");
 							}
+
 							&.aws:before {
 								background-image: url("../images/icon_tile_aws.png");
 							}
+
 							&.azure:before {
 								background-image: url("../images/icon_tile_azure.png");
 							}
+
 							&.cloudstack:before {
 								background-image: url("../images/icon_tile_cloudstack.png");
 							}
+
 							&.digitalocean:before {
 								background-image: url("../images/icon_tile_digitalocean.png");
 							}
+
 							&.dockerfile:before {
 								background-image: url("../images/icon_tile_dockerfile.png");
 							}
+
 							&.github:before {
 								background-image: url("../images/icon_tile_github.png");
-
 							}
+
 							&.kubernetes:before {
 								background-image: url("../images/icon_tile_kubernetes.png");
 							}
+
 							&.google:before {
 								background-image: url("../images/icon_tile_google.png");
 							}
+
 							&.openstack:before {
 								background-image: url("../images/icon_tile_openstack.png");
 							}
+
 							&.oracle:before {
 								background-image: url("../images/icon_tile_oracle.png");
 							}
+
 							&.tracee:before {
 								background-image: url("../images/icon_page_aqua.png");
 							}
-						} //with_icon
-					} //page_pretitle
+						}
+
+						//with_icon
+					}
+
+					//page_pretitle
 
 					.page_title {
 						margin-top: 40px;
@@ -118,7 +141,7 @@
 						font-size: 1.25rem; //1.5rem;
 					}
 
-					.page_pretitle + .page_title {
+					.page_pretitle+.page_title {
 						margin-top: 10px;
 					}
 
@@ -138,8 +161,12 @@
 							}
 						}
 					}
-				} //header_title_wrap
-			} //hero-body
+				}
+
+				//header_title_wrap
+			}
+
+			//hero-body
 
 			.hero-foot {
 				background-color: $aq-royal-blue-dark;
@@ -163,8 +190,16 @@
 						display: block;
 						margin-bottom: 12px;
 					}
-				} //.pagetitle_metaitem
+				}
+
+				//.pagetitle_metaitem
 			}
-		} //header_wrap
-	} //hero
-} //hero_wrap
+		}
+
+		//header_wrap
+	}
+
+	//hero
+}
+
+//hero_wrap
