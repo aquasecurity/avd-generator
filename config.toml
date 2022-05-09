@@ -59,6 +59,11 @@ hasChildren = true
   url = "kube-bench"
   weight = 3
 
+[[menu.main]]
+  parent = "projects"
+  name = "Chain Bench"
+  url = "chain-bench"
+  weight = 4
 
 ############################# Default Parameters ##########################
 [params]

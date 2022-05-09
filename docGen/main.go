@@ -42,6 +42,7 @@ func main() {
 		Years = append(Years, strconv.Itoa(y))
 	}
 
+	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "content/compliance")
 	generateKubeBenchPages("kube-bench-repo/cfg", "content/compliance")
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
 	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
