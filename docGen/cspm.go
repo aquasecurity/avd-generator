@@ -100,7 +100,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 `, recommendedActionsRegex.FindStringSubmatch(content)[1])
 		}
 
-		categoryID := strings.ReplaceAll(strings.ToLower(category), " ", "-")
+		categoryID := strings.ReplaceAll(strings.ToLower(filepath.Base(filepath.Dir(file))), " ", "-")
 		providerID := strings.ReplaceAll(strings.ToLower(provider), " ", "-")
 
 		outputFilePath := filepath.Join(outputPagesDir, providerID, categoryID, strings.ToLower(fmt.Sprintf("%s.md", remediationString)))
