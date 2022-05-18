@@ -101,6 +101,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 
 		categoryID := strings.ReplaceAll(strings.ToLower(filepath.Base(filepath.Dir(file))), " ", "-")
+		aliasCategoryID := strings.ReplaceAll(strings.ToLower(category), " ", "-")
 		providerID := strings.ReplaceAll(strings.ToLower(provider), " ", "-")
 
 		outputFilePath := filepath.Join(outputPagesDir, providerID, categoryID, strings.ToLower(fmt.Sprintf("%s.md", remediationString)))
@@ -113,6 +114,13 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		if err != nil {
 			fmt.Printf("failed to create file %s\n", outputFilePath)
 			continue
+		}
+
+		aliases := []string{
+			fmt.Sprintf("%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
+		}
+		if categoryID != aliasCategoryID {
+			aliases = append(aliases, fmt.Sprintf("%s/%s/%s", providerID, aliasCategoryID, strings.ToLower(remediationString)))
 		}
 
 		var post = map[string]interface{}{
@@ -128,7 +136,8 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 			"MoreInfo":           moreInfo,
 			"Links":              []string{link},
 			"RecommendedActions": recommendedActions,
-			"AliasID":            fmt.Sprintf("%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
+			"AliasIDs":           aliases,
+			"Keyword":            fmt.Sprintf("%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
 		}
 
 		t := template.Must(template.New("defsecPost").Parse(cspmTemplate))
@@ -201,7 +210,8 @@ const cspmTemplate = `---
 title: {{.Title}}
 id: {{.ShortName}}
 aliases: [
-	"/cspm/{{ .AliasID}}"
+	{{range $i, $e := .AliasIDs}}{{if $i}},
+	{{end}}"/cspm/{{ $e }}"{{end}}
 ]
 source: CloudSploit
 icon: {{ .ProviderID }}
@@ -209,7 +219,7 @@ draft: false
 shortName: {{.ShortName}}
 severity: "unknown"
 category: misconfig
-keywords: "{{ .AliasID}}"
+keywords: "{{ .Keyword }}"
 
 avd_page_type: avd_page
 
