@@ -100,11 +100,11 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 `, recommendedActionsRegex.FindStringSubmatch(content)[1])
 		}
 
-		categoryID := strings.ReplaceAll(strings.ToLower(filepath.Base(filepath.Dir(file))), " ", "-")
+		categoryID := strings.ReplaceAll(strings.ToLower(filepath.Base(filepath.Dir(file))), " ", "")
 		aliasCategoryID := strings.ReplaceAll(strings.ToLower(category), " ", "-")
 		providerID := strings.ReplaceAll(strings.ToLower(provider), " ", "-")
 
-		outputFilePath := filepath.Join(outputPagesDir, providerID, categoryID, strings.ToLower(fmt.Sprintf("%s.md", remediationString)))
+		outputFilePath := filepath.Join(outputPagesDir, providerID, aliasCategoryID, strings.ToLower(fmt.Sprintf("%s.md", remediationString)))
 		if err := os.MkdirAll(filepath.Dir(outputFilePath), 0755); err != nil {
 			fmt.Printf("Could not create directory for %s\n", outputFilePath)
 			continue
@@ -117,10 +117,12 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 
 		aliases := []string{
-			fmt.Sprintf("%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
+			fmt.Sprintf("misconfig/%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
+			fmt.Sprintf("cspm/%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
 		}
 		if categoryID != aliasCategoryID {
-			aliases = append(aliases, fmt.Sprintf("%s/%s/%s", providerID, aliasCategoryID, strings.ToLower(remediationString)))
+			aliases = append(aliases, fmt.Sprintf("misconfig/%s/%s/%s", providerID, aliasCategoryID, strings.ToLower(remediationString)))
+			aliases = append(aliases, fmt.Sprintf("cspm/%s/%s/%s", providerID, aliasCategoryID, strings.ToLower(remediationString)))
 		}
 
 		var post = map[string]interface{}{
@@ -131,7 +133,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 			"Remediations":       []string{},
 			"ProviderID":         providerID,
 			"ProviderName":       util.Nicify(strings.Title(provider)),
-			"CategoryID":         categoryID,
+			"CategoryID":         aliasCategoryID,
 			"ServiceName":        category,
 			"MoreInfo":           moreInfo,
 			"Links":              []string{link},
@@ -147,7 +149,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 
 		misConfigurationMenu.AddNode(providerID, provider, outputPagesDir, "", []string{},
 			[]menu.BreadCrumb{}, providerID, true)
-		misConfigurationMenu.AddNode(categoryID, category, filepath.Join(outputPagesDir, providerID),
+		misConfigurationMenu.AddNode(aliasCategoryID, category, filepath.Join(outputPagesDir, providerID),
 			providerID, []string{},
 			[]menu.BreadCrumb{{Name: util.Nicify(strings.Title(provider)), Url: fmt.Sprintf("/misconfig/%s", providerID)}}, providerID, false)
 
@@ -211,7 +213,7 @@ title: {{.Title}}
 id: {{.ShortName}}
 aliases: [
 	{{range $i, $e := .AliasIDs}}{{if $i}},
-	{{end}}"/cspm/{{ $e }}"{{end}}
+	{{end}}"/{{ $e }}"{{end}}
 ]
 source: CloudSploit
 icon: {{ .ProviderID }}

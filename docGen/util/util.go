@@ -17,6 +17,7 @@ var categoryRemap = map[string]string{
 	"appservice":            "App Service",
 	"repos":                 "Repositories",
 	"apigateway":            "API Gateway",
+	"codebuild":             "Code Build",
 }
 
 var acronyms = []string{

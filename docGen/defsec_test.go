@@ -21,8 +21,9 @@ func TestLoadsAsExpected(t *testing.T) {
         content, err := os.ReadFile(fmt.Sprintf("%s/aws/codebuild/%s.md", tempDir, id))
         require.NoError(t, err)
 
-        expected, err := os.ReadFile(fmt.Sprintf("../goldens/defsec/expected/%s.md", id))
-        require.NoError(t, err)
+	for _, id := range ids {
+		content, err := os.ReadFile(fmt.Sprintf("%s/aws/code-build/%s.md", tempDir, id))
+		require.NoError(t, err)
 
         assert.Equal(t, string(expected), string(content))
     }

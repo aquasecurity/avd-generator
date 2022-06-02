@@ -120,10 +120,21 @@ func (m *menu) generateBranchFiles() error {
 			return err
 		}
 
+		aliasID := strings.ReplaceAll(branch.id, "-", "")
+
 		pageType := ""
 		if branch.topLevel {
 			pageType = "toplevel_page"
 		}
+
+		aliases := []string{
+			fmt.Sprintf("cspm/%s/%s", branch.parentID, branch.id),
+		}
+		if branch.id != aliasID {
+			aliases = append(aliases, fmt.Sprintf("cspm/%s/%s", branch.parentID, aliasID))
+			aliases = append(aliases, fmt.Sprintf("misconfig/%s/%s", branch.parentID, aliasID))
+		}
+
 		t := template.Must(template.New("service").Parse(branchTemplate))
 		if err := t.Execute(branchFile, map[string]interface{}{
 			"RootMenu":     m.rootMenu,
@@ -135,6 +146,7 @@ func (m *menu) generateBranchFiles() error {
 			"Icon":         branch.icon,
 			"Heading":      headingMap[branch.parentID],
 			"PageType":     pageType,
+			"AliasIDs":     aliases,
 		}); err != nil {
 			return err
 		}
@@ -158,6 +170,7 @@ func (m *menu) generateTopLevelFile() error {
 		if topLevel.topLevel {
 			pageType = "toplevel_page"
 		}
+
 		t := template.Must(template.New("provider").Parse(topLevelTemplate))
 		if err := t.Execute(providerFile, map[string]interface{}{
 			"RootMenu":     m.rootMenu,
@@ -236,7 +249,8 @@ title: {{ .Name }}
 heading: {{ .Heading }}
 {{ if eq .RootMenu "misconfig" }}
 aliases: [
-	"/cspm/{{.ParentID}}/{{.BranchID}}"
+	{{range $i, $e := .AliasIDs}}{{if $i}},
+	{{end}}"/{{ $e }}"{{end}}
 ]
 {{ end }}
 icon: {{ .Icon }}
