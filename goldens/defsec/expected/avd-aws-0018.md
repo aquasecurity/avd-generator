@@ -2,7 +2,7 @@
 title: Enable Encryption
 id: AVD-AWS-0018
 
-aliases: [	
+aliases: [
 	"/misconfig/avd-aws-0018"
 ]
 
@@ -11,7 +11,7 @@ source: Trivy
 icon: aws
 draft: false
 shortName: Enable Encryption
-severity: ""
+severity: "high"
 category: misconfig
 keywords: "AVD-AWS-0018"
 
