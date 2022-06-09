@@ -10,10 +10,10 @@ jobs:
     #    runs-on: ubuntu-20.04
     runs-on: macos-latest
     steps:
-      - name: Set up Go 1.17
+      - name: Set up Go 1.18
         uses: actions/setup-go@v1
         with:
-          go-version: 1.17
+          go-version: 1.18
         id: go
 
       - name: Setup Hugo
@@ -30,13 +30,6 @@ jobs:
           repository: aquasecurity/avd
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo
-
-      - name: Checkout private appshield-repo
-        uses: actions/checkout@v2
-        with:
-          repository: aquasecurity/appshield
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          path: avd-repo/appshield-repo
 
       - name: Checkout public vuln-list-repo
         uses: actions/checkout@v2
