@@ -83,8 +83,7 @@ jobs:
       - name: Checkout private chain-bench-repo
         uses: actions/checkout@v2
         with:
-          repository: argonsecurity/chain-bench
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: aquasecurity/chain-bench
           path: avd-repo/chain-bench-repo
 
       - name: Build generator
