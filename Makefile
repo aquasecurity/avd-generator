@@ -12,7 +12,7 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
 	git clone git@github.com:aquasecurity/kube-hunter.git avd-repo/kube-hunter-repo
 	git clone git@github.com:aquasecurity/kube-bench.git avd-repo/kube-bench-repo
-	git clone git@github.com:argonsecurity/chain-bench.git avd-repo/chain-bench-repo
+	git clone git@github.com:aquasecurity/chain-bench.git avd-repo/chain-bench-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 	git clone git@github.com:aquasecurity/tracee.git avd-repo/tracee-repo
 	git clone git@github.com:aquasecurity/defsec.git avd-repo/defsec-repo
