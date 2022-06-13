@@ -84,6 +84,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: aquasecurity/chain-bench
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
           path: avd-repo/chain-bench-repo
 
       - name: Build generator
