@@ -121,7 +121,6 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 			fmt.Sprintf("cspm/%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
 		}
 		if categoryID != aliasCategoryID {
-			aliases = append(aliases, fmt.Sprintf("misconfig/%s/%s/%s", providerID, aliasCategoryID, strings.ToLower(remediationString)))
 			aliases = append(aliases, fmt.Sprintf("cspm/%s/%s/%s", providerID, aliasCategoryID, strings.ToLower(remediationString)))
 		}
 
