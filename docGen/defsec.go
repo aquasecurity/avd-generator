@@ -74,15 +74,19 @@ func generateDefsecPages(remediationDir, contentDir string) {
 			[]menu.BreadCrumb{}, topLevelID, true)
 		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID),
 			topLevelID, []string{},
-			[]menu.BreadCrumb{{Name: util.Nicify(strings.Title(providerName)), Url: fmt.Sprintf("/misconfig/%s", topLevelID)}}, topLevelID, false)
+			[]menu.BreadCrumb{
+				{
+					Name: util.Nicify(strings.Title(providerName)), Url: fmt.Sprintf("/misconfig/%s", topLevelID),
+				},
+			}, topLevelID, false)
 	}
 }
 
 func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, contentDir string, docsFile string, menuParent string) error {
 
-	providerPath := strings.ToLower(rule.Rule().Provider.ConstName())
-	servicePath := strings.ToLower(strings.ReplaceAll(menuParent, " ", "-"))
-	ruleIDPath := strings.ToLower(rule.Rule().AVDID)
+	providerPath := strings.ToLower(rule.Provider.ConstName())
+	servicePath := strings.ToLower(menuParent)
+	ruleIDPath := strings.ToLower(rule.AVDID)
 
 	outputFilePath := strings.ReplaceAll(filepath.Join(contentDir, providerPath, servicePath, strings.ToLower(fmt.Sprintf("%s.md", ruleIDPath))), " ", "-")
 	if err := os.MkdirAll(filepath.Dir(outputFilePath), 0777); err != nil {
@@ -180,7 +184,7 @@ aliases: [
 {{ if .AliasID}}    "/cspm/{{ .AliasID}}",
 {{ end }}{{ if .LegacyID }}  "/misconfig/{{ .Provider }}/{{ .LegacyID_Lowered }} ",
 {{ end }}	"/misconfig/{{ .AVDID_Lowered }}",
-"/misconfig/{{ .Provider }}/{{ .Service }}/{{ .AVDID_Lowered }}",
+       "/misconfig/{{ .Provider }}/{{ .Service }}/{{ .AVDID_Lowered }}",
 ]
 
 source: {{ .Source }}

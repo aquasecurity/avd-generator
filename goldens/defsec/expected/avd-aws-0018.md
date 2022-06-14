@@ -2,9 +2,10 @@
 title: Enable Encryption
 id: AVD-AWS-0018
 
-aliases: [	
+
+aliases: [
 	"/misconfig/avd-aws-0018",
-  "/misconfig/aws/codebuild/avd-aws-0018",
+       "/misconfig/aws/codebuild/avd-aws-0018",
 ]
 
 source: Trivy
@@ -19,8 +20,8 @@ keywords: "AVD-AWS-0018"
 breadcrumbs: 
   - name: AWS
     path: /misconfig/aws
-  - name: Code Build
-    path: /misconfig/aws/code-build
+  - name: Codebuild
+    path: /misconfig/aws/codebuild
 
 avd_page_type: avd_page
 
