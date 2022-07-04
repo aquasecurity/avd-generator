@@ -60,10 +60,37 @@ jQuery(document).ready(function ($) {
     headings.forEach(function(heading){
       if(heading.id){
         var a = document.createElement('a');
-        a.innerHTML = '&nbsp;<i class="fa fa-link"></i>';
         a.href = '#'+heading.id;
+		a.onclick = function(evt) {
+			event.preventDefault();
+			var loc = evt.currentTarget.getAttribute('href');
+			var locPath = document.location.origin + document.location.pathname + loc;
+			if (navigator.clipboard && window.isSecureContext) {
+				navigator.clipboard.writeText(locPath);
+			} else {
+				copy(locPath);
+			}
+		};
+
+		a.innerHTML = '&nbsp;<i class="fa fa-link"></i>';
         heading.appendChild(a);
       }
     });
 
 });
+
+
+function copy(location) {
+// text area method
+let textArea = document.createElement("textarea");
+textArea.value = location;
+// make the textarea out of viewport
+textArea.style.position = "fixed";
+textArea.style.left = "-999999px";
+textArea.style.top = "-999999px";
+document.body.appendChild(textArea);
+textArea.focus();
+textArea.select();
+	document.execCommand('copy');
+	textArea.remove();
+  }
