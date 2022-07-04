@@ -49,12 +49,21 @@ jQuery(document).ready(function ($) {
 	} //if breakpoint
 
 	//scrollmagic ends
-
 	$('[data-toggle="tooltip"]').each(function () {
 		tooltip_title = $(this).data('title');
 		$(this).tooltip({ title: tooltip_title });
 	});
 
 
+	// add link to h3 and h4 headings
+    var headings = document.querySelectorAll('h3, h4');
+    headings.forEach(function(heading){
+      if(heading.id){
+        var a = document.createElement('a');
+        a.innerHTML = '&nbsp;<i class="fa fa-link"></i>';
+        a.href = '#'+heading.id;
+        heading.appendChild(a);
+      }
+    });
 
 });
