@@ -161,9 +161,6 @@ func TestVulnerabilityPostToMarkdown(t *testing.T) {
 			},
 			expectedOutput: `---
 title: "CVE-2020-11932"
-aliases: [
-	"/nvd/cve-2020-11932"
-]
 
 shortName: ""
 date: 2020-05-13 12:01:15 +0000
@@ -259,9 +256,6 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 		bar content`,
 			expectedOutput: `---
 title: "CVE-2020-1234"
-aliases: [
-	"/nvd/cve-2020-1234"
-]
 
 shortName: "foo cwe info name"
 date: 2020-01-08 12:19:15 +0000

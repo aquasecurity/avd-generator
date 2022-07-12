@@ -503,9 +503,6 @@ func GetCustomContentFromMarkdown(fileName string) string {
 
 const vulnerabilityPostTemplate = `---
 title: "{{.Title}}"
-aliases: [
-	"/nvd/{{ lower .Title}}"
-]
 
 shortName: "{{.Vulnerability.CWEInfo.Name}}"
 date: {{.Date}}
