@@ -128,8 +128,10 @@ github.com/apparentlymart/go-dump v0.0.0-20180507223929-23540a00eaa3/go.mod h1:o
 github.com/apparentlymart/go-textseg v1.0.0/go.mod h1:z96Txxhf3xSFMPmb5X/1W05FF/Nj9VFpLOpjS5yuumk=
 github.com/apparentlymart/go-textseg/v13 v13.0.0 h1:Y+KvPE1NYz0xl601PVImeQfFyEy6iT90AvPUL1NNfNw=
 github.com/apparentlymart/go-textseg/v13 v13.0.0/go.mod h1:ZK2fH7c4NqDTLtiYLvIkEghdlcqw7yxLeM89kiTRPUo=
-github.com/aquasecurity/defsec v0.68.6 h1:SjjvdQXyC+L1+hg2RAJHKHc+JiuFEKa6cwQYJw1n4VU=
-github.com/aquasecurity/defsec v0.68.6/go.mod h1:m59o8MPMXFbMgulxFOvFRW8tVg4gcnqZ9Gi3uvd/6zg=
+github.com/aquasecurity/defsec v0.68.9 h1:VFp6fqeTsL2qgjk7eT5Y4cNXECpw9Y884vKZ4oR+68w=
+github.com/aquasecurity/defsec v0.68.9/go.mod h1:NdjAkq2LAbsu3sFHbWfA+DDR5BxiajELQAMUrfJ6PFg=
+github.com/aquasecurity/tracee v0.9.14 h1:WpeFH8FZFMGJbHgJ4HzbfT19k5X4LK3nlCjdk6/R7Ow=
+github.com/aquasecurity/tracee v0.9.14/go.mod h1:PhwQpVGvJn01UXG/XwZ33U3il2iF/S59yVQkB4UvDDo=
 github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.4/go.mod h1:C6aED/3HEi4aKSyjtCBWC//7EDXVlV/cQAdDgSbF1eM=
 github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5 h1:wqqD2xzSZ6Zgm8qfBortGV4R3qyz0+rsNhaPd1NR6rU=
 github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5/go.mod h1:C6aED/3HEi4aKSyjtCBWC//7EDXVlV/cQAdDgSbF1eM=
@@ -699,8 +701,8 @@ github.com/kylelemons/godebug v1.1.0 h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0
 github.com/kylelemons/godebug v1.1.0/go.mod h1:9/0rRGxNHcop5bhtWyNeEfOS8JIWk580+fNqagV/RAw=
 github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b h1:ozQQA/k08pNmaav0AxE/EYzN4jvzvhD2idtcHcSAOSA=
 github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b/go.mod h1:thNruaSwydMhkQ8dXzapABF9Sc1Tz08ZBcDdgott9RA=
-github.com/liamg/iamgo v0.0.6 h1:VUzOnf39c7QYQfXzOr9upTmIqikmipqu1AvSIoX36PQ=
-github.com/liamg/iamgo v0.0.6/go.mod h1:Kk6ZxBF/GQqG9nnaUjIi6jf+WXNpeOTyhwc6gnguaZQ=
+github.com/liamg/iamgo v0.0.9 h1:tADGm3xVotyRJmuKKaH4+zsBn7LOcvgdpuF3WsSKW3c=
+github.com/liamg/iamgo v0.0.9/go.mod h1:Kk6ZxBF/GQqG9nnaUjIi6jf+WXNpeOTyhwc6gnguaZQ=
 github.com/liamg/jfather v0.0.7 h1:Xf78zS263yfT+xr2VSo6+kyAy4ROlCacRqJG7s5jt4k=
 github.com/liamg/jfather v0.0.7/go.mod h1:xXBGiBoiZ6tmHhfy5Jzw8sugzajwYdi6VosIpB3/cPM=
 github.com/liamg/memoryfs v1.4.2 h1:6T9Oy1DdWxGCzIY89p0Ykeya5H0uAlzG2xHEGcvo6MU=

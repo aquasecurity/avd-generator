@@ -108,13 +108,15 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go", "aio", "common", "mapper"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go"}) {
+		if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go", "aio", "common", "mapper"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go", ".disabled"}) {
 			continue
 		}
 
 		b, _ := ioutil.ReadFile(file)
 		r := strings.NewReplacer(`"`, ``)
 		rTitle := strings.NewReplacer("/", "-", `"`, "")
+
+		log.Printf("Processing Tracee go signature file: %s", file)
 
 		// TODO: Check for split string length before indexing to avoid panic
 		sig := Signature{
