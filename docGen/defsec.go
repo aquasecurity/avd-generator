@@ -180,10 +180,10 @@ title: {{.ShortName}}
 id: {{ .AVDID }}
 
 aliases: [
-{{ if .AliasID}}    "/cspm/{{ .AliasID}}",
+{{ if .AliasID}}  "/cspm/{{ .AliasID}}",
 {{ end }}{{ if .LegacyID }}  "/misconfig/{{ .Provider }}/{{ .LegacyID_Lowered }}",
 {{ end }}	"/misconfig/{{ .AVDID_Lowered }}",
-       "/misconfig/{{ .Provider }}/{{ .Service }}/{{ .AVDID_Lowered }}",
+  "/misconfig/{{ .Provider }}/{{ .Service }}/{{ .AVDID_Lowered }}",
 ]
 
 source: {{ .Source }}

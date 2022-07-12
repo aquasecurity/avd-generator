@@ -46,11 +46,11 @@ func main() {
 	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
 	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig")
-	generateVulnPages()
+	// generateVulnPages()
 
-	for _, year := range Years {
-		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
-	}
+	// for _, year := range Years {
+	// 	generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+	// }
 
 	createTopLevelMenus()
 }
