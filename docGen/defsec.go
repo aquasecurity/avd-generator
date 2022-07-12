@@ -178,11 +178,11 @@ Follow the appropriate remediation steps below to resolve the issue.
 const defsecTemplate string = `---
 title: {{.ShortName}}
 id: {{ .AVDID }}
-
+P
 
 aliases: [
 {{ if .AliasID}}    "/cspm/{{ .AliasID}}",
-{{ end }}{{ if .LegacyID }}  "/misconfig/{{ .Provider }}/{{ .LegacyID_Lowered }} ",
+{{ end }}{{ if .LegacyID }}  "/misconfig/{{ .Provider }}/{{ .LegacyID_Lowered }}",
 {{ end }}	"/misconfig/{{ .AVDID_Lowered }}",
        "/misconfig/{{ .Provider }}/{{ .Service }}/{{ .AVDID_Lowered }}",
 ]
