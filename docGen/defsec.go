@@ -178,7 +178,6 @@ Follow the appropriate remediation steps below to resolve the issue.
 const defsecTemplate string = `---
 title: {{.ShortName}}
 id: {{ .AVDID }}
-P
 
 aliases: [
 {{ if .AliasID}}    "/cspm/{{ .AliasID}}",

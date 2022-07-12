@@ -1,7 +1,6 @@
 ---
 title: Enable Encryption
 id: AVD-AWS-0018
-P
 
 aliases: [
 	"/misconfig/avd-aws-0018",
