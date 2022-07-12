@@ -14,7 +14,7 @@ import (
 
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
-	"github.com/aquasecurity/tracee/tracee-rules/signatures/rego/regosig"
+	"github.com/aquasecurity/tracee/pkg/rules/regosig"
 )
 
 var (
@@ -178,9 +178,11 @@ func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if findSubstringsInString(file, []string{"helpers", "example", ".go", "aio"}) { // TODO: This should be handled by a filter in GetAllFilesOfKind
+		if findSubstringsInString(file, []string{"helpers", "example", ".go", "aio", "disabled"}) { // TODO: This should be handled by a filter in GetAllFilesOfKind
 			continue
 		}
+
+		log.Printf("Processing Tracee rego signature file: %s", file)
 
 		b, err := ioutil.ReadFile(file)
 		if err != nil {

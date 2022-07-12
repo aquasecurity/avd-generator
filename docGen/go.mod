@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/aquasecurity/defsec v0.68.9
-	github.com/aquasecurity/tracee/tracee-rules v0.6.5
+	github.com/aquasecurity/tracee v0.7.0
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
 	github.com/stretchr/testify v1.7.2
@@ -23,8 +23,7 @@ require (
 	github.com/agnivade/levenshtein v1.0.1 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/aquasecurity/tracee v0.9.14 // indirect
-	github.com/aquasecurity/tracee/tracee-ebpf/external v0.6.5 // indirect
+	github.com/aquasecurity/tracee/types v0.0.0-20220228102148-dffb469aed94 // indirect
 	github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dlclark/regexp2 v1.4.0 // indirect
