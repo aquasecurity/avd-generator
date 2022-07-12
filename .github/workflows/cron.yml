@@ -110,8 +110,11 @@ jobs:
       - name: Commit files to AVD repo
         run: |
           cd avd-repo
+          rm -rf .git
+          git init
+          git remote add origin github.com/aquasecurity/avd.git
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
           git commit -m "Add changes"
-          git push
+          git push -u force origin master --allow-unrelated-histories
