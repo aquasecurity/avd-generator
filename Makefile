@@ -62,6 +62,7 @@ simple-host:
 
 copy-assets:
 	cp -R avd-repo/remediations-repo/resources avd-repo/docs/resources
+	touch avd-repo/docs/.nojekyll
 
 build-all-no-clone: md-clean md-build sync-all md-generate hugo-generate copy-assets nginx-restart
 	echo "Build Done, navigate to http://localhost:9011/ to browse"

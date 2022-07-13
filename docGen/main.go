@@ -34,7 +34,7 @@ func (realClock) Now(format ...string) string {
 
 func main() {
 
-	firstYear := 2010
+	firstYear := 1999
 
 	for y := firstYear; y <= time.Now().Year(); y++ {
 		Years = append(Years, strconv.Itoa(y))
