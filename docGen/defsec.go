@@ -120,11 +120,16 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 
 	sort.Strings(remediationKeys)
 
+	var legacy string
+	if rule.Aliases != nil && len(rule.Aliases) > 0 {
+		legacy = rule.Aliases[0]
+	}
+
 	post := map[string]interface{}{
 		"AVDID":            rule.AVDID,
 		"AVDID_Lowered":    strings.ToLower(rule.AVDID),
-		"LegacyID":         rule.LegacyID,
-		"LegacyID_Lowered": strings.ToLower(rule.LegacyID),
+		"LegacyID":         legacy,
+		"LegacyID_Lowered": strings.ToLower(legacy),
 		"ShortName":        rule.ShortCodeDisplayName(),
 		"Provider":         strings.ToLower(rule.Provider.ConstName()),
 		"ProviderName":     rule.Provider.DisplayName(),
