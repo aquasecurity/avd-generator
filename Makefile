@@ -2,7 +2,7 @@ md-update-deps:
 	cd docGen && go get github.com/aquasecurity/defsec \
 	&& go mod tidy
 
-md-build: md-update-deps
+md-build: 
 	cd docGen && go build -o ../generator .
 
 md-test:
