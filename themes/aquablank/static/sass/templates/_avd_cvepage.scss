@@ -1,14 +1,16 @@
 /* avd cve page */
 .page-avd-cve {}
+
 .avdcve_wrap {}
 
 .vulnerability_content_wrap {
-	
+
 	.vulnerability_content_title {
 		font-size: 1.625rem;
 		font-weight: $weight-normal;
 		margin-bottom: 30px;
 	}
+
 	.vulnerability_content {
 
 		ul {
@@ -35,8 +37,8 @@
 					&:after {
 						content: "";
 						display: inline-block;
-						width: 0; 
-						height: 0; 
+						width: 0;
+						height: 0;
 						border-left: 6px solid transparent;
 						border-right: 6px solid transparent;
 						border-top: 6px solid $aq-royal-blue;
@@ -51,7 +53,7 @@
 		h3.with_icon {
 
 			//padding-left: 10px;
-			
+
 			&:before {
 				content: '';
 				display: inline-block;
@@ -65,21 +67,35 @@
 			}
 
 
-			&.weakness:before {background-image: url('../images/title_weakness.png');}
-			&.affected_software:before {background-image: url('../images/title_affected_software.png');}
-			&.mitigations:before {background-image: url('../images/title_mitigations.png');}
-			&.related_patterns:before {background-image: url('../images/title_related_patterns.png');}
-			&.references:before {background-image: url('../images/title_references.png');}
-			
+			&.weakness:before {
+				background-image: url('../images/title_weakness.png');
+			}
+
+			&.affected_software:before {
+				background-image: url('../images/title_affected_software.png');
+			}
+
+			&.mitigations:before {
+				background-image: url('../images/title_mitigations.png');
+			}
+
+			&.related_patterns:before {
+				background-image: url('../images/title_related_patterns.png');
+			}
+
+			&.references:before {
+				background-image: url('../images/title_references.png');
+			}
+
 		}
-		
+
 	}
 
 }
 
 
 .avdcve_sidebar_wrap {
-	
+
 	.avd_sidebar_widget {
 		margin-bottom: $gap;
 		color: $aq-dark-abyss;
@@ -88,7 +104,7 @@
 
 
 		.sidebar_widget_title {
-			background-color: rgba($aq-ocean-ash,0.2);
+			background-color: rgba($aq-ocean-ash, 0.2);
 			color: $aq-dark-abyss;
 			font-size: 0.875rem;
 			font-weight: $weight-bold;
@@ -103,13 +119,19 @@
 			width: 100%;
 			background-color: transparent;
 
-			th {padding-left: 20px;}
+			th {
+				padding-left: 20px;
+			}
+
 			td {
 				padding-left: 20px;
+
 				a {
 					word-break: break-word;
 				}
-			} //td
+			}
+
+			//td
 		}
 
 		&.avdcve_scores_wrap {
@@ -123,12 +145,12 @@
 
 .avdcve_scores_cvss {
 
-	background-color: rgba($aq-ocean-ash,0.1);
+	background-color: rgba($aq-ocean-ash, 0.1);
 	position: relative;
 	padding: 30px 20px 10px 20px;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
-	
+
 	&:before {
 		content: '';
 		position: absolute;
@@ -170,7 +192,7 @@
 				border-radius: 50%;
 				position: absolute;
 				//@include neo_box_light-bg;
-				box-shadow: 0px 7px 13.02px 0.98px rgba(255, 255, 255, 0.45),4.95px 4.95px 13.02px 0.98px rgba(0, 0, 0, 0.09);
+				box-shadow: 0px 7px 13.02px 0.98px rgba(255, 255, 255, 0.45), 4.95px 4.95px 13.02px 0.98px rgba(0, 0, 0, 0.09);
 				background-color: #ffffff;
 				top: -90px;
 				left: 0px; //160/2-80/2
@@ -184,12 +206,15 @@
 						line-height: 2.5rem;
 						font-weight: $weight-bold;
 					}
+
 					.score_label {
 						font-size: 1.3rem;
 						line-height: 1.5rem;
 						font-weight: $weight-bold;
 					}
-				} //score_gague_content
+				}
+
+				//score_gague_content
 
 				.score_bg {
 					position: absolute;
@@ -201,11 +226,17 @@
 					background-position: 0px 0px;
 					background-image: url('../images/gague_sprite.png');
 					pointer-events: none;
-				} //score_bg
+				}
 
-			} //large_score_gauge
+				//score_bg
 
-		} //large_score_gauge_wrap
+			}
+
+			//large_score_gauge
+
+		}
+
+		//large_score_gauge_wrap
 
 		.large_score_source {
 			font-size: 0.875rem;
@@ -226,13 +257,17 @@
 					margin-bottom: -2px;
 				}
 			}
-		} //large_score_source
+		}
 
-	
-	} //large_score_wrap
-	
-	
-	
+		//large_score_source
+
+
+	}
+
+	//large_score_wrap
+
+
+
 	.large_score_vector {
 		font-size: 1rem;
 		opacity: 0.8;
@@ -249,39 +284,83 @@
 	&.cvss_1,
 	&.cvss_2,
 	&.cvss_3 {
-		background-color: rgba($aq-avd-yellow,0.1);
-		&:before {background-color: $aq-avd-yellow;}
+		background-color: rgba($aq-avd-yellow, 0.1);
+
+		&:before {
+			background-color: $aq-avd-yellow;
+		}
 	}
 
 	&.cvss_4,
 	&.cvss_5,
 	&.cvss_6 {
-		background-color: rgba($aq-avd-orange,0.1);
-		&:before {background-color: $aq-avd-orange;}
+		background-color: rgba($aq-avd-orange, 0.1);
+
+		&:before {
+			background-color: $aq-avd-orange;
+		}
 	}
 
 	&.cvss_7,
 	&.cvss_8,
 	&.cvss_9,
 	&.cvss_10 {
-		background-color: rgba($aq-avd-red,0.1);
-		&:before {background-color: $aq-avd-red;}
-		.score_gague_content {color: $aq-avd-red;}
+		background-color: rgba($aq-avd-red, 0.1);
+
+		&:before {
+			background-color: $aq-avd-red;
+		}
+
+		.score_gague_content {
+			color: $aq-avd-red;
+		}
 	}
 
-	
-	&.cvss_0 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px 0px;}
-	&.cvss_1 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -160px;}
-	&.cvss_2 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -320px;}
-	&.cvss_3 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -480px;}
-	&.cvss_4 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -640px;}
-	&.cvss_5 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -800px;}
-	&.cvss_6 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -960px;}
-	&.cvss_7 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -1120px;}
-	&.cvss_8 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -1280px;}
-	&.cvss_9 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -1440px;}
-	&.cvss_10 .large_score_gauge_wrap .large_score_gague .score_bg {background-position: 0px -1600px;}
-	
+
+	&.cvss_0 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px 0px;
+	}
+
+	&.cvss_1 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -160px;
+	}
+
+	&.cvss_2 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -320px;
+	}
+
+	&.cvss_3 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -480px;
+	}
+
+	&.cvss_4 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -640px;
+	}
+
+	&.cvss_5 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -800px;
+	}
+
+	&.cvss_6 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -960px;
+	}
+
+	&.cvss_7 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -1120px;
+	}
+
+	&.cvss_8 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -1280px;
+	}
+
+	&.cvss_9 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -1440px;
+	}
+
+	&.cvss_10 .large_score_gauge_wrap .large_score_gague .score_bg {
+		background-position: 0px -1600px;
+	}
+
 
 
 	.score_bar {
@@ -295,7 +374,9 @@
 			top: 13px;
 		}
 	}
-} //avdcve_scores_cvss
+}
+
+//avdcve_scores_cvss
 
 
 
@@ -303,8 +384,10 @@
 
 	//border-bottom-right-radius: 4px;
 	//border-bottom-left-radius: 4px;
-	
-} //avdcve_scores_additional
+
+}
+
+//avdcve_scores_additional
 
 
 .score_bar {
@@ -321,6 +404,7 @@
 		width: 30%;
 		font-size: 0.875rem;
 		font-weight: $weight-bold;
+		vertical-align: top;
 	}
 
 	.score_bar_image {
@@ -334,6 +418,7 @@
 		margin-right: 10px;
 		margin-bottom: -5px;
 	}
+
 	.score_bar_label {
 		display: inline-block;
 		position: relative;
@@ -341,6 +426,7 @@
 		font-size: 0.875rem;
 		font-weight: $weight-bold;
 	}
+
 	.score_bar_vector {
 		display: block;
 		position: absolute;
@@ -361,23 +447,59 @@
 			&:hover {
 				opacity: 1;
 			}
-		} //with_tooltip
+		}
+
+		//with_tooltip
 
 		&.without_tooltip {
 			opacity: 0.15;
 		}
 	}
 
-	&.score_bar_0 .score_bar_image {background-position: 0px 0px;}
-	&.score_bar_1 .score_bar_image {background-position: 0px -20px;}
-	&.score_bar_2 .score_bar_image {background-position: 0px -40px;}
-	&.score_bar_3 .score_bar_image {background-position: 0px -60px;}
-	&.score_bar_4 .score_bar_image {background-position: 0px -80px;}
-	&.score_bar_5 .score_bar_image {background-position: 0px -100px;}
-	&.score_bar_6 .score_bar_image {background-position: 0px -120px;}
-	&.score_bar_7 .score_bar_image {background-position: 0px -140px;}
-	&.score_bar_8 .score_bar_image {background-position: 0px -160px;}
-	&.score_bar_9 .score_bar_image {background-position: 0px -180px;}
-	&.score_bar_10 .score_bar_image {background-position: 0px -200px;}
+	&.score_bar_0 .score_bar_image {
+		background-position: 0px 0px;
+	}
 
-} //score_bar
+	&.score_bar_1 .score_bar_image {
+		background-position: 0px -20px;
+	}
+
+	&.score_bar_2 .score_bar_image {
+		background-position: 0px -40px;
+	}
+
+	&.score_bar_3 .score_bar_image {
+		background-position: 0px -60px;
+	}
+
+	&.score_bar_4 .score_bar_image {
+		background-position: 0px -80px;
+	}
+
+	&.score_bar_5 .score_bar_image {
+		background-position: 0px -100px;
+	}
+
+	&.score_bar_6 .score_bar_image {
+		background-position: 0px -120px;
+	}
+
+	&.score_bar_7 .score_bar_image {
+		background-position: 0px -140px;
+	}
+
+	&.score_bar_8 .score_bar_image {
+		background-position: 0px -160px;
+	}
+
+	&.score_bar_9 .score_bar_image {
+		background-position: 0px -180px;
+	}
+
+	&.score_bar_10 .score_bar_image {
+		background-position: 0px -200px;
+	}
+
+}
+
+//score_bar
