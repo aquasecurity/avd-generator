@@ -3,9 +3,13 @@ title: Enable Encryption
 id: AVD-AWS-0018
 
 aliases: [
-	"/misconfig/avd-aws-0018",
+  "/misconfig/avd-aws-0018",
   "/misconfig/aws/codebuild/avd-aws-0018",
+  "cspm/aws/codebuild/project-artifacts-encrypted",
+  "cspm/aws/code-build/project-artifacts-encrypted",
+
 ]
+
 
 source: Trivy
 

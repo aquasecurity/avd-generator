@@ -47,7 +47,7 @@
 			<div class="column is-3-desktop is-12-tablet is-12-mobile fadeInUp animationDelay_4">
 				<div class="avdcve_sidebar_wrap">
 					<div class="avd_sidebar_widget avdcve_scores_wrap">
-						<div class="avdcve_scores_cvss cvss_{{ if eq .Params.severity "critical"}}10{{end}}{{ if eq
+						<div class="avdcve_scores_cvss cvss_{{ if eq .Params.severity " critical"}}10{{end}}{{ if eq
 							.Params.severity "high" }}7{{end}}{{ if eq .Params.severity "medium" }}5{{end}}{{ if eq
 							.Params.severity "low" }}3{{end}}{{ if eq .Params.severity "info" }}1{{end}}{{ if eq
 							.Params.severity "unknown" }}0{{end}}">
@@ -80,6 +80,18 @@
 								<div class="score_bar_label">{{ .Params.cspmID }}</div>
 							</div>
 							{{ end }}
+
+							{{ if .Params.frameworks}}
+							<div class="score_bar">
+								<div class="score_bar_name">Frameworks</div>
+								<div class="score_bar_label">{{ range $framework := .Params.frameworks }}<p>{{
+										$framework }}</p>
+									{{ end }}
+								</div>
+							</div>
+
+							{{ end }}
+
 							<div class="score_bar">
 								<div class="score_bar_name">ID</div>
 								<div class="score_bar_label">{{ .Params.id }}</div>
@@ -124,7 +136,7 @@
 					</div><!-- vulnerability_content -->
 				</div><!-- vulnerability_content_wrap -->
 			</div><!-- column is-8 -->
-			
+
 
 		</div>
 	</div><!-- columns -->

@@ -10,6 +10,8 @@ import (
 	"strings"
 	"text/template"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
 )
@@ -50,6 +52,13 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		b, err := ioutil.ReadFile(file)
 		if err != nil {
 			fmt.Printf("Error reading %s\n", file)
+			continue
+		}
+
+		id := strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
+		if slices.Contains(cloudsploitIgnores, id) {
+			fmt.Printf("Skipping '%s' because it is in the cloudsploit ignore list: \n", id)
+
 			continue
 		}
 
@@ -117,7 +126,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 
 		aliases := []string{
-			fmt.Sprintf("misconfig/%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
+			// fmt.Sprintf("misconfig/%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
 			fmt.Sprintf("cspm/%s/%s/%s", providerID, categoryID, strings.ToLower(remediationString)),
 		}
 		if categoryID != aliasCategoryID {
@@ -158,7 +167,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 
 func hasDefsecOverride(remediationFile string) bool {
 	if avdID := getAVDIDByCSPMPath(remediationFile); avdID != "" {
-		log.Printf("Override detected: '%s' has been overridden by '%s'\n", remediationFile, avdID)
+		// log.Printf("Override detected: '%s' has been overridden by '%s'\n", remediationFile, avdID)
 		return true
 	}
 	return false

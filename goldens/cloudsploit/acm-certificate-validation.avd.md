@@ -2,7 +2,6 @@
 title: ACM Certificate Validation
 id: acm-certificate-validation
 aliases: [
-	"/misconfig/aws/acm/acm-certificate-validation",
 	"/cspm/aws/acm/acm-certificate-validation"
 ]
 source: CloudSploit

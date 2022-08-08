@@ -14,13 +14,14 @@ import (
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
 
+	"github.com/aquasecurity/defsec/pkg/framework"
 	_ "github.com/aquasecurity/defsec/pkg/rego"
 	"github.com/aquasecurity/defsec/pkg/rules"
 	"github.com/aquasecurity/defsec/pkg/scan"
 )
 
 func generateDefsecPages(remediationDir, contentDir string) {
-	for _, r := range rules.GetRegistered() {
+	for _, r := range rules.GetRegistered(framework.ALL) {
 
 		avdId := r.Rule().AVDID
 		topLevelID := strings.ToLower(r.Rule().Provider.ConstName())
@@ -125,6 +126,17 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 		legacy = rule.Aliases[0]
 	}
 
+	var frameworks []string
+
+	if rule.Frameworks != nil && len(rule.Frameworks) > 0 {
+		for framework, _ := range rule.Frameworks {
+			if framework == "default" {
+				continue
+			}
+			frameworks = append(frameworks, strings.ToUpper(strings.ReplaceAll(string(framework), "-", " ")))
+		}
+	}
+
 	post := map[string]interface{}{
 		"AVDID":            rule.AVDID,
 		"AVDID_Lowered":    strings.ToLower(rule.AVDID),
@@ -140,7 +152,12 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 		"Severity":         strings.ToLower(string(rule.Severity)),
 		"ParentID":         strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
 		"Remediations":     remediationKeys,
+		"Frameworks":       frameworks,
 		"Source":           "Trivy",
+	}
+
+	if aliases := getCSPMAliasesForAVDID(rule.AVDID); len(aliases) > 0 {
+		post["AdditionalAliases"] = aliases
 	}
 
 	if remediationPath, ok := crossOver[rule.AVDID]; ok {
@@ -185,12 +202,19 @@ title: {{.ShortName}}
 id: {{ .AVDID }}
 
 aliases: [
-{{ if .AliasID}}  "/cspm/{{ .AliasID}}",
+{{ if .AliasID}}	"/cspm/{{ .AliasID}}",
 {{ end }}{{ if .LegacyID }}  "/misconfig/{{ .Provider }}/{{ .LegacyID_Lowered }}",
 {{ end }}{{ if .LegacyID }}  "/misconfig/{{ .LegacyID_Lowered }}",
-{{ end }}	"/misconfig/{{ .AVDID_Lowered }}",
+{{ end }}  "/misconfig/{{ .AVDID_Lowered }}",
   "/misconfig/{{ .Provider }}/{{ .Service }}/{{ .AVDID_Lowered }}",
+{{ if .AdditionalAliases }}{{ range $alias := .AdditionalAliases }}  "{{ $alias }}",
+{{end}}{{end}}
 ]
+{{ if .Frameworks }}
+frameworks: [
+{{ range .Frameworks }}  "{{ . }}",
+{{ end }}]
+{{ end }}
 
 source: {{ .Source }}
 {{ if .CSPMID}}
