@@ -404,7 +404,7 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	if err != nil {
 		return VulnerabilityPost{}, err
 	}
-	vuln.Description = strings.NewReplacer(`"`, ``, `\`, ``).Replace(string(v.GetStringBytes("cve", "description", "description_data", "0", "value")))
+	vuln.Description = strings.NewReplacer(`"`, ``, `\`, ``, `'`, ``).Replace(string(v.GetStringBytes("cve", "description", "description_data", "0", "value")))
 	vuln.ID = string(v.GetStringBytes("cve", "CVE_data_meta", "ID"))
 	vuln.CWEID = string(v.GetStringBytes("cve", "problemtype", "problemtype_data", "0", "description", "0", "value"))
 	vuln.CVSS = CVSS{

@@ -108,6 +108,61 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 				},
 			},
 		},
+		{
+			fileName: "../goldens/json/nvd/CVE-2022-2788.json",
+			expectedBlogPost: VulnerabilityPost{
+				Layout: "vulnerability",
+				Title:  "CVE-2022-2788",
+				By:     "NVD",
+				Date:   "2020-01-08 12:19:15 +0000",
+				Vulnerability: Vulnerability{
+					ID:          "CVE-2022-2788",
+					CWEID:       "CWE-269",
+					Description: "Emerson Electrics Proficy Machine Edition Version 9.80 and prior is vulnerable to CWE-29 Path Traversal: ..Filename, also known as a ZipSlip attack, through an upload procedure which enables attackers to implant a malicious .BLZ file on the PLC. The file can transfer through the engineering station onto Windows in a way that executes the malicious code.",
+					References: []string{
+						"https://source.android.com/security/bulletin/2020-01-01",
+					},
+					CVSS: CVSS{
+						V2Vector: "AV:L/AC:L/Au:N/C:C/I:C/A:C",
+						V2Score:  7.2,
+						V3Vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+						V3Score:  7.8,
+					},
+					Dates: Dates{
+						Published: "2020-01-08 12:19:15 +0000",
+						Modified:  "2020-01-14 12:21:52 +0000",
+					},
+					NVDSeverityV2: "HIGH",
+					NVDSeverityV3: "HIGH",
+					AffectedSoftware: []AffectedSoftware{
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "8.0",
+							EndVersion:   "8.0",
+						},
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "8.1",
+							EndVersion:   "8.1",
+						},
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "9.0",
+							EndVersion:   "9.0",
+						},
+						{
+							Name:         "android",
+							Vendor:       "google",
+							StartVersion: "10.0",
+							EndVersion:   "10.0",
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, tc := range testCases {
 		actual, err := parseVulnerabilityJSONFile(tc.fileName)
