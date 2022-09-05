@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 )
 
 type RelatedAttackPattern struct {
@@ -75,6 +76,8 @@ func AddCWEInformation(bp *VulnerabilityPost, cweDir string) error {
 	if err := json.Unmarshal(b, &w); err != nil {
 		return err
 	}
+
+	bp.ShortName = strings.ReplaceAll(w.Name, "\\", "\\\\")
 
 	bp.Vulnerability.CWEInfo = w
 	return nil
