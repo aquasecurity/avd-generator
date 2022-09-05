@@ -88,6 +88,7 @@ type Vulnerability struct {
 type VulnerabilityPost struct {
 	Layout        string
 	Title         string
+	ShortName     string
 	By            string
 	Date          string
 	Vulnerability Vulnerability
@@ -507,7 +508,7 @@ aliases: [
 	"/nvd/{{ lower .Title}}"
 ]
 
-shortName: "{{.Vulnerability.CWEInfo.Name}}"
+shortName: "{{.ShortName}}"
 date: {{.Date}}
 category: vulnerabilities
 draft: false
@@ -517,7 +518,7 @@ avd_page_type: nvd_page
 date_published: {{.Vulnerability.Dates.Published}}
 date_modified: {{.Vulnerability.Dates.Modified}}
 
-header_subtitle: "{{.Vulnerability.CWEInfo.Name}}"
+header_subtitle: "{{.ShortName}}"
 
 sidebar_additional_info_nvd: "https://nvd.nist.gov/vuln/detail/{{.Title}}"
 sidebar_additional_info_cwe: "https://cwe.mitre.org/data/definitions/{{.Vulnerability.CWEID | replace "CWE-"}}.html"

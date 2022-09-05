@@ -272,10 +272,11 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 		{
 			name: "happy path with custom content",
 			inputBlogPost: VulnerabilityPost{
-				Layout: "vulnerability",
-				Title:  "CVE-2020-1234",
-				By:     "baz source",
-				Date:   "2020-01-08 12:19:15 +0000",
+				Layout:    "vulnerability",
+				Title:     "CVE-2020-1234",
+				ShortName: "foo cwe info name",
+				By:        "baz source",
+				Date:      "2020-01-08 12:19:15 +0000",
 				Vulnerability: Vulnerability{
 					ID:    "CVE-2020-1234",
 					CWEID: "CWE-269",
