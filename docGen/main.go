@@ -42,6 +42,7 @@ func main() {
 
 	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "content/compliance")
 	generateKubeBenchPages("kube-bench-repo/cfg", "content/compliance")
+	generateDefsecComplianceSpecPages("defsec-repo/internal/specs/compliance", "content/compliance")
 	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
 	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
 	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
