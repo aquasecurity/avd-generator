@@ -43,6 +43,21 @@ type DefsecComplianceSpec struct {
 	} `yaml:"spec"`
 }
 
+var funcMap = template.FuncMap{
+	"toLower":    strings.ToLower,
+	"toUpper":    strings.ToUpper,
+	"toTitle":    strings.Title,
+	"getSummary": getSummary,
+}
+
+var registeredRulesSummaries = make(map[string]string)
+
+func init() {
+	for _, rule := range rules.GetRegistered(framework.ALL) {
+		registeredRulesSummaries[rule.Rule().AVDID] = rule.Rule().Summary
+	}
+}
+
 func generateDefsecComplianceSpecPages(specDir, contentDir string) {
 
 	if err := filepath.Walk(specDir, func(path string, info fs.FileInfo, err error) error {
@@ -82,10 +97,13 @@ func generateDefsecComplianceSpecPages(specDir, contentDir string) {
 
 }
 
-var funcMap = template.FuncMap{
-	"toLower": strings.ToLower,
-	"toUpper": strings.ToUpper,
-	"toTitle": strings.Title,
+func getSummary(id string) string {
+	if summary, ok := registeredRulesSummaries[id]; ok {
+		return fmt.Sprintf(" - %s", summary)
+	}
+
+	return ""
+
 }
 
 func generateDefsecComplianceSpecPage(spec DefsecComplianceSpec, contentDir string) error {
@@ -376,7 +394,7 @@ avd_page_type: avd_page
 {{ .Description }}
 
 **Control Checks**
-{{ range .Checks }}* [{{ .ID }}](https://avd.aquasec.com/misconfig/{{ .ID | toLower }}){{ end }}
+{{ range .Checks }}* [{{ .ID }}](https://avd.aquasec.com/misconfig/{{ .ID | toLower }}){{ .ID | getSummary }}{{ end }}
 
 
 `
