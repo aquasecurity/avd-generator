@@ -107,11 +107,14 @@ jobs:
           cd avd-repo
           curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents --data @docs/searchindex.json
 
-      - name: Commit files to AVD repo
+      - name: Install AWS CLI
         run: |
-          cd avd-repo
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git commit -m "Add changes"
-          git push origin master
+          pip install awscli
+        
+      - name: Sync changes to the bucket
+        run: |
+          aws s3 sync --recursive --no-progress avd-repo/docs s3://aqua-avd-prod
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AVD_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AVD_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
