@@ -132,8 +132,8 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 				Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
 				Description: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Description)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
 				Severity:    getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(Severity)\"\:\s*\d`).FindString(string(b)), ":")[1]))),
-				MitreAttack: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(MITRE ATT&CK)\"\:\s*\"(...)*`).FindString(string(b)), `: "`)[1])),
-				GoCode:      string(b),
+				// MitreAttack: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(MITRE ATT&CK)\"\:\s*\"(...)*`).FindString(string(b)), `: "`)[1])),
+				GoCode: string(b),
 			}
 
 			topLevelIDName := strings.TrimSpace(strings.Split(sig.MitreAttack, ":")[0])
