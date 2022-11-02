@@ -1,10 +1,10 @@
-name: Build Website
+name: Build Website - Staging
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Website
+    name: Build Website - Staging
     #    runs-on: ubuntu-20.04
     runs-on: macos-latest
     steps:
@@ -117,6 +117,6 @@ jobs:
         run: |
           aws s3 sync --recursive --no-progress avd-repo/docs s3://aqua-avd-staging
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AVD_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AVD_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AVD_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AVD_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
