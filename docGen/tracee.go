@@ -125,15 +125,22 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 
 			log.Printf("Processing Tracee go signature file: %s", file)
 
-			// TODO: Check for split string length before indexing to avoid panic
+			mitreAttack := r.Replace(getRegexMatch(`\"(MITRE ATT&CK)\"\:\s*\"(.*)\"`, string(b)))
+			category := r.Replace(getRegexMatch(`\"(Category)\"\:\s*\"(.*)\"`, string(b)))
+			technique := r.Replace(getRegexMatch(`\"(Technique)\"\:\s*\"(.*)\"`, string(b)))
+
+			if mitreAttack == "" {
+				mitreAttack = fmt.Sprintf("%s: %s", strings.Title(strings.ReplaceAll(category, "-", " ")), technique)
+			}
+
 			sig := Signature{
-				ID:          r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(ID)\:\s*\"(.*?)"`).FindString(string(b)), ":")[1])),
-				Version:     r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Version)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
-				Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
-				Description: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Description)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
-				Severity:    getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(Severity)\"\:\s*\d`).FindString(string(b)), ":")[1]))),
-				// MitreAttack: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(MITRE ATT&CK)\"\:\s*\"(...)*`).FindString(string(b)), `: "`)[1])),
-				GoCode: string(b),
+				ID:          r.Replace(getRegexMatch(`(ID)\:\s*\"(.*?)"`, string(b))),
+				Version:     r.Replace(getRegexMatch(`(Version)\:\s*\"(.*?)\"`, string(b))),
+				Name:        rTitle.Replace(getRegexMatch(`(Name)\:\s*\"(.*?)\"`, string(b))),
+				Description: r.Replace(getRegexMatch(`(Description)\:\s*\"(.*?)\"`, string(b))),
+				Severity:    getSeverityName(getRegexMatch(`\"(Severity)\"\:\s*\d`, string(b))),
+				MitreAttack: mitreAttack,
+				GoCode:      string(b),
 			}
 
 			topLevelIDName := strings.TrimSpace(strings.Split(sig.MitreAttack, ":")[0])
@@ -168,8 +175,20 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 			}
 		}(file)
 	}
-
 	return nil
+}
+
+func getRegexMatch(regex, str string) string {
+	result := regexp.MustCompile(regex).FindString(str)
+	if result == "" {
+		return ""
+	}
+	parts := strings.SplitN(result, ":", 2)
+	if len(parts) < 2 {
+		return ""
+	}
+
+	return strings.TrimSpace(parts[1])
 }
 
 func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
