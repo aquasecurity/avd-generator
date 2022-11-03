@@ -115,7 +115,7 @@ jobs:
 
       - name: Sync changes to the bucket
         run: |
-          aws s3 sync --no-progress avd-repo/docs s3://aqua-avd-atg1
+          aws s3 sync --no-progress avd-repo/docs s3://aqua-avd-stg1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AVD_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AVD_SECRET_ACCESS_KEY }}
