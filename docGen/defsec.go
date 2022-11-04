@@ -13,12 +13,132 @@ import (
 
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
+	"gopkg.in/yaml.v3"
 
 	"github.com/aquasecurity/defsec/pkg/framework"
 	_ "github.com/aquasecurity/defsec/pkg/rego"
 	"github.com/aquasecurity/defsec/pkg/rules"
 	"github.com/aquasecurity/defsec/pkg/scan"
 )
+
+type DefsecComplianceSpec struct {
+	Spec struct {
+		ID               string   `yaml:"id"`
+		Title            string   `yaml:"title"`
+		Description      string   `yaml:"description"`
+		RelatedResources []string `yaml:"relatedResources"`
+		Version          string   `yaml:"version"`
+		Category         string   `yaml:"category"`
+		CategoryTitle    string
+		Controls         []struct {
+			Name        string `yaml:"name"`
+			Description string `yaml:"description"`
+			ID          string `yaml:"id"`
+			Checks      []struct {
+				ID string `yaml:"id"`
+			} `yaml:"checks"`
+			Severity      string `yaml:"severity"`
+			DefaultStatus string `yaml:"defaultStatus,omitempty"`
+		} `yaml:"controls"`
+	} `yaml:"spec"`
+}
+
+var funcMap = template.FuncMap{
+	"toLower":    strings.ToLower,
+	"toUpper":    strings.ToUpper,
+	"toTitle":    strings.Title,
+	"getSummary": getSummary,
+}
+
+var registeredRulesSummaries = make(map[string]string)
+
+func init() {
+	for _, rule := range rules.GetRegistered(framework.ALL) {
+		registeredRulesSummaries[rule.Rule().AVDID] = rule.Rule().Summary
+	}
+}
+
+func generateDefsecComplianceSpecPages(specDir, contentDir string) {
+
+	if err := filepath.Walk(specDir, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !strings.HasSuffix(info.Name(), ".yaml") && !strings.HasSuffix(info.Name(), ".yml") {
+			return nil
+		}
+
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+
+		var spec DefsecComplianceSpec
+
+		if err := yaml.Unmarshal(content, &spec); err != nil {
+			return err
+		}
+
+		if spec.Spec.Category == "" {
+			spec.Spec.Category = "kubernetes"
+		}
+		outputDir := filepath.Join(contentDir, spec.Spec.Category)
+		title := fmt.Sprintf("%s-%s", strings.ToUpper(spec.Spec.Title), spec.Spec.Version)
+		complianceMenu.AddNode(title, fmt.Sprintf("%s-%s", spec.Spec.Title, spec.Spec.Version), filepath.Join(outputDir),
+			spec.Spec.Category, []string{},
+			[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"},
+				{Name: strings.Title(spec.Spec.Category), Url: fmt.Sprintf("/compliance/%s", spec.Spec.Category)}}, spec.Spec.Category, true)
+
+		return generateDefsecComplianceSpecPage(spec, contentDir)
+
+	}); err != nil {
+		fmt.Println(err)
+	}
+
+}
+
+func getSummary(id string) string {
+	if summary, ok := registeredRulesSummaries[id]; ok {
+		return fmt.Sprintf(" - %s", summary)
+	}
+
+	return ""
+
+}
+
+func generateDefsecComplianceSpecPage(spec DefsecComplianceSpec, contentDir string) error {
+
+	for _, control := range spec.Spec.Controls {
+
+		outputFilePath := filepath.Join(contentDir, spec.Spec.Category, fmt.Sprintf("%s-%s", spec.Spec.Title, spec.Spec.Version), fmt.Sprintf("%s.md", control.ID))
+
+		if err := os.MkdirAll(filepath.Dir(outputFilePath), 0755); err != nil {
+			return err
+		}
+
+		outputFile, err := os.Create(outputFilePath)
+		if err != nil {
+			return err
+		}
+
+		t := template.Must(template.New("defsecPost").Funcs(funcMap).Parse(defsecComplianceTemplate))
+		if err := t.Execute(outputFile, map[string]interface{}{
+			"ID":          spec.Spec.ID,
+			"Version":     spec.Spec.Version,
+			"Severity":    control.Severity,
+			"Title":       spec.Spec.Title,
+			"Description": control.Description,
+			"Category":    spec.Spec.Category,
+			"Name":        control.Name,
+			"ControlID":   control.ID,
+			"Checks":      control.Checks,
+		}); err != nil {
+			return err
+		}
+
+	}
+	return nil
+}
 
 func generateDefsecPages(remediationDir, contentDir string) {
 	for _, r := range rules.GetRegistered(framework.ALL) {
@@ -243,5 +363,38 @@ remediations:
 ### {{ .Summary }}
 
 {{.Body}}
+
+`
+
+const defsecComplianceTemplate string = `---
+title: {{ .Name }}
+id: {{ .ControlID }}
+source: Trivy
+icon: {{ .Category }}
+draft: false
+shortName: {{.Title}}
+severity: {{ .Severity | toLower}}
+version: {{ .Version}}
+category: compliance
+
+breadcrumbs: 
+  - name: Compliance
+    path: /compliance
+  - name: {{ .Category | toTitle }}
+    path: /compliance/{{ .Category }}
+  - name: {{ .Title | toUpper }}-{{ .Version }}
+    path: /compliance/{{ .Category }}/{{ .Title }}-{{ .Version}}
+
+
+avd_page_type: avd_page
+
+---
+
+### {{ .ControlID }} - {{ .Name }}
+{{ .Description }}
+
+**Control Checks**
+{{ range .Checks }}* [{{ .ID }}](https://avd.aquasec.com/misconfig/{{ .ID | toLower }}){{ .ID | getSummary }}{{ end }}
+
 
 `

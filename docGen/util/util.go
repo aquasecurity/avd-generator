@@ -70,6 +70,7 @@ var acronyms = []string{
 	"mq",
 	"msk",
 	"mwaa",
+	"nsa",
 	"oss",
 	"oke",
 	"qldb",
