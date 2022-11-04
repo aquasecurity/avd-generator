@@ -40,13 +40,14 @@ func main() {
 		Years = append(Years, strconv.Itoa(y))
 	}
 
-	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "content/compliance")
-	generateKubeBenchPages("kube-bench-repo/cfg", "content/compliance")
-	generateDefsecComplianceSpecPages("defsec-repo/internal/specs/compliance", "content/compliance")
-	generateKubeHunterPages("kube-hunter-repo/docs/_kb", "content/misconfig/kubernetes")
-	generateCloudSploitPages("cloudsploit-repo/plugins", "content/misconfig", "remediations-repo/en")
-	generateTraceePages("tracee-repo/signatures", "content/tracee", realClock{})
-	generateDefsecPages("defsec-repo/avd_docs", "content/misconfig")
+	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
+	generateKubeBenchPages("../avd-repo/kube-bench-repo/cfg", "../avd-repo/content/compliance")
+  generateDefsecComplianceSpecPages("../avd-repo/defsec-repo/internal/specs/compliance", "../avd-repo/content/compliance")
+	generateKubeHunterPages("../avd-repo/kube-hunter-repo/docs/_kb", "../avd-repo/content/misconfig/kubernetes")
+	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
+	generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{})
+	generateDefsecPages("../avd-repo/defsec-repo/avd_docs", "../avd-repo/content/misconfig")
+
 	generateVulnPages()
 
 	for _, year := range Years {

@@ -108,60 +108,87 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 	}
 
 	for _, file := range files {
-		if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go", "aio", "common", "mapper"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go", ".disabled"}) {
-			continue
-		}
+		func(file string) {
+			defer func() {
+				if err := recover(); err != nil {
+					log.Printf("failed to process file %s: %v", file, err)
+				}
+			}()
 
-		b, _ := ioutil.ReadFile(file)
-		r := strings.NewReplacer(`"`, ``)
-		rTitle := strings.NewReplacer("/", "-", `"`, "")
+			if findSubstringsInString(file, []string{"helpers.go", "example.go", "export.go", "traceerego.go", "aio", "common", "mapper"}) || findSuffixSubstringInString(file, []string{".md", ".rego", "test.go", ".disabled"}) {
+				return
+			}
 
-		log.Printf("Processing Tracee go signature file: %s", file)
+			b, _ := ioutil.ReadFile(file)
+			r := strings.NewReplacer(`"`, ``)
+			rTitle := strings.NewReplacer("/", "-", `"`, "")
 
-		// TODO: Check for split string length before indexing to avoid panic
-		sig := Signature{
-			ID:          r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(ID)\:\s*\"(.*?)"`).FindString(string(b)), ":")[1])),
-			Version:     r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Version)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
-			Name:        rTitle.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Name)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
-			Description: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`(Description)\:\s*\"(.*?)\"`).FindString(string(b)), ":")[1])),
-			Severity:    getSeverityName(r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(Severity)\"\:\s*\d`).FindString(string(b)), ":")[1]))),
-			MitreAttack: r.Replace(strings.TrimSpace(strings.Split(regexp.MustCompile(`\"(MITRE ATT&CK)\"\:\s*\"(...)*`).FindString(string(b)), `: "`)[1])),
-			GoCode:      string(b),
-		}
+			log.Printf("Processing Tracee go signature file: %s", file)
 
-		topLevelIDName := strings.TrimSpace(strings.Split(sig.MitreAttack, ":")[0])
-		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
-		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.BreadCrumb{
-			{Name: "Runtime Security", Url: "/tracee"},
-		}, "runtime", true)
-		parentID := topLevelID
+			mitreAttack := r.Replace(getRegexMatch(`\"(MITRE ATT&CK)\"\:\s*\"(.*)\"`, string(b)))
+			category := r.Replace(getRegexMatch(`\"(Category)\"\:\s*\"(.*)\"`, string(b)))
+			technique := r.Replace(getRegexMatch(`\"(Technique)\"\:\s*\"(.*)\"`, string(b)))
 
-		outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(sig.ID, "-", "")))
-		if err := os.MkdirAll(filepath.Dir(outputFilepath), 0755); err != nil {
-			log.Printf("error occurred while creating target directory: %s, %s", filepath.Dir(outputFilepath), err)
-		}
+			if mitreAttack == "" {
+				mitreAttack = fmt.Sprintf("%s: %s", strings.Title(strings.ReplaceAll(category, "-", " ")), technique)
+			}
 
-		f, err := os.Create(outputFilepath)
-		if err != nil {
-			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, sig.ID)
-			continue
-		}
+			sig := Signature{
+				ID:          r.Replace(getRegexMatch(`(ID)\:\s*\"(.*?)"`, string(b))),
+				Version:     r.Replace(getRegexMatch(`(Version)\:\s*\"(.*?)\"`, string(b))),
+				Name:        rTitle.Replace(getRegexMatch(`(Name)\:\s*\"(.*?)\"`, string(b))),
+				Description: r.Replace(getRegexMatch(`(Description)\:\s*\"(.*?)\"`, string(b))),
+				Severity:    getSeverityName(getRegexMatch(`\"(Severity)\"\:\s*\d`, string(b))),
+				MitreAttack: mitreAttack,
+				GoCode:      string(b),
+			}
 
-		if err = TraceePostToMarkdown(TraceePost{
-			Title:      util.Nicify(strings.Title(strings.ReplaceAll(sig.Name, "-", " "))),
-			TopLevelID: parentID,
-			ParentID:   parentID,
-			ParentName: strings.Title(topLevelIDName),
-			AliasID:    strings.ToLower(strings.ReplaceAll(sig.ID, "-", "")),
-			Date:       clock.Now("2006-01-02"),
-			Signature:  sig,
-		}, f); err != nil {
-			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sig.ID, err)
-			continue
-		}
+			topLevelIDName := strings.TrimSpace(strings.Split(sig.MitreAttack, ":")[0])
+			topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
+			runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "", []string{"runtime"}, []menu.BreadCrumb{
+				{Name: "Runtime Security", Url: "/tracee"},
+			}, "runtime", true)
+			parentID := topLevelID
+
+			outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(sig.ID, "-", "")))
+			if err := os.MkdirAll(filepath.Dir(outputFilepath), 0755); err != nil {
+				log.Printf("error occurred while creating target directory: %s, %s", filepath.Dir(outputFilepath), err)
+			}
+
+			f, err := os.Create(outputFilepath)
+			if err != nil {
+				log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, sig.ID)
+				return
+			}
+
+			if err = TraceePostToMarkdown(TraceePost{
+				Title:      util.Nicify(strings.Title(strings.ReplaceAll(sig.Name, "-", " "))),
+				TopLevelID: parentID,
+				ParentID:   parentID,
+				ParentName: strings.Title(topLevelIDName),
+				AliasID:    strings.ToLower(strings.ReplaceAll(sig.ID, "-", "")),
+				Date:       clock.Now("2006-01-02"),
+				Signature:  sig,
+			}, f); err != nil {
+				log.Printf("unable to write tracee signature markdown: %s.md, err: %s", sig.ID, err)
+				return
+			}
+		}(file)
+	}
+	return nil
+}
+
+func getRegexMatch(regex, str string) string {
+	result := regexp.MustCompile(regex).FindString(str)
+	if result == "" {
+		return ""
+	}
+	parts := strings.SplitN(result, ":", 2)
+	if len(parts) < 2 {
+		return ""
 	}
 
-	return nil
+	return strings.TrimSpace(parts[1])
 }
 
 func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
