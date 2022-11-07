@@ -23,11 +23,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Checkout private avd-repo
-        uses: actions/checkout@v2
-        with:
-          repository: aquasecurity/avd
-          token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo
+        run:  mkdir avd-repo
 
       - name: Checkout public vuln-list-repo
         uses: actions/checkout@v2
@@ -99,23 +95,12 @@ jobs:
 
       - name: Copy assets
         run: make copy-assets
-
-      - name: Commit files to AVD repo
-        run: |
-          cd avd-repo
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git commit -m "Add changes"
-          git push origin master
-
+        
       - name: Install AWS CLI
-        run: |
-          pip3 install awscli
+        run: pip3 install awscli
 
       - name: Sync changes to the bucket
-        run: |
-          aws s3 sync --no-progress --only-show-errors --size-only avd-repo/docs s3://aqua-avd-stg1
+        run: aws s3 sync --no-progress --only-show-errors --size-only avd-repo/docs s3://aqua-avd-stg1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AVD_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AVD_SECRET_ACCESS_KEY }}
