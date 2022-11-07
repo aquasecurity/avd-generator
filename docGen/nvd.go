@@ -129,7 +129,7 @@ func generateVulnPages() {
 			Heading: year,
 			Icon:    "cve",
 			Summary: fmt.Sprintf("CVE's for %s", year),
-			URL:     year,
+			URL:     fmt.Sprintf("/nvd/%s/", year),
 		},
 		)
 	}
