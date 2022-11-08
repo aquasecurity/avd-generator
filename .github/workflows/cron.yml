@@ -23,13 +23,9 @@ jobs:
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
-
-      - name: Checkout private avd-repo
-        uses: actions/checkout@v2
-        with:
-          repository: aquasecurity/avd
-          token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo
+      
+      - name: Create build folder
+        run:  mkdir avd-repo
 
       - name: Checkout public vuln-list-repo
         uses: actions/checkout@v2
@@ -108,13 +104,11 @@ jobs:
           curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents --data @docs/searchindex.json
 
       - name: Install AWS CLI
-        run: |
-          pip install awscli
-        
+        run: pip3 install awscli
+
       - name: Sync changes to the bucket
-        run: |
-          aws s3 sync --recursive --no-progress avd-repo/docs s3://aqua-avd-prod
+        run: aws s3 sync --no-progress --only-show-errors --size-only avd-repo/docs ${{ secrets.PROD_AVD_BUCKET }}
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AVD_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AVD_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AVD_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AVD_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
