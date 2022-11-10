@@ -205,6 +205,12 @@ The process has the following workflow
 
 4. Updates the index in the Meilesearch appliance
 
-5. Commits new docs to `githubc.om/aquasecurity/avd`
+5. Syncs the output to the s3 buckets
+   
+   a. Credentials for S3 write access for both staging and prod are in Secrets and provided by SRE team
+   
+   b. Bucket names are also secrets, also provide by SRE team
+   
+   c. Uses an S3 Sync with `--size-only` to limit the amount of traffic
 
 At this point, gh-pages actions kick in and generate the site.
