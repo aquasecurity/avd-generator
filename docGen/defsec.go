@@ -179,7 +179,7 @@ func generateDefsecPages(remediationDir, contentDir string) {
 
 		if _, ok := remediations["Management Console"]; !ok {
 			if remediationFile, ok := crossOver[avdId]; ok {
-				if remediationContent := getRemediationBodyWhereExists(fmt.Sprintf("remediations-repo/%s", remediationFile)); remediationContent != "" {
+				if remediationContent := getRemediationBodyWhereExists(fmt.Sprintf("remediations-repo/%s", remediationFile), true); remediationContent != "" {
 					log.Printf("Can use %s for %s\n", remediationFile, avdId)
 					remediations["Management Console"] = remediationContent
 				}
