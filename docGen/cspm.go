@@ -99,7 +99,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		remediationFile := strings.ReplaceAll(filepath.Join(
 			remediationsDir, strings.ToLower(provider), strings.ToLower(category),
 			fmt.Sprintf("%s.md", remediationString)), " ", "")
-		remediationBody := getRemediationBodyWhereExists(remediationFile)
+		remediationBody := getRemediationBodyWhereExists(remediationFile, false)
 		if remediationBody != "" {
 			recommendedActions = remediationBody
 		} else if recommendedActionsRegex.MatchString(content) {
@@ -174,7 +174,7 @@ func hasDefsecOverride(remediationFile string) bool {
 
 }
 
-func getRemediationBodyWhereExists(remediationFile string) string {
+func getRemediationBodyWhereExists(remediationFile string, fromDefsec bool) string {
 
 	remediationFile, err := filepath.Abs(remediationFile)
 	if err != nil {
@@ -203,15 +203,21 @@ func getRemediationBodyWhereExists(remediationFile string) string {
 
 	imageConverterRegex := regexp.MustCompile(`</br>\s?<img src=\"(.*)"\s?/>`)
 	strippedContent = imageConverterRegex.ReplaceAllString(strippedContent, "![Step]($1)\n")
-	body := `### Recommended Actions
+	body := ""
 
-Follow the appropriate remediation steps below to resolve the issue.
-`
-	body += "{{< tabs groupId=\"remediation\" >}}\n"
-	body += "{{% tab name=\"Management Console\" %}}\n"
-	body += strippedContent
-	body += "{{% /tab %}}\n"
-	body += "{{< /tabs >}}\n"
+	if !fromDefsec {
+		body += `### Recommended Actions `
+		body += "\n Follow the appropriate remediation steps below to resolve the issue."
+		body += "{{< tabs groupId=\"remediation\" >}}\n"
+		body += "{{% tab name=\"Management Console\" %}}\n"
+	}
+
+	body += "\n" + strippedContent
+
+	if !fromDefsec {
+		body += "{{% /tab %}}\n"
+		body += "{{< /tabs >}}\n"
+	}
 
 	return body
 }
