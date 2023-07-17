@@ -13,16 +13,14 @@
 					<div class="page_pretitle with_icon {{ .Params.icon }} fadeInUp">
 						{{ if .Params.breadcrumbs }}
 						{{ $page := . }}
-						{{ range $breadcrumb := .Params.breadcrumbs }}
-						{{ if ne $breadcrumb.name $page.Title }}
-						<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
-						{{ end }}
-						{{ end }}
-						{{ .Title }}
-						{{ else }}
-						{{ .Title }}
+							{{ range $breadcrumb := .Params.breadcrumbs }}
+							{{ if ne $breadcrumb.name $page.Title }}
+							<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
+							{{ end }}
+							{{ end }}
 						{{ end }}
 					</div>
+					<h1 class="title page_title fadeInUp animationDelay_1">{{ .Title }}</h1>
 				</div><!-- header_title_wrap -->
 			</div><!-- container -->
 		</div><!-- hero-body -->
