@@ -29,9 +29,9 @@
 			{{ .Scratch.Set "seo_description" .Title | safeHTML }}
 			{{ .Scratch.Add "seo_description" " Vulnerability, " }}
 			{{ .Scratch.Add "seo_description" "Severity " }}
-			{{ .Scratch.Set "seo_description" .Params.cvss_nvd_v3_score | safeHTML }}
+			{{ .Scratch.Add "seo_description" .Params.cvss_nvd_v3_score | safeHTML }}
 			{{ .Scratch.Add "seo_description" " " }}
-			{{ .Scratch.Set "seo_description" .Params.cvss_nvd_v3_severity | safeHTML }}
+			{{ .Scratch.Add "seo_description" .Params.cvss_nvd_v3_severity | safeHTML }}
 			{{ .Scratch.Add "seo_description" ", " }}
 			{{ .Scratch.Add "seo_description" (.Params.header_subtitle | safeHTML | truncate 110) }}
 		{{ else }}
