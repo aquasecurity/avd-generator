@@ -13,11 +13,14 @@
 						<a href="{{ $breadcrumb.path }}">{{ $breadcrumb.name }}</a> >
 						{{ end }}
 						{{ end }}
-						{{ .Title }}
-						{{ else }}
-						{{ .Params.heading }}
 						{{ end }}
 					</div>
+
+					{{ if .Params.breadcrumbs }}
+						<h1 class="title page_title fadeInUp animationDelay_1">{{ .Title }}</h1>
+					{{ else }}
+						<h1 class="title page_title fadeInUp animationDelay_1">{{ .Params.heading }}</h1>
+					{{ end }}
 
 				</div><!-- header_title_wrap -->
 			</div><!-- container -->
