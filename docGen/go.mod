@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/aquasecurity/defsec v0.86.0
+	github.com/aquasecurity/defsec v0.91.1
 	github.com/aquasecurity/tracee v0.7.0
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
