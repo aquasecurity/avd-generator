@@ -19,7 +19,7 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/chain-bench.git avd-repo/chain-bench-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 	git clone git@github.com:aquasecurity/tracee.git avd-repo/tracee-repo
-	git clone git@github.com:aquasecurity/defsec.git avd-repo/defsec-repo
+	git clone git@github.com:aquasecurity/trivy-policies.git avd-repo/trivy-policies-repo
 	git clone git@github.com:aquasecurity/cloudsploit.git avd-repo/cloudsploit-repo
 
 update-all-repos:
@@ -29,7 +29,7 @@ update-all-repos:
 	cd avd-repo/chain-bench-repo && git pull
 	cd avd-repo/remediations-repo && git pull
 	cd avd-repo/tracee-repo && git pull
-	cd avd-repo/defsec-repo && git pull
+	cd avd-repo/trivy-policies-repo && git pull
 	cd avd-repo/cloudsploit-repo && git pull
 
 sync-all:
