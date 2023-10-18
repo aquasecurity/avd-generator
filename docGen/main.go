@@ -46,7 +46,7 @@ func main() {
 	generateKubeHunterPages("../avd-repo/kube-hunter-repo/docs/_kb", "../avd-repo/content/misconfig/kubernetes")
 	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
 	generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{})
-	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../trivy-policies-repo/content/misconfig")
+	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
 
 	generateVulnPages()
 
