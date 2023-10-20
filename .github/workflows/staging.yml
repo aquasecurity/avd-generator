@@ -60,12 +60,12 @@ jobs:
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/cloudsploit-repo
 
-      - name: Checkout public defsec-repo
+      - name: Checkout public trivy-policies-repo
         uses: actions/checkout@v3
         with:
-          repository: aquasecurity/defsec
+          repository: aquasecurity/trivy-policies
           token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo/defsec-repo
+          path: avd-repo/trivy-policies-repo
 
       - name: Checkout public kube-bench-repo
         uses: actions/checkout@v3
