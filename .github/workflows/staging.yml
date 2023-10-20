@@ -32,6 +32,13 @@ jobs:
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/vuln-list
 
+      - name: Checkout public vuln-list-nvd-repo
+        uses: actions/checkout@v3
+        with:
+          repository: aquasecurity/vuln-list-nvd
+          token: ${{ secrets.ORG_REPO_TOKEN }}
+          path: avd-repo/vuln-list-nvd
+
       - name: Checkout public kube-hunter-repo
         uses: actions/checkout@v3
         with:

@@ -51,7 +51,7 @@ func main() {
 	generateVulnPages()
 
 	for _, year := range Years {
-		generateReservedPages(year, realClock{}, "vuln-list", "content/nvd")
+		generateReservedPages(year, realClock{}, "vuln-list-nvd", "content/nvd")
 	}
 
 	createTopLevelMenus()

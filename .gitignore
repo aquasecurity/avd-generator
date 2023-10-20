@@ -2,6 +2,7 @@ http.access.log
 http.error.log
 generator
 vuln-list
+vuln-list-nvd
 kube-hunter-repo
 .idea
 .DS_Store
