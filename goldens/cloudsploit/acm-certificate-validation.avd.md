@@ -31,11 +31,10 @@ ACM certificates should be configured to use DNS validation.
 
 With DNS validation, ACM will automatically renew certificates before they expire, as long as the DNS CNAME record is in place.
 
-### Recommended Actions
-
-Follow the appropriate remediation steps below to resolve the issue.
-{{< tabs groupId="remediation" >}}
+### Recommended Actions 
+ Follow the appropriate remediation steps below to resolve the issue.{{< tabs groupId="remediation" >}}
 {{% tab name="Management Console" %}}
+
 1. Log into the AWS console and navigate to the ACM service page.![Step](/path/to/some/image.png)
 
 2. Click into each certificate that has been requested. ![Step](/path/to/some/image.png)

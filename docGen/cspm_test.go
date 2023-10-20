@@ -20,5 +20,6 @@ func TestGenerateCloudtSploitPages(t *testing.T) {
 	require.NoError(t, err)
 
 	want, _ := ioutil.ReadFile("../goldens/cloudsploit/acm-certificate-validation.avd.md")
+
 	assert.Equal(t, string(want), string(got))
 }
