@@ -16,9 +16,9 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/aquasecurity/defsec/pkg/framework"
-	_ "github.com/aquasecurity/defsec/pkg/rego"
-	"github.com/aquasecurity/defsec/pkg/rules"
 	"github.com/aquasecurity/defsec/pkg/scan"
+	_ "github.com/aquasecurity/trivy-iac/pkg/rego"
+	"github.com/aquasecurity/trivy-policies/pkg/rules"
 )
 
 type DefsecComplianceSpec struct {
@@ -54,7 +54,7 @@ var registeredRulesSummaries = make(map[string]string)
 
 func init() {
 	for _, rule := range rules.GetRegistered(framework.ALL) {
-		registeredRulesSummaries[rule.Rule().AVDID] = rule.Rule().Summary
+		registeredRulesSummaries[rule.GetRule().AVDID] = rule.GetRule().Summary
 	}
 }
 
@@ -143,13 +143,13 @@ func generateDefsecComplianceSpecPage(spec DefsecComplianceSpec, contentDir stri
 func generateDefsecPages(remediationDir, contentDir string) {
 	for _, r := range rules.GetRegistered(framework.ALL) {
 
-		avdId := r.Rule().AVDID
-		topLevelID := strings.ToLower(r.Rule().Provider.ConstName())
-		branchID := r.Rule().Service
+		avdId := r.GetRule().AVDID
+		topLevelID := strings.ToLower(r.GetRule().Provider.ConstName())
+		branchID := r.GetRule().Service
 		branchID = util.RemapCategory(branchID)
 
 		log.Printf("Getting remediation markdown for %s", avdId)
-		remediationDir := filepath.Join(remediationDir, strings.ToLower(r.Rule().Provider.ConstName()), strings.ReplaceAll(r.Rule().Service, "-", ""), avdId)
+		remediationDir := filepath.Join(remediationDir, strings.ToLower(r.GetRule().Provider.ConstName()), strings.ReplaceAll(r.GetRule().Service, "-", ""), avdId)
 
 		remediations := make(map[string]string)
 		docsFile := filepath.Join(remediationDir, "docs.md")
@@ -186,11 +186,11 @@ func generateDefsecPages(remediationDir, contentDir string) {
 			}
 		}
 
-		if err := generateDefsecCheckPage(r.Rule(), remediations, contentDir, docsFile, branchID); err != nil {
-			log.Printf("an error occurred writing the page for %s. %v", r.Rule().AVDID, err)
+		if err := generateDefsecCheckPage(r.GetRule(), remediations, contentDir, docsFile, branchID); err != nil {
+			log.Printf("an error occurred writing the page for %s. %v", r.GetRule().AVDID, err)
 		}
 
-		providerName := r.Rule().Provider.DisplayName()
+		providerName := r.GetRule().Provider.DisplayName()
 		misConfigurationMenu.AddNode(topLevelID, providerName, contentDir, "", []string{},
 			[]menu.BreadCrumb{}, topLevelID, true)
 		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID),
