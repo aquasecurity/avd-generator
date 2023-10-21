@@ -103,7 +103,7 @@ func generateVulnPages() {
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
-		nvdDir := fmt.Sprintf("vuln-list/nvd/%s/", year)
+		nvdDir := fmt.Sprintf("vuln-list-nvd/feed/%s/", year)
 		cweDir := "vuln-list/cwe"
 
 		go func(year string) {

@@ -8,10 +8,10 @@ jobs:
     #    runs-on: ubuntu-20.04
     runs-on: macos-latest
     steps:
-      - name: Set up Go 1.18
-        uses: actions/setup-go@v3
+      - name: Set up Go 1.20
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.18
+          go-version: '1.20'
         id: go
 
       - name: Setup Hugo
@@ -31,6 +31,13 @@ jobs:
           repository: aquasecurity/vuln-list
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/vuln-list
+
+      - name: Checkout public vuln-list-nvd-repo
+        uses: actions/checkout@v3
+        with:
+          repository: aquasecurity/vuln-list-nvd
+          token: ${{ secrets.ORG_REPO_TOKEN }}
+          path: avd-repo/vuln-list-nvd
 
       - name: Checkout public kube-hunter-repo
         uses: actions/checkout@v3
