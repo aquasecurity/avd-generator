@@ -103,7 +103,7 @@ func generateVulnPages() {
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
-		nvdDir := fmt.Sprintf("vuln-list-nvd/feed/%s/", year)
+		nvdDir := fmt.Sprintf("vuln-list-nvd/api/%s/", year)
 		cweDir := "vuln-list/cwe"
 
 		go func(year string) {
@@ -405,35 +405,45 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	if err != nil {
 		return VulnerabilityPost{}, err
 	}
-	vuln.Description = strings.NewReplacer(`"`, ``, `\`, ``, `'`, ``).Replace(string(v.GetStringBytes("cve", "description", "description_data", "0", "value")))
-	vuln.ID = string(v.GetStringBytes("cve", "CVE_data_meta", "ID"))
-	vuln.CWEID = string(v.GetStringBytes("cve", "problemtype", "problemtype_data", "0", "description", "0", "value"))
-	vuln.CVSS = CVSS{
-		V2Vector: string(v.GetStringBytes("impact", "baseMetricV2", "cvssV2", "vectorString")),
-		V2Score:  v.GetFloat64("impact", "baseMetricV2", "cvssV2", "baseScore"),
-		V3Vector: string(v.GetStringBytes("impact", "baseMetricV3", "cvssV3", "vectorString")),
-		V3Score:  v.GetFloat64("impact", "baseMetricV3", "cvssV3", "baseScore"),
+	vuln.Description = strings.NewReplacer(`"`, ``, `\`, ``, `'`, ``).Replace(string(v.GetStringBytes("descriptions", "0", "value")))
+	vuln.ID = string(v.GetStringBytes("id"))
+	if cwe := string(v.GetStringBytes("weaknesses", "0", "description", "0", "value")); cwe != "NVD-CWE-noinfo" {
+		vuln.CWEID = cwe
 	}
 
-	vuln.NVDSeverityV2 = string(v.GetStringBytes("impact", "baseMetricV2", "severity"))
-	vuln.NVDSeverityV3 = string(v.GetStringBytes("impact", "baseMetricV3", "cvssV3", "baseSeverity"))
+	vuln.CVSS = CVSS{
+		V2Vector: string(v.GetStringBytes("metrics", "cvssMetricV2", "0", "cvssData", "vectorString")),
+		V2Score:  v.GetFloat64("metrics", "cvssMetricV2", "0", "cvssData", "baseScore"),
+		V3Vector: string(v.GetStringBytes("metrics", "cvssMetricV31", "0", "cvssData", "vectorString")),
+		V3Score:  v.GetFloat64("metrics", "cvssMetricV31", "0", "cvssData", "baseScore"),
+	}
+	vuln.NVDSeverityV2 = string(v.GetStringBytes("metrics", "cvssMetricV2", "0", "baseSeverity"))
+	vuln.NVDSeverityV3 = string(v.GetStringBytes("metrics", "cvssMetricV31", "0", "cvssData", "baseSeverity"))
 
-	publishedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("publishedDate")))
-	modifiedDate, _ := time.Parse("2006-01-02T04:05Z", string(v.GetStringBytes("lastModifiedDate")))
+	// `cvssMetricV31` doesn't exist
+	// take CVSS V3 from `cvssMetricV30`
+	if vuln.CVSS.V3Score == 0 {
+		vuln.CVSS.V3Vector = string(v.GetStringBytes("metrics", "cvssMetricV30", "0", "cvssData", "vectorString"))
+		vuln.CVSS.V3Score = v.GetFloat64("metrics", "cvssMetricV30", "0", "cvssData", "baseScore")
+		vuln.NVDSeverityV3 = string(v.GetStringBytes("metrics", "cvssMetricV30", "0", "cvssData", "baseSeverity"))
+	}
+
+	publishedDate, _ := time.Parse("2006-01-02T15:04:05", string(v.GetStringBytes("published")))
+	modifiedDate, _ := time.Parse("2006-01-02T15:04:05", string(v.GetStringBytes("lastModified")))
 	vuln.Dates = Dates{
 		Published: publishedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
 		Modified:  modifiedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
 	}
 
 	var refs []string
-	for _, r := range v.GetArray("cve", "references", "reference_data") {
+	for _, r := range v.GetArray("references") {
 		refs = append(refs, strings.ReplaceAll(r.Get("url").String(), `"`, ``))
 	}
 	vuln.References = refs
 
-	affectedSoftwares := v.GetArray("configurations", "nodes", "0", "cpe_match") // TODO: This logic should be improved to iterate over list of lists
+	affectedSoftwares := v.GetArray("configurations", "0", "nodes", "0", "cpeMatch") // TODO: This logic should be improved to iterate over list of lists
 	for _, as := range affectedSoftwares {
-		uri := string(as.GetStringBytes("cpe23Uri"))
+		uri := string(as.GetStringBytes("criteria"))
 		item, err := cpe.NewItemFromFormattedString(uri)
 		if err != nil {
 			continue
