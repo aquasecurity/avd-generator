@@ -75,3 +75,15 @@ build-all: md-clean md-build md-clone-all sync-all md-generate hugo-generate cop
 
 compile-theme-sass:
 	cd themes/aquablank/static/sass && sass avdblank.scss:../css/avdblank.css && sass avdblank.scss:../css/avdblank.min.css --style compressed
+
+.PHONY: id
+id:
+	cd cmd/new-policy-id-generator && go run -v main.go
+
+.PHONY: misconfig-docs
+misconfig-docs:
+	cd cmd/trivy-policies-generator && go run -v main.go
+
+.PHONY: misconfig-docs-test
+misconfig-docs-test:
+	cd cmd/trivy-policies-generator && go test -v ./...
