@@ -4,6 +4,7 @@ md-update-deps:
 
 md-build:
 	cd cmd/trivy-policies-generator && go run -v main.go
+	cd test && go test -v ./...
 	cd docGen && go build -o ../generator .
 
 md-test:
