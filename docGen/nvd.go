@@ -411,21 +411,26 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 		vuln.CWEID = cwe
 	}
 
-	vuln.CVSS = CVSS{
-		V2Vector: string(v.GetStringBytes("metrics", "cvssMetricV2", "0", "cvssData", "vectorString")),
-		V2Score:  v.GetFloat64("metrics", "cvssMetricV2", "0", "cvssData", "baseScore"),
-		V3Vector: string(v.GetStringBytes("metrics", "cvssMetricV31", "0", "cvssData", "vectorString")),
-		V3Score:  v.GetFloat64("metrics", "cvssMetricV31", "0", "cvssData", "baseScore"),
+	for _, metricV2 := range v.GetArray("metrics", "cvssMetricV2") {
+		source := string(metricV2.GetStringBytes("source"))
+		// Save only NVD metric
+		if source == "nvd@nist.gov" {
+			vuln.CVSS.V2Score = metricV2.GetFloat64("cvssData", "baseScore")
+			vuln.CVSS.V2Vector = string(metricV2.GetStringBytes("cvssData", "vectorString"))
+			vuln.NVDSeverityV2 = string(metricV2.GetStringBytes("baseSeverity"))
+		}
 	}
-	vuln.NVDSeverityV2 = string(v.GetStringBytes("metrics", "cvssMetricV2", "0", "baseSeverity"))
-	vuln.NVDSeverityV3 = string(v.GetStringBytes("metrics", "cvssMetricV31", "0", "cvssData", "baseSeverity"))
 
-	// `cvssMetricV31` doesn't exist
-	// take CVSS V3 from `cvssMetricV30`
-	if vuln.CVSS.V3Score == 0 {
-		vuln.CVSS.V3Vector = string(v.GetStringBytes("metrics", "cvssMetricV30", "0", "cvssData", "vectorString"))
-		vuln.CVSS.V3Score = v.GetFloat64("metrics", "cvssMetricV30", "0", "cvssData", "baseScore")
-		vuln.NVDSeverityV3 = string(v.GetStringBytes("metrics", "cvssMetricV30", "0", "cvssData", "baseSeverity"))
+	// Save NVD metric from v3.1,
+	// if it doesn't exist - save NVD metric from v3.0
+	for _, metricV3 := range append(v.GetArray("metrics", "cvssMetricV31"), v.GetArray("metrics", "cvssMetricV30")...) {
+		source := string(metricV3.GetStringBytes("source"))
+		// Save only NVD metric
+		if source == "nvd@nist.gov" {
+			vuln.CVSS.V3Score = metricV3.GetFloat64("cvssData", "baseScore")
+			vuln.CVSS.V3Vector = string(metricV3.GetStringBytes("cvssData", "vectorString"))
+			vuln.NVDSeverityV3 = string(metricV3.GetStringBytes("cvssData", "baseSeverity"))
+		}
 	}
 
 	publishedDate, _ := time.Parse("2006-01-02T15:04:05", string(v.GetStringBytes("published")))
