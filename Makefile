@@ -2,8 +2,7 @@ md-update-deps:
 	cd docGen && go get github.com/aquasecurity/defsec \
 	&& go mod tidy
 
-md-build:
-	cd cmd/trivy-policies-generator && go run -v main.go
+md-build: misconfig-docs
 	cd test && go test -v ./...
 	cd docGen && go build -o ../generator .
 
