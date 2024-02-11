@@ -16,8 +16,8 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/aquasecurity/defsec/pkg/framework"
+	_ "github.com/aquasecurity/defsec/pkg/rego"
 	"github.com/aquasecurity/defsec/pkg/scan"
-	_ "github.com/aquasecurity/trivy-iac/pkg/rego"
 	"github.com/aquasecurity/trivy-policies/pkg/rules"
 )
 
