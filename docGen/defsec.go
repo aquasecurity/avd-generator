@@ -17,8 +17,8 @@ import (
 
 	"github.com/aquasecurity/defsec/pkg/framework"
 	_ "github.com/aquasecurity/defsec/pkg/rego"
+	"github.com/aquasecurity/defsec/pkg/rules"
 	"github.com/aquasecurity/defsec/pkg/scan"
-	"github.com/aquasecurity/trivy-policies/pkg/rules"
 )
 
 type DefsecComplianceSpec struct {
