@@ -8,7 +8,7 @@ source: CloudSploit
 icon: aws
 draft: false
 shortName: acm-certificate-validation
-severity: "unknown"
+severity: "medium"
 category: misconfig
 keywords: "aws/acm/acm-certificate-validation"
 
