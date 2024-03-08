@@ -13,6 +13,7 @@ avd_page_type: cloudsploit_page
 | **Cloud** | GOOGLE |
 | **Category** | DNS |
 | **Description** | Ensures that DNS Security is enabled on all managed zones |
+| **Severity** | Medium |
 | **More Info** | DNS Security is a feature that authenticates all responses to domain name lookups. This prevents attackers from committing DNS hijacking or man in the middle attacks. |
 | **GOOGLE Link** | https://cloud.google.com/dns/docs/dnssec |
 | **Recommended Action** | Ensure DNSSEC is enabled for all managed zones in the cloud DNS service. |

@@ -35,6 +35,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 	titleRegex := regexp.MustCompile(`(?m)^\s+title:\s?'(.*)'`)
 	categoryRegex := regexp.MustCompile(`(?m)^\s+category:\s?'(.*)'`)
 	descriptionRegex := regexp.MustCompile(`(?m)^\s+description:\s?'(.*)'`)
+	severityRegex := regexp.MustCompile(`(?m)^\s+severity:\s?'(.*)'`)
 	moreInfoRegex := regexp.MustCompile(`(?m)^\s+more_info:\s?'(.*)'`)
 	linkRegex := regexp.MustCompile(`(?m)^\s+link:\s?'(.*)'`)
 	recommendedActionsRegex := regexp.MustCompile(`(?m)^\s+recommended_action:\s?'(.*)'`)
@@ -64,7 +65,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 
 		content := string(b)
 
-		var title, originalCategory, category, description, moreInfo, link, recommendedActions, remediationString string
+		var title, originalCategory, category, description, severity, moreInfo, link, recommendedActions, remediationString string
 
 		if titleRegex.MatchString(content) {
 			title = titleRegex.FindStringSubmatch(content)[1]
@@ -85,6 +86,14 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 		}
 		if linkRegex.MatchString(content) {
 			link = linkRegex.FindStringSubmatch(content)[1]
+		}
+		if severityRegex.MatchString(content) {
+			severity = severityRegex.FindStringSubmatch(content)[1]
+			if len(severity) > 1 {
+				severity = strings.ToLower(severity)
+			}
+		} else {
+			severity = "unknown"
 		}
 
 		remediationString = strings.ToLower(strings.ReplaceAll(title, " ", "-"))
@@ -138,6 +147,7 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 			"Description":        description,
 			"ID":                 remediationString,
 			"ShortName":          remediationString,
+			"Severity":           severity,
 			"Remediations":       []string{},
 			"ProviderID":         providerID,
 			"ProviderName":       util.Nicify(strings.Title(provider)),
@@ -204,16 +214,13 @@ func getRemediationBodyWhereExists(remediationFile string, fromDefsec bool) stri
 	imageConverterRegex := regexp.MustCompile(`</br>\s?<img src=\"(.*)"\s?/>`)
 	strippedContent = imageConverterRegex.ReplaceAllString(strippedContent, "![Step]($1)\n")
 	body := ""
-
 	if !fromDefsec {
 		body += `### Recommended Actions `
 		body += "\n Follow the appropriate remediation steps below to resolve the issue."
 		body += "{{< tabs groupId=\"remediation\" >}}\n"
 		body += "{{% tab name=\"Management Console\" %}}\n"
 	}
-
 	body += "\n" + strippedContent
-
 	if !fromDefsec {
 		body += "{{% /tab %}}\n"
 		body += "{{< /tabs >}}\n"
@@ -233,7 +240,7 @@ source: CloudSploit
 icon: {{ .ProviderID }}
 draft: false
 shortName: {{.ShortName}}
-severity: "unknown"
+severity: {{.Severity}}
 category: misconfig
 keywords: "{{ .Keyword }}"
 
