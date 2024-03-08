@@ -240,7 +240,7 @@ source: CloudSploit
 icon: {{ .ProviderID }}
 draft: false
 shortName: {{.ShortName}}
-severity:  {{.Severity}}
+severity: {{.Severity}}
 category: misconfig
 keywords: "{{ .Keyword }}"
 
