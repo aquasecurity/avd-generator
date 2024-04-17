@@ -240,7 +240,7 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
-| Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
+| Foo-software | Foo-vendor | 1.2.3 (including) | 4.5.6 (excluding)|
 
 
 ### References  {.with_icon .references}
@@ -339,7 +339,7 @@ foo Description
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
-| Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
+| Foo-software | Foo-vendor | 1.2.3 (including) | 4.5.6 (excluding)|
 
 
 ### References  {.with_icon .references}
