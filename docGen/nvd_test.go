@@ -560,7 +560,7 @@ An attacker may use the contents of error messages to help launch another, more 
 			b, _ := ioutil.ReadFile(file)
 			assert.NotEmpty(t, b, file)
 
-			if filepath.Base(file) == "CVE-2020-0002.md" {
+			if file == "CVE-2020-0002.md" {
 				assert.Equal(t, `---
 title: "CVE-2020-0002"
 date: 2020-01-08 12:19:15 +0000
