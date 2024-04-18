@@ -45,26 +45,26 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 						{
 							Name:         "android",
 							Vendor:       "google",
-							StartVersion: "8.0",
-							EndVersion:   "8.0",
+							StartVersion: "8.0 (including)",
+							EndVersion:   "8.0 (including)",
 						},
 						{
 							Name:         "android",
 							Vendor:       "google",
-							StartVersion: "8.1",
-							EndVersion:   "8.1",
+							StartVersion: "8.1 (including)",
+							EndVersion:   "8.1 (including)",
 						},
 						{
 							Name:         "android",
 							Vendor:       "google",
-							StartVersion: "9.0",
-							EndVersion:   "9.0",
+							StartVersion: "9.0-beta1 (including)",
+							EndVersion:   "9.0-beta1 (including)",
 						},
 						{
 							Name:         "android",
 							Vendor:       "google",
-							StartVersion: "10.0",
-							EndVersion:   "10.0",
+							StartVersion: "10.0 (including)",
+							EndVersion:   "10.0 (including)",
 						},
 					},
 				},
@@ -102,7 +102,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 							Name:         "subiquity",
 							Vendor:       "canonical",
 							StartVersion: "*",
-							EndVersion:   "*",
+							EndVersion:   "20.05.2 (excluding)",
 						},
 					},
 				},
@@ -136,7 +136,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 							Name:         "electric's_proficy",
 							Vendor:       "emerson",
 							StartVersion: "*",
-							EndVersion:   "9.80",
+							EndVersion:   "9.80 (including)",
 						},
 					},
 				},
@@ -187,8 +187,8 @@ func TestVulnerabilityPostToMarkdown(t *testing.T) {
 						{
 							Name:         "foo-software",
 							Vendor:       "foo-vendor",
-							StartVersion: "1.2.3",
-							EndVersion:   "4.5.6",
+							StartVersion: "1.2.3 (including)",
+							EndVersion:   "4.5.6 (excluding)",
 						},
 					},
 				},
@@ -240,7 +240,7 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
-| Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
+| Foo-software | Foo-vendor | 1.2.3 (including) | 4.5.6 (excluding)|
 
 
 ### References  {.with_icon .references}
@@ -283,8 +283,8 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 						{
 							Name:         "foo-software",
 							Vendor:       "foo-vendor",
-							StartVersion: "1.2.3",
-							EndVersion:   "4.5.6",
+							StartVersion: "1.2.3 (including)",
+							EndVersion:   "4.5.6 (excluding)",
 						},
 					},
 				},
@@ -339,7 +339,7 @@ foo Description
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
-| Foo-software | Foo-vendor | 1.2.3 | 4.5.6|
+| Foo-software | Foo-vendor | 1.2.3 (including) | 4.5.6 (excluding)|
 
 
 ### References  {.with_icon .references}
@@ -444,16 +444,22 @@ func TestGenerateVulnerabilityPages(t *testing.T) {
 			b, _ := ioutil.ReadFile(file)
 			assert.NotEmpty(t, b)
 
-			if file == "CVE-2020-0002.md" {
+			if filepath.Base(file) == "CVE-2020-0002.md" {
 				assert.Equal(t, `---
 title: "CVE-2020-0002"
-date: 2020-01-08 12:19:15 +0000
+aliases: [
+	"/nvd/cve-2020-0002"
+]
+
+shortName: "Generation of Error Message Containing Sensitive Information"
+date: 2020-01-08 07:15:12 +0000
+category: vulnerabilities
 draft: false
 
 avd_page_type: nvd_page
 
-date_published: 2020-01-08 12:19:15 +0000
-date_modified: 2020-01-29 12:21:15 +0000
+date_published: 2020-01-08 07:15:12 +0000
+date_modified: 2022-01-01 08:01:34 +0000
 
 header_subtitle: "Generation of Error Message Containing Sensitive Information"
 
@@ -489,10 +495,10 @@ The software generates an error message that includes sensitive information abou
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
-| Android | Google | 1.1.1 | 1.1.1c|
-| Android | Google | 8.1 | 8.1|
-| Android | Google | 9.0 | 9.0|
-| Android | Google | 10.0 | 10.0|
+| Android | Google | 8.0 (including) | 8.0 (including)|
+| Android | Google | 8.1 (including) | 8.1 (including)|
+| Android | Google | 9.0-beta1 (including) | 9.0-beta1 (including)|
+| Android | Google | 10.0 (including) | 10.0 (including)|
 | Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
 | Tar | Ubuntu | bionic | *|
 | Tar | Ubuntu | cosmic | *|

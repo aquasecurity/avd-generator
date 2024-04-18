@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/exp/slices"
 	"io/ioutil"
 	"log"
 	"os"
@@ -454,22 +455,20 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 			continue
 		}
 
-		startVersion := string(as.GetStringBytes("versionStartIncluding"))
-		if startVersion == "" {
-			startVersion = item.Version().String()
-		}
+		startVersion := detectVersion(string(as.GetStringBytes("versionStartIncluding")), string(as.GetStringBytes("versionStartExcluding")), item)
+		endVersion := detectVersion(string(as.GetStringBytes("versionEndIncluding")), string(as.GetStringBytes("versionEndExcluding")), item)
 
-		endVersion := string(as.GetStringBytes("versionEndIncluding"))
-		if endVersion == "" {
-			endVersion = item.Version().String()
-		}
-
-		vuln.AffectedSoftware = append(vuln.AffectedSoftware, AffectedSoftware{
+		affectedSoftware := AffectedSoftware{
 			Name:         item.Product().String(),
 			Vendor:       item.Vendor().String(),
 			StartVersion: startVersion,
 			EndVersion:   endVersion,
-		})
+		}
+
+		// Avoid duplicates
+		if !slices.Contains(vuln.AffectedSoftware, affectedSoftware) {
+			vuln.AffectedSoftware = append(vuln.AffectedSoftware, affectedSoftware)
+		}
 	}
 
 	return VulnerabilityPost{
@@ -479,6 +478,26 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 		Date:          publishedDate.UTC().Format("2006-01-02 03:04:05 -0700"),
 		Vulnerability: vuln,
 	}, nil
+}
+
+func detectVersion(includeVersion, excludeVersion string, item *cpe.Item) string {
+	if includeVersion != "" {
+		return includeVersion + " (including)"
+	}
+
+	if excludeVersion != "" {
+		return excludeVersion + " (excluding)"
+	}
+
+	version := item.Version().String()
+	if version != "*" {
+		if update := item.Update().String(); update != "*" && update != "-" {
+			version += "-" + update
+		}
+		return version + " (including)"
+	}
+
+	return version
 }
 
 func VulnerabilityPostToMarkdown(blog VulnerabilityPost, outputFile *os.File, customContent string) error {
