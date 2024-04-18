@@ -57,8 +57,8 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 						{
 							Name:         "android",
 							Vendor:       "google",
-							StartVersion: "9.0 (including)",
-							EndVersion:   "9.0 (including)",
+							StartVersion: "9.0-beta1 (including)",
+							EndVersion:   "9.0-beta1 (including)",
 						},
 						{
 							Name:         "android",
@@ -497,7 +497,7 @@ The software generates an error message that includes sensitive information abou
 | ------------- |-------------|-----|----|
 | Android | Google | 8.0 (including) | 8.0 (including)|
 | Android | Google | 8.1 (including) | 8.1 (including)|
-| Android | Google | 9.0 (including) | 9.0 (including)|
+| Android | Google | 9.0-beta1 (including) | 9.0-beta1 (including)|
 | Android | Google | 10.0 (including) | 10.0 (including)|
 | Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
 | Tar | Ubuntu | bionic | *|

@@ -455,8 +455,8 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 			continue
 		}
 
-		startVersion := detectVersion(string(as.GetStringBytes("versionStartIncluding")), string(as.GetStringBytes("versionStartExcluding")), item.Version().String())
-		endVersion := detectVersion(string(as.GetStringBytes("versionEndIncluding")), string(as.GetStringBytes("versionEndExcluding")), item.Version().String())
+		startVersion := detectVersion(string(as.GetStringBytes("versionStartIncluding")), string(as.GetStringBytes("versionStartExcluding")), item)
+		endVersion := detectVersion(string(as.GetStringBytes("versionEndIncluding")), string(as.GetStringBytes("versionEndExcluding")), item)
 
 		affectedSoftware := AffectedSoftware{
 			Name:         item.Product().String(),
@@ -480,7 +480,7 @@ func parseVulnerabilityJSONFile(fileName string) (VulnerabilityPost, error) {
 	}, nil
 }
 
-func detectVersion(includeVersion, excludeVersion, itemVersion string) string {
+func detectVersion(includeVersion, excludeVersion string, item *cpe.Item) string {
 	if includeVersion != "" {
 		return includeVersion + " (including)"
 	}
@@ -489,11 +489,15 @@ func detectVersion(includeVersion, excludeVersion, itemVersion string) string {
 		return excludeVersion + " (excluding)"
 	}
 
-	if itemVersion != "*" {
-		return itemVersion + " (including)"
+	version := item.Version().String()
+	if version != "*" {
+		if update := item.Update().String(); update != "*" && update != "-" {
+			version += "-" + update
+		}
+		return version + " (including)"
 	}
 
-	return itemVersion
+	return version
 }
 
 func VulnerabilityPostToMarkdown(blog VulnerabilityPost, outputFile *os.File, customContent string) error {
