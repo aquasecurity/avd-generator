@@ -13,12 +13,11 @@ import (
 
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
+	"github.com/aquasecurity/trivy/pkg/iac/framework"
+	_ "github.com/aquasecurity/trivy/pkg/iac/rego"
+	"github.com/aquasecurity/trivy/pkg/iac/rules"
+	"github.com/aquasecurity/trivy/pkg/iac/scan"
 	"gopkg.in/yaml.v3"
-
-	"github.com/aquasecurity/defsec/pkg/framework"
-	_ "github.com/aquasecurity/defsec/pkg/rego"
-	"github.com/aquasecurity/defsec/pkg/rules"
-	"github.com/aquasecurity/defsec/pkg/scan"
 )
 
 type DefsecComplianceSpec struct {
