@@ -109,7 +109,7 @@ jobs:
 
       - name: Generate Hugo website
         env:
-          HUGO_CACHEDIR: "./hugo_cache"
+          HUGO_CACHEDIR: $PWD/hugo_cache
         run: |
           mkdir hugo_cache
           make hugo-generate
