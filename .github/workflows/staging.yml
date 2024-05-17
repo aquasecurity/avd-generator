@@ -109,7 +109,9 @@ jobs:
       - name: Generate Hugo website
         env:
           HUGO_CACHEDIR: "./hugo_cache"
-        run: make hugo-generate
+        run: |
+          mkdir hugo_cache
+          make hugo-generate
 
       - name: Copy assets
         run: make copy-assets
