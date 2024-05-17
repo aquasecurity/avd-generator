@@ -10,6 +10,7 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@v10
         with:
+          root-reserve-mb: 25600 # Hugo is required a lot of free space
           remove-android: 'true'
           remove-docker-images: 'true'
           remove-dotnet: 'true'
@@ -106,6 +107,8 @@ jobs:
         run: make md-generate
 
       - name: Generate Hugo website
+        env:
+          HUGO_CACHEDIR: "./hugo_cache"
         run: make hugo-generate
 
       - name: Copy assets
