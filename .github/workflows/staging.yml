@@ -108,11 +108,7 @@ jobs:
         run: make md-generate
 
       - name: Generate Hugo website
-        run: |
-          hugo_cache_dir=$(echo "$PWD/hugo_cache")
-          mkdir ${hugo_cache_dir}
-          export HUGO_CACHEDIR=${hugo_cache_dir}
-          make hugo-generate
+        run: make hugo-generate
 
       - name: Copy assets
         run: make copy-assets
