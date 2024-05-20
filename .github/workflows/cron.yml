@@ -12,7 +12,8 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@v10
         with:
-          root-reserve-mb: 25600 # Hugo is required a lot of free space
+          root-reserve-mb: 13000 # Hugo is required a lot of free space
+          temp-reserve-mb: 13000
           remove-android: 'true'
           remove-docker-images: 'true'
           remove-dotnet: 'true'
