@@ -38,6 +38,14 @@ jobs:
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/vuln-list-nvd
 
+
+      - name: Checkout public vuln-list-redhat-repo
+        uses: actions/checkout@v3
+        with:
+          repository: aquasecurity/vuln-list-redhat
+          token: ${{ secrets.ORG_REPO_TOKEN }}
+          path: avd-repo/vuln-list-redhat
+
       - name: Checkout public kube-hunter-repo
         uses: actions/checkout@v3
         with:
@@ -103,10 +111,7 @@ jobs:
         run: make copy-assets
         
       - name: Install AWS CLI
-        run: |
-          python3 -m venv .venv
-          source .venv/bin/activate
-          pip3 install awscli
+        run: pip3 install awscli
 
       - name: Sync changes to the bucket
         run: aws s3 sync --no-progress --only-show-errors --size-only avd-repo/docs ${{ secrets.STAGING_AVD_BUCKET }}
