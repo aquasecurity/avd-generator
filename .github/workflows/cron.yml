@@ -118,7 +118,10 @@ jobs:
           curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents --data @docs/searchindex.json
 
       - name: Install AWS CLI
-        run: pip3 install awscli
+        run: | 
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install awscli
 
       - name: Sync changes to the bucket
         run: aws s3 sync --no-progress --only-show-errors --size-only avd-repo/docs ${{ secrets.PROD_AVD_BUCKET }}
