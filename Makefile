@@ -58,7 +58,8 @@ hugo-clean:
 	cd avd-repo && rm -rf docs
 
 hugo-generate: hugo-clean
-	cd avd-repo && hugo --destination=docs
+	# build NVD pages first to avoid overwriting nvd/index.html file
+	cd ../avd-repo && ./ci/nvd_pages_build.sh && hugo --destination=docs
 	echo "avd.aquasec.com" > avd-repo/docs/CNAME
 
 simple-host:
