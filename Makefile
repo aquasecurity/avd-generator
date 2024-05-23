@@ -43,7 +43,6 @@ remove-all-repos:
 	rm -rf avd-repo/kube-hunter-repo
 	rm -rf avd-repo/kube-bench-repo
 	rm -rf avd-repo/chain-bench-repo
-	rm -rf avd-repo/remediations-repo
 	rm -rf avd-repo/tracee-repo
 	rm -rf avd-repo/trivy-policies-repo
 	rm -rf avd-repo/cloudsploit-repo
