@@ -99,6 +99,10 @@ const (
 	nvdDir        = "nvd"
 	contentDir    = "content"
 	nvdContentDir = "content-nvd"
+	// We use `year` twice:
+	// 	1. To split advisories by years
+	//  2. To build path required for site (nvd/<year>/CVE-xxx-xxx.md)
+	nvdPostsDirFormat = nvdContentDir + "/%[1]v/" + nvdDir + "/%[1]v"
 	// vuln-list dirs
 	cweDir            = "vuln-list/cwe"
 	vulnListNvdDir    = "vuln-list-nvd"
@@ -156,10 +160,7 @@ func generateVulnPages() {
 }
 
 func generateVulnerabilityPages(year string) {
-	// We use `year` twice:
-	// 	1. To split advisories by years
-	//  2. to build path required for site (nvd/<year>/CVE-xxx-xxx.md)
-	postsDir := filepath.Join(nvdContentDir, year, nvdDir, year)
+	postsDir := fmt.Sprintf(nvdPostsDirFormat, year)
 	if err := os.MkdirAll(postsDir, 0755); err != nil {
 		fail(err)
 	}
@@ -214,7 +215,7 @@ func generateVulnerabilityPages(year string) {
 	}
 }
 
-func generateReservedPages(year string, clock Clock, inputDir string, postsDir string) {
+func generateReservedPages(year string, clock Clock) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
 	vulnListNvdYearDir := filepath.Join(vulnListNvdApiDir, year)
 	files, _ := getAllFiles(vulnListNvdYearDir)
@@ -247,7 +248,7 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 	}
 
 	for file, vendorsMap := range CVEMap {
-		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", filepath.Base(file))))
+		f, err := os.Create(filepath.Join(fmt.Sprintf(nvdPostsDirFormat, year), fmt.Sprintf("%s.md", filepath.Base(file))))
 		if err != nil {
 			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
 			continue
