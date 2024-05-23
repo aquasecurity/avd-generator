@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -51,7 +52,7 @@ func main() {
 	generateVulnPages()
 
 	for _, year := range Years {
-		generateReservedPages(year, realClock{}, "vuln-list-nvd", "content/nvd")
+		generateReservedPages(year, realClock{}, vulnListNvdDir, filepath.Join(nvdContentDir, nvdDir))
 	}
 
 	createTopLevelMenus()

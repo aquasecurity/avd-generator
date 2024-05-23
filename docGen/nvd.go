@@ -95,26 +95,37 @@ type VulnerabilityPost struct {
 	Vulnerability Vulnerability
 }
 
-func generateVulnPages() {
-	postsDir := "content/nvd"
+const (
+	nvdDir        = "nvd"
+	contentDir    = "content"
+	nvdContentDir = "content-nvd"
+	// vuln-list dirs
+	cweDir         = "vuln-list/cwe"
+	vulnListNvdDir = "vuln-list-nvd"
+)
 
+func generateVulnPages() {
 	var wg sync.WaitGroup
 	for _, year := range Years {
-		year := year
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
-		nvdDir := fmt.Sprintf("vuln-list-nvd/api/%s/", year)
-		cweDir := "vuln-list/cwe"
+		vulnListNvdYearDir := filepath.Join(vulnListNvdDir, "api", year)
 
 		go func(year string) {
 			defer wg.Done()
-			generateVulnerabilityPages(nvdDir, cweDir, postsDir, year)
+			generateVulnerabilityPages(vulnListNvdYearDir, year)
 		}(year)
 	}
 	wg.Wait()
 
-	indexFile := filepath.Join(postsDir, "_index.md")
+	// Save the index file in the `content` directory.
+	// It will be added the first time `hugo` is run.
+	// NVD advisories (from directory `content_nvd`) will be added yearly in other runs of `hugo`
+	indexFile := filepath.Join(contentDir, nvdDir, "_index.md")
+	if err := os.MkdirAll(filepath.Dir(indexFile), 0755); err != nil {
+		fail(err)
+	}
 	vulnIndex := menu.NewTopLevelMenu("Vulnerabilties", "toplevel_page", indexFile).
 		WithHeading("Vulnerabilties").
 		WithIcon("aqua").
@@ -139,14 +150,16 @@ func generateVulnPages() {
 	}
 }
 
-func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
-
-	postsDir = fmt.Sprintf("%s/%s", postsDir, year)
+func generateVulnerabilityPages(vulnListNvdYearDir, year string) {
+	// We use `year` twice:
+	// 	1. To split advisories by years
+	//  2. to build path required for site (nvd/<year>/CVE-xxx-xxx.md)
+	postsDir := filepath.Join(nvdContentDir, year, nvdDir, year)
 	if err := os.MkdirAll(postsDir, 0755); err != nil {
 		fail(err)
 	}
 
-	files, err := getAllFiles(nvdDir)
+	files, err := getAllFiles(vulnListNvdYearDir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -160,7 +173,7 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 		_ = AddCWEInformation(&bp, cweDir)
 
 		for _, vendor := range []string{"redhat", "ubuntu"} {
-			_ = AddVendorInformation(&bp, vendor, strings.ReplaceAll(nvdDir, "nvd", vendor))
+			_ = AddVendorInformation(&bp, vendor, strings.ReplaceAll(vulnListNvdYearDir, "nvd", vendor))
 		}
 
 		// check if file exists first, if does then open, if not create
@@ -197,7 +210,7 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 
 func generateReservedPages(year string, clock Clock, inputDir string, postsDir string) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
-	nvdDir := fmt.Sprintf("%s/nvd/%s", inputDir, year)
+	nvdDir := fmt.Sprintf("%s/api/%s", inputDir, year)
 	files, _ := getAllFiles(nvdDir)
 	for _, file := range files {
 		CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
