@@ -17,7 +17,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 		expectedBlogPost VulnerabilityPost
 	}{
 		{
-			fileName: "../goldens/json/nvd/CVE-2020-0001.json",
+			fileName: "../goldens/json/nvd/2020/CVE-2020-0001.json",
 			expectedBlogPost: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-0001",
@@ -71,7 +71,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 			},
 		},
 		{
-			fileName: "../goldens/json/nvd/CVE-2020-11932.json",
+			fileName: "../goldens/json/nvd/2020/CVE-2020-11932.json",
 			expectedBlogPost: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-11932",
@@ -109,7 +109,7 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 			},
 		},
 		{
-			fileName: "../goldens/json/nvd/CVE-2022-2788.json",
+			fileName: "../goldens/json/nvd/2020/CVE-2022-2788.json",
 			expectedBlogPost: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2022-2788",
@@ -425,20 +425,25 @@ In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write 
 
 func TestGenerateVulnerabilityPages(t *testing.T) {
 	t.Run("happy path no file with custom content", func(t *testing.T) {
-		nvdDir := "../goldens/json/nvd"
+		nvdApiDir := "../goldens/json/nvd"
 		postsDir, _ := ioutil.TempDir("", "TestGenerateVulnerabilityPages-*")
 		defer func() {
 			_ = os.RemoveAll(postsDir)
 		}()
-		cweDir := "../goldens/cwe"
-		b, _ := ioutil.ReadFile(filepath.Join(cweDir, "CWE-416.json")) // One test file within the golden directory
+		testCweDir := "../goldens/cwe"
+		b, _ := ioutil.ReadFile(filepath.Join(testCweDir, "CWE-416.json")) // One test file within the golden directory
 		var weaknesses WeaknessType
 		err := json.Unmarshal(b, &weaknesses)
 		require.NoError(t, err)
 
-		generateVulnerabilityPages(nvdDir, cweDir, postsDir, "2022")
+		vendorDirs := map[string]string{
+			"redhat": "../goldens/json/redhat",
+			"ubuntu": "../goldens/json/ubuntu",
+		}
+		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(nvdApiDir), WithCweDir(testCweDir), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
+		nvdGenerator.generateVulnerabilityPages("2020")
 
-		gotFiles, err := getAllFiles(postsDir)
+		gotFiles, err := getAllFiles(filepath.Join(postsDir, "2020"))
 		require.NoError(t, err)
 		for _, file := range gotFiles {
 			b, _ := ioutil.ReadFile(file)
@@ -538,13 +543,13 @@ An attacker may use the contents of error messages to help launch another, more 
 	})
 
 	t.Run("happy path, one file with existing custom content", func(t *testing.T) {
-		nvdDir := "../goldens/json/nvd"
+		nvdApiDir := "../goldens/json/nvd"
 		postsDir, _ := ioutil.TempDir("", "TestGenerate-*")
 		defer func() {
 			_ = os.RemoveAll(postsDir)
 		}()
-		cweDir := "../goldens/cwe"
-		b, _ := ioutil.ReadFile(filepath.Join(cweDir, "CWE-416.json")) // One test file within the golden directory
+		testCweDir := "../goldens/cwe"
+		b, _ := ioutil.ReadFile(filepath.Join(testCweDir, "CWE-416.json")) // One test file within the golden directory
 		var weakness WeaknessType
 		err := json.Unmarshal(b, &weakness)
 		require.NoError(t, err)
@@ -552,9 +557,14 @@ An attacker may use the contents of error messages to help launch another, more 
 		b1, _ := ioutil.ReadFile("../goldens/markdown/CVE-2020-0002.md")
 		_ = ioutil.WriteFile(filepath.Join(postsDir, "CVE-2020-0002.md"), b1, 0600)
 
-		generateVulnerabilityPages(nvdDir, cweDir, postsDir, "2022")
+		vendorDirs := map[string]string{
+			"redhat": "../goldens/json/redhat",
+			"ubuntu": "../goldens/json/ubuntu",
+		}
+		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(nvdApiDir), WithCweDir(testCweDir), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
+		nvdGenerator.generateVulnerabilityPages("2020")
 
-		gotFiles, err := getAllFiles(postsDir)
+		gotFiles, err := getAllFiles(filepath.Join(postsDir, "2020"))
 		require.NoError(t, err)
 		for _, file := range gotFiles {
 			b, _ := ioutil.ReadFile(file)
@@ -658,12 +668,18 @@ func TestGenerateReservedPages(t *testing.T) {
 			_ = os.RemoveAll(postsDir)
 		}()
 
+		goldenDir := "../goldens/reserved-no-existing-info"
+		vendorDirs := map[string]string{
+			"redhat": filepath.Join(goldenDir, "redhat"),
+			"ubuntu": filepath.Join(goldenDir, "ubuntu"),
+		}
+		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(filepath.Join(goldenDir, "nvd")), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
 		for _, year := range []string{"2020"} {
-			generateReservedPages(year, fakeClock{}, "../goldens/reserved-no-existing-info", postsDir)
+			nvdGenerator.GenerateReservedPages(year, fakeClock{})
 		}
 
 		// check for one expected file
-		got, err := ioutil.ReadFile(filepath.Join(postsDir, "CVE-2020-0569.md"))
+		got, err := ioutil.ReadFile(filepath.Join(postsDir, "2020", "CVE-2020-0569.md"))
 		require.NoError(t, err)
 		assert.Equal(t, `---
 title: "CVE-2020-0569"
@@ -718,8 +734,14 @@ QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugi
 			_ = os.RemoveAll(postsDir)
 		}()
 
+		goldenDir := "../goldens/reserved-with-existing-info"
+		vendorDirs := map[string]string{
+			"redhat": filepath.Join(goldenDir, "redhat"),
+			"ubuntu": filepath.Join(goldenDir, "ubuntu"),
+		}
+		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(filepath.Join(goldenDir, "nvd")), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
 		for _, year := range []string{"2020"} {
-			generateReservedPages(year, fakeClock{}, "../goldens/reserved-with-existing-info", postsDir)
+			nvdGenerator.GenerateReservedPages(year, fakeClock{})
 		}
 
 		// no new reserved page must be created as NVD already has info
