@@ -227,9 +227,9 @@ func generateReservedPages(year string, clock Clock) {
 
 	for vendor, vendorDir := range vendorDirs {
 		vendorFiles, _ := getAllFiles(filepath.Join(vendorDir, year))
-		for _, file := range vendorFiles {
-			fKey := strings.ReplaceAll(filepath.Base(file), ".json", "")
-			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(file, ".json", ""), vendor, "nvd")) {
+		for _, vendorFile := range vendorFiles {
+			fKey := strings.ReplaceAll(filepath.Base(vendorFile), ".json", "")
+			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(vendorFile, ".json", ""), vendorDir, vulnListNvdApiDir)) {
 				if _, ok := CVEMap[fKey]; !ok {
 					CVEMap[fKey] = make(map[string]ReservedCVEInfo)
 				}
