@@ -48,10 +48,11 @@ func main() {
 	generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{})
 	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
 
-	generateVulnPages()
+	nvdGenerator := NewNvdGenerator()
+	nvdGenerator.GenerateVulnPages()
 
 	for _, year := range Years {
-		generateReservedPages(year, realClock{})
+		nvdGenerator.GenerateReservedPages(year, realClock{})
 	}
 
 	createTopLevelMenus()

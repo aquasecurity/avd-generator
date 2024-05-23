@@ -99,22 +99,76 @@ const (
 	nvdDir        = "nvd"
 	contentDir    = "content"
 	nvdContentDir = "content-nvd"
-	// We use `year` twice:
-	// 	1. To split advisories by years
-	//  2. To build path required for site (nvd/<year>/CVE-xxx-xxx.md)
-	nvdPostsDirFormat = nvdContentDir + "/%[1]v/" + nvdDir + "/%[1]v"
 	// vuln-list dirs
-	cweDir            = "vuln-list/cwe"
-	vulnListNvdDir    = "vuln-list-nvd"
-	vulnListNvdApiDir = vulnListNvdDir + "/api"
+	cweDir         = "vuln-list/cwe"
+	vulnListNvdDir = "vuln-list-nvd"
 )
 
-var vendorDirs = map[string]string{
-	"redhat": "vuln-list-redhat/api",
-	"ubuntu": "vuln-list/ubuntu",
+type options struct {
+	nvdPostsDirFormat string
+	cweDir            string
+	vulnListNvdApiDir string
+	vendorDirs        map[string]string
 }
 
-func generateVulnPages() {
+// WithNvdPostsDirFormat takes a nvd content dir
+func WithNvdPostsDirFormat(format string) Option {
+	return func(opts *options) {
+		opts.nvdPostsDirFormat = format
+	}
+}
+
+// WithCweDir takes a cwe dir
+func WithCweDir(dir string) Option {
+	return func(opts *options) {
+		opts.cweDir = dir
+	}
+}
+
+// WithVulnListNvdApiDir takes a vuln-list-nvd/api dir
+func WithVulnListNvdApiDir(dir string) Option {
+	return func(opts *options) {
+		opts.vulnListNvdApiDir = dir
+	}
+}
+
+// WithVendorDirs takes a vendor dirs
+func WithVendorDirs(dirs map[string]string) Option {
+	return func(opts *options) {
+		opts.vendorDirs = dirs
+	}
+}
+
+// Option is a functional option
+type Option func(*options)
+
+type NvdGenerator struct {
+	*options
+}
+
+func NewNvdGenerator(opts ...Option) *NvdGenerator {
+	o := &options{
+		// We use `year` twice:
+		// 	1. To split advisories by years
+		//  2. To build path required for site (nvd/<year>/CVE-xxx-xxx.md)
+		nvdPostsDirFormat: nvdContentDir + "/%[1]v/" + nvdDir + "/%[1]v",
+		cweDir:            cweDir,
+		vulnListNvdApiDir: vulnListNvdDir + "/api",
+		vendorDirs: map[string]string{
+			"redhat": "vuln-list-redhat/api",
+			"ubuntu": "vuln-list/ubuntu",
+		},
+	}
+
+	for _, opt := range opts {
+		opt(o)
+	}
+	return &NvdGenerator{
+		options: o,
+	}
+}
+
+func (g NvdGenerator) GenerateVulnPages() {
 	var wg sync.WaitGroup
 	for _, year := range Years {
 		wg.Add(1)
@@ -123,7 +177,7 @@ func generateVulnPages() {
 
 		go func(year string) {
 			defer wg.Done()
-			generateVulnerabilityPages(year)
+			g.generateVulnerabilityPages(year)
 		}(year)
 	}
 	wg.Wait()
@@ -159,13 +213,13 @@ func generateVulnPages() {
 	}
 }
 
-func generateVulnerabilityPages(year string) {
-	postsDir := fmt.Sprintf(nvdPostsDirFormat, year)
+func (g NvdGenerator) generateVulnerabilityPages(year string) {
+	postsDir := fmt.Sprintf(g.nvdPostsDirFormat, year)
 	if err := os.MkdirAll(postsDir, 0755); err != nil {
 		fail(err)
 	}
 
-	vulnListNvdYearDir := filepath.Join(vulnListNvdApiDir, year)
+	vulnListNvdYearDir := filepath.Join(g.vulnListNvdApiDir, year)
 	files, err := getAllFiles(vulnListNvdYearDir)
 	if err != nil {
 		log.Fatal(err)
@@ -177,9 +231,9 @@ func generateVulnerabilityPages(year string) {
 			continue
 		}
 
-		_ = AddCWEInformation(&bp, cweDir)
+		_ = AddCWEInformation(&bp, g.cweDir)
 
-		for vendor, vendorDir := range vendorDirs {
+		for vendor, vendorDir := range g.vendorDirs {
 			_ = AddVendorInformation(&bp, vendor, filepath.Join(vendorDir, year))
 		}
 
@@ -215,9 +269,9 @@ func generateVulnerabilityPages(year string) {
 	}
 }
 
-func generateReservedPages(year string, clock Clock) {
+func (g NvdGenerator) GenerateReservedPages(year string, clock Clock) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
-	vulnListNvdYearDir := filepath.Join(vulnListNvdApiDir, year)
+	vulnListNvdYearDir := filepath.Join(g.vulnListNvdApiDir, year)
 	files, _ := getAllFiles(vulnListNvdYearDir)
 	for _, file := range files {
 		CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
@@ -225,15 +279,16 @@ func generateReservedPages(year string, clock Clock) {
 		}
 	}
 
-	for vendor, vendorDir := range vendorDirs {
-		vendorFiles, _ := getAllFiles(filepath.Join(vendorDir, year))
+	for vendor, vendorDir := range g.vendorDirs {
+		vendorYearDir := filepath.Join(vendorDir, year)
+		vendorFiles, _ := getAllFiles(vendorYearDir)
 		for _, vendorFile := range vendorFiles {
 			fKey := strings.ReplaceAll(filepath.Base(vendorFile), ".json", "")
-			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(vendorFile, ".json", ""), vendorDir, vulnListNvdApiDir)) {
+			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(vendorFile, ".json", ""), vendorDir, g.vulnListNvdApiDir)) {
 				if _, ok := CVEMap[fKey]; !ok {
 					CVEMap[fKey] = make(map[string]ReservedCVEInfo)
 				}
-				addReservedCVE(vendorDir, CVEMap, vendor, fKey)
+				addReservedCVE(vendorYearDir, CVEMap, vendor, fKey)
 			}
 		}
 	}
@@ -248,7 +303,13 @@ func generateReservedPages(year string, clock Clock) {
 	}
 
 	for file, vendorsMap := range CVEMap {
-		f, err := os.Create(filepath.Join(fmt.Sprintf(nvdPostsDirFormat, year), fmt.Sprintf("%s.md", filepath.Base(file))))
+		dir := filepath.Join(fmt.Sprintf(g.nvdPostsDirFormat, year))
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			log.Printf("unable to create dir: %s for markdown, err: %s, skipping...\n", dir, err)
+			continue
+		}
+
+		f, err := os.Create(filepath.Join(dir, fmt.Sprintf("%s.md", filepath.Base(file))))
 		if err != nil {
 			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
 			continue
