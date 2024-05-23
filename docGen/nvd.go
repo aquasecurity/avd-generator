@@ -100,9 +100,15 @@ const (
 	contentDir    = "content"
 	nvdContentDir = "content-nvd"
 	// vuln-list dirs
-	cweDir         = "vuln-list/cwe"
-	vulnListNvdDir = "vuln-list-nvd"
+	cweDir            = "vuln-list/cwe"
+	vulnListNvdDir    = "vuln-list-nvd"
+	vulnListNvdApiDir = vulnListNvdDir + "/api"
 )
+
+var vendorDirs = map[string]string{
+	"redhat": "vuln-list-redhat/api",
+	"ubuntu": "vuln-list/ubuntu",
+}
 
 func generateVulnPages() {
 	var wg sync.WaitGroup
@@ -110,11 +116,10 @@ func generateVulnPages() {
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
-		vulnListNvdYearDir := filepath.Join(vulnListNvdDir, "api", year)
 
 		go func(year string) {
 			defer wg.Done()
-			generateVulnerabilityPages(vulnListNvdYearDir, year)
+			generateVulnerabilityPages(year)
 		}(year)
 	}
 	wg.Wait()
@@ -150,7 +155,7 @@ func generateVulnPages() {
 	}
 }
 
-func generateVulnerabilityPages(vulnListNvdYearDir, year string) {
+func generateVulnerabilityPages(year string) {
 	// We use `year` twice:
 	// 	1. To split advisories by years
 	//  2. to build path required for site (nvd/<year>/CVE-xxx-xxx.md)
@@ -159,6 +164,7 @@ func generateVulnerabilityPages(vulnListNvdYearDir, year string) {
 		fail(err)
 	}
 
+	vulnListNvdYearDir := filepath.Join(vulnListNvdApiDir, year)
 	files, err := getAllFiles(vulnListNvdYearDir)
 	if err != nil {
 		log.Fatal(err)
@@ -172,8 +178,8 @@ func generateVulnerabilityPages(vulnListNvdYearDir, year string) {
 
 		_ = AddCWEInformation(&bp, cweDir)
 
-		for _, vendor := range []string{"redhat", "ubuntu"} {
-			_ = AddVendorInformation(&bp, vendor, strings.ReplaceAll(vulnListNvdYearDir, "nvd", vendor))
+		for vendor, vendorDir := range vendorDirs {
+			_ = AddVendorInformation(&bp, vendor, filepath.Join(vendorDir, year))
 		}
 
 		// check if file exists first, if does then open, if not create
@@ -210,18 +216,17 @@ func generateVulnerabilityPages(vulnListNvdYearDir, year string) {
 
 func generateReservedPages(year string, clock Clock, inputDir string, postsDir string) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
-	nvdDir := fmt.Sprintf("%s/api/%s", inputDir, year)
-	files, _ := getAllFiles(nvdDir)
+	vulnListNvdYearDir := filepath.Join(vulnListNvdApiDir, year)
+	files, _ := getAllFiles(vulnListNvdYearDir)
 	for _, file := range files {
 		CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
 			"nvd": {},
 		}
 	}
 
-	for _, vendor := range []string{"redhat", "ubuntu"} {
-		vendorDir := fmt.Sprintf("%s/%s/%s", inputDir, vendor, year)
-		files, _ := getAllFiles(vendorDir)
-		for _, file := range files {
+	for vendor, vendorDir := range vendorDirs {
+		vendorFiles, _ := getAllFiles(filepath.Join(vendorDir, year))
+		for _, file := range vendorFiles {
 			fKey := strings.ReplaceAll(filepath.Base(file), ".json", "")
 			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(file, ".json", ""), vendor, "nvd")) {
 				if _, ok := CVEMap[fKey]; !ok {
