@@ -10,7 +10,11 @@ do
     echo "$(pwd)/$CONTENT_NVD_DIR doesn't exist."
     exit 1
   else
-    echo "Building NVD $YEAR pages"
+    printf "\n===Building NVD $YEAR pages===\n"
     hugo --destination=docs -c "$CONTENT_NVD_DIR/$YEAR" ## build nvd pages by year
   fi
 done
+
+## build `compliance`, `misconfig`, `tracee` and `nvd/index.md` pages
+printf "\n===Building the remaining content===\n"
+hugo --destination=docs
