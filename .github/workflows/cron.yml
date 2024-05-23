@@ -105,6 +105,10 @@ jobs:
       - name: Build and Generate Markdown pages
         run: make md-generate
 
+      ## We have already created *.md files, so we can remove the repositories to save free space.
+      - name: Remove repositories
+        run: make remove-all-repos
+
       - name: Generate Hugo website
         run: make hugo-generate
 

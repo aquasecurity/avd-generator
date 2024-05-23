@@ -36,6 +36,18 @@ update-all-repos:
 	cd avd-repo/trivy-policies-repo && git pull
 	cd avd-repo/cloudsploit-repo && git pull
 
+remove-all-repos:
+	rm -rf avd-repo/vuln-list
+	rm -rf avd-repo/vuln-list-nvd
+	rm -rf avd-repo/vuln-list-redhat
+	rm -rf avd-repo/kube-hunter-repo
+	rm -rf avd-repo/kube-bench-repo
+	rm -rf avd-repo/chain-bench-repo
+	rm -rf avd-repo/remediations-repo
+	rm -rf avd-repo/tracee-repo
+	rm -rf avd-repo/trivy-policies-repo
+	rm -rf avd-repo/cloudsploit-repo
+
 sync-all:
 	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
