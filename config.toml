@@ -125,3 +125,8 @@ lineNumbersInTable = true
 tabWidth = 4
 noClasses = false
 pygmentsCodefences = true
+
+[markup.goldmark]
+  [markup.goldmark.renderHooks]
+    [markup.goldmark.renderHooks.link]
+      enableDefault = false
