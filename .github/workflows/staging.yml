@@ -104,6 +104,10 @@ jobs:
       - name: Build and Generate Markdown pages
         run: make md-generate
 
+      ## We have already created *.md files, so we can remove the repositories to save free space.
+      - name: Remove repositories
+        run: make remove-all-repos
+
       - name: Generate Hugo website
         run: make hugo-generate
 
@@ -111,7 +115,10 @@ jobs:
         run: make copy-assets
         
       - name: Install AWS CLI
-        run: pip3 install awscli
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install awscli
 
       - name: Sync changes to the bucket
         run: aws s3 sync --no-progress --only-show-errors --size-only avd-repo/docs ${{ secrets.STAGING_AVD_BUCKET }}

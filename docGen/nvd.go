@@ -95,26 +95,100 @@ type VulnerabilityPost struct {
 	Vulnerability Vulnerability
 }
 
-func generateVulnPages() {
-	postsDir := "content/nvd"
+const (
+	nvdDir        = "nvd"
+	contentDir    = "content"
+	nvdContentDir = "content-nvd"
+	// vuln-list dirs
+	cweDir         = "vuln-list/cwe"
+	vulnListNvdDir = "vuln-list-nvd"
+)
 
+type options struct {
+	nvdPostsDirFormat string
+	cweDir            string
+	vulnListNvdApiDir string
+	vendorDirs        map[string]string
+}
+
+// WithNvdPostsDirFormat takes a nvd content dir
+func WithNvdPostsDirFormat(format string) Option {
+	return func(opts *options) {
+		opts.nvdPostsDirFormat = format
+	}
+}
+
+// WithCweDir takes a cwe dir
+func WithCweDir(dir string) Option {
+	return func(opts *options) {
+		opts.cweDir = dir
+	}
+}
+
+// WithVulnListNvdApiDir takes a vuln-list-nvd/api dir
+func WithVulnListNvdApiDir(dir string) Option {
+	return func(opts *options) {
+		opts.vulnListNvdApiDir = dir
+	}
+}
+
+// WithVendorDirs takes a vendor dirs
+func WithVendorDirs(dirs map[string]string) Option {
+	return func(opts *options) {
+		opts.vendorDirs = dirs
+	}
+}
+
+// Option is a functional option
+type Option func(*options)
+
+type NvdGenerator struct {
+	*options
+}
+
+func NewNvdGenerator(opts ...Option) *NvdGenerator {
+	o := &options{
+		// We use `year` twice:
+		// 	1. To split advisories by years
+		//  2. To build path required for site (nvd/<year>/CVE-xxx-xxx.md)
+		nvdPostsDirFormat: nvdContentDir + "/%[1]v/" + nvdDir + "/%[1]v",
+		cweDir:            cweDir,
+		vulnListNvdApiDir: vulnListNvdDir + "/api",
+		vendorDirs: map[string]string{
+			"redhat": "vuln-list-redhat/api",
+			"ubuntu": "vuln-list/ubuntu",
+		},
+	}
+
+	for _, opt := range opts {
+		opt(o)
+	}
+	return &NvdGenerator{
+		options: o,
+	}
+}
+
+func (g NvdGenerator) GenerateVulnPages() {
 	var wg sync.WaitGroup
 	for _, year := range Years {
-		year := year
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
-		nvdDir := fmt.Sprintf("vuln-list-nvd/api/%s/", year)
-		cweDir := "vuln-list/cwe"
 
 		go func(year string) {
 			defer wg.Done()
-			generateVulnerabilityPages(nvdDir, cweDir, postsDir, year)
+			g.generateVulnerabilityPages(year)
 		}(year)
 	}
 	wg.Wait()
 
-	indexFile := filepath.Join(postsDir, "_index.md")
+	// Save the index file in the `content` directory.
+	// It will be added the first time `hugo` is run.
+	// NVD advisories (from directory `content_nvd`) will be added yearly in other runs of `hugo`
+	indexFile := filepath.Join(contentDir, nvdDir, "_index.md")
+	if err := os.MkdirAll(filepath.Dir(indexFile), 0755); err != nil {
+		fail(err)
+	}
 	vulnIndex := menu.NewTopLevelMenu("Vulnerabilties", "toplevel_page", indexFile).
 		WithHeading("Vulnerabilties").
 		WithIcon("aqua").
@@ -139,14 +213,14 @@ func generateVulnPages() {
 	}
 }
 
-func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
-
-	postsDir = fmt.Sprintf("%s/%s", postsDir, year)
+func (g NvdGenerator) generateVulnerabilityPages(year string) {
+	postsDir := fmt.Sprintf(g.nvdPostsDirFormat, year)
 	if err := os.MkdirAll(postsDir, 0755); err != nil {
 		fail(err)
 	}
 
-	files, err := getAllFiles(nvdDir)
+	vulnListNvdYearDir := filepath.Join(g.vulnListNvdApiDir, year)
+	files, err := getAllFiles(vulnListNvdYearDir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -157,10 +231,10 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 			continue
 		}
 
-		_ = AddCWEInformation(&bp, cweDir)
+		_ = AddCWEInformation(&bp, g.cweDir)
 
-		for _, vendor := range []string{"redhat", "ubuntu"} {
-			_ = AddVendorInformation(&bp, vendor, strings.ReplaceAll(nvdDir, "nvd", vendor))
+		for vendor, vendorDir := range g.vendorDirs {
+			_ = AddVendorInformation(&bp, vendor, filepath.Join(vendorDir, year))
 		}
 
 		// check if file exists first, if does then open, if not create
@@ -195,26 +269,26 @@ func generateVulnerabilityPages(nvdDir, cweDir, postsDir, year string) {
 	}
 }
 
-func generateReservedPages(year string, clock Clock, inputDir string, postsDir string) {
+func (g NvdGenerator) GenerateReservedPages(year string, clock Clock) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
-	nvdDir := fmt.Sprintf("%s/nvd/%s", inputDir, year)
-	files, _ := getAllFiles(nvdDir)
+	vulnListNvdYearDir := filepath.Join(g.vulnListNvdApiDir, year)
+	files, _ := getAllFiles(vulnListNvdYearDir)
 	for _, file := range files {
 		CVEMap[strings.ReplaceAll(file, ".json", "")] = map[string]ReservedCVEInfo{
 			"nvd": {},
 		}
 	}
 
-	for _, vendor := range []string{"redhat", "ubuntu"} {
-		vendorDir := fmt.Sprintf("%s/%s/%s", inputDir, vendor, year)
-		files, _ := getAllFiles(vendorDir)
-		for _, file := range files {
-			fKey := strings.ReplaceAll(filepath.Base(file), ".json", "")
-			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(file, ".json", ""), vendor, "nvd")) {
+	for vendor, vendorDir := range g.vendorDirs {
+		vendorYearDir := filepath.Join(vendorDir, year)
+		vendorFiles, _ := getAllFiles(vendorYearDir)
+		for _, vendorFile := range vendorFiles {
+			fKey := strings.ReplaceAll(filepath.Base(vendorFile), ".json", "")
+			if !existsInCVEMap(CVEMap, strings.ReplaceAll(strings.ReplaceAll(vendorFile, ".json", ""), vendorDir, g.vulnListNvdApiDir)) {
 				if _, ok := CVEMap[fKey]; !ok {
 					CVEMap[fKey] = make(map[string]ReservedCVEInfo)
 				}
-				addReservedCVE(vendorDir, CVEMap, vendor, fKey)
+				addReservedCVE(vendorYearDir, CVEMap, vendor, fKey)
 			}
 		}
 	}
@@ -229,7 +303,13 @@ func generateReservedPages(year string, clock Clock, inputDir string, postsDir s
 	}
 
 	for file, vendorsMap := range CVEMap {
-		f, err := os.Create(filepath.Join(postsDir, fmt.Sprintf("%s.md", filepath.Base(file))))
+		dir := filepath.Join(fmt.Sprintf(g.nvdPostsDirFormat, year))
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			log.Printf("unable to create dir: %s for markdown, err: %s, skipping...\n", dir, err)
+			continue
+		}
+
+		f, err := os.Create(filepath.Join(dir, fmt.Sprintf("%s.md", filepath.Base(file))))
 		if err != nil {
 			log.Printf("unable to create file: %s for markdown, err: %s, skipping...\n", file, err)
 			continue
