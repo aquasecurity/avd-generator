@@ -132,15 +132,11 @@
 
 								</div><!-- score_bar -->
 
-								<div class="score_bar ubuntu {{ if and (not (eq .Params.ubuntu_score "-")) (not (eq .Params.ubuntu_score "N/A")) }}score_bar_{{ math.Round (float (.Params.ubuntu_score)) }}{{ end }}">
+								<div class="score_bar ubuntu">
 									<div class="score_bar_name">Ubuntu</div>
 									<div class="score_bar_image"></div>
-									<div class="score_bar_label">{{ if and (not (eq .Params.ubuntu_score "-")) (not (eq .Params.ubuntu_score "0")) (not (eq .Params.ubuntu_score "N/A")) }}{{ .Params.ubuntu_score }} {{ .Params.ubuntu_severity }}{{ end }}</div>
-									{{ if and (not (eq .Params.ubuntu_vector "-")) (not (eq .Params.ubuntu_vector "")) (not (eq .Params.ubuntu_vector "N/A")) }}
-										<div class="score_bar_vector with_tooltip" data-toggle="tooltip" data-placement="top" data-title="{{ .Params.ubuntu_vector }}">{{ .Params.ubuntu_vector }}</div>
-									{{ else }}
-										<div class="score_bar_vector without_tooltip"></div>
-									{{ end }}
+									<div class="score_bar_label">{{ if and (not (eq .Params.ubuntu_severity "-")) (not (eq .Params.ubuntu_severity "N/A")) }}{{ .Params.ubuntu_severity }}{{ end }}</div>
+									<div class="score_bar_vector without_tooltip"></div>
 
 								</div><!-- score_bar -->
 								
