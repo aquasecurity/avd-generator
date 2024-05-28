@@ -120,8 +120,6 @@ var cloudsploitIgnores = []string{
 	"redshiftClusterCmkEncrypted",
 	"redshiftClusterInVpc",
 	"bucketEncryption",
-	"bucketLogging",
-	"bucketVersioning",
 	"topicCmkEncrypted",
 	"topicEncrypted",
 	"sqsEncrypted",
