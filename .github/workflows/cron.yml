@@ -118,7 +118,7 @@ jobs:
       - name: Deploy Search Index to MeiliSearch Instance
         run: |
           cd avd-repo
-          curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents --data @docs/searchindex.json
+          curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents?primaryKey=title --data @docs/searchindex.json
 
       - name: Install AWS CLI
         run: |
