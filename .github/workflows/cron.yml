@@ -142,6 +142,15 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AVD_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
 
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+
   keepalive-job:  # needed to keep GitHub from disabling the actions due to inactivity
     name: Keepalive Workflow
     runs-on: ubuntu-latest
