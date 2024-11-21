@@ -14,7 +14,7 @@ import (
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
 	"github.com/aquasecurity/trivy/pkg/iac/framework"
-	_ "github.com/aquasecurity/trivy/pkg/iac/rego"
+	"github.com/aquasecurity/trivy/pkg/iac/rego"
 	"github.com/aquasecurity/trivy/pkg/iac/rules"
 	"github.com/aquasecurity/trivy/pkg/iac/scan"
 	"gopkg.in/yaml.v3"
@@ -52,6 +52,10 @@ var funcMap = template.FuncMap{
 var registeredRulesSummaries = make(map[string]string)
 
 func init() {
+	rules.Reset()
+
+	rego.LoadAndRegister()
+
 	for _, rule := range rules.GetRegistered(framework.ALL) {
 		registeredRulesSummaries[rule.GetRule().AVDID] = rule.GetRule().Summary
 	}
@@ -241,14 +245,15 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 	sort.Strings(remediationKeys)
 
 	var legacy string
-	if rule.Aliases != nil && len(rule.Aliases) > 0 {
+	// for Rego checks the last alias is the ID field from metadata
+	if len(rule.Aliases) > 0 && rule.Aliases[0] != rule.AVDID {
 		legacy = rule.Aliases[0]
 	}
 
 	var frameworks []string
 
-	if rule.Frameworks != nil && len(rule.Frameworks) > 0 {
-		for framework, _ := range rule.Frameworks {
+	if len(rule.Frameworks) > 0 {
+		for framework := range rule.Frameworks {
 			if framework == "default" {
 				continue
 			}
