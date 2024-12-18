@@ -303,6 +303,7 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 		"Remediations":     remediationKeys,
 		"Frameworks":       frameworks,
 		"Source":           "Trivy",
+		"Deprecated":       rule.Deprecated,
 	}
 
 	if aliases := getCSPMAliasesForAVDID(rule.AVDID); len(aliases) > 0 {
@@ -347,8 +348,9 @@ Follow the appropriate remediation steps below to resolve the issue.
 }
 
 const defsecTemplate string = `---
-title: {{.ShortName}}
+title: {{.ShortName}}{{ if .Deprecated }} [Deprecated] {{ end }}
 id: {{ .AVDID }}
+deprecated: {{ .Deprecated }}
 
 aliases: [
 {{ if .AliasID}}	"/cspm/{{ .AliasID}}",
