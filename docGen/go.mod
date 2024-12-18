@@ -6,7 +6,6 @@ toolchain go1.22.2
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/aquasecurity/tracee v0.7.0
 	github.com/aquasecurity/trivy v0.57.0
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
@@ -56,7 +55,6 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
-	github.com/aquasecurity/tracee/types v0.0.0-20220228102148-dffb469aed94 // indirect
 	github.com/aquasecurity/trivy-checks v1.2.2 // indirect
 	github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect

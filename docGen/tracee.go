@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -14,7 +12,6 @@ import (
 
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
-	"github.com/aquasecurity/tracee/pkg/rules/regosig"
 )
 
 var (
@@ -83,21 +80,18 @@ func TraceePostToMarkdown(tp TraceePost, outputFile *os.File) error {
 	return nil
 }
 
-func generateTraceePages(rulesDir, postsDir string, clock Clock) {
+func generateTraceePages(rulesDir, postsDir string, clock Clock) error {
 	err := os.MkdirAll(postsDir, 0755)
 	if err != nil {
-		log.Fatal("unable to create tracee directory ", err)
+		return fmt.Errorf("create dir: %w", err)
 	}
 
 	log.Println("generating tracee pages in: ", postsDir)
 
-	if err := generateRegoSigPages(rulesDir, postsDir, clock); err != nil {
-		log.Fatal("failed to generate rego sig pages: ", err)
-	}
-
 	if err := generateGoSigPages(rulesDir, postsDir, clock); err != nil {
-		log.Fatal("failed to generate go sig pages: ", err)
+		return fmt.Errorf("generate go sig pages: %w", err)
 	}
+	return nil
 }
 
 func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
@@ -119,7 +113,7 @@ func generateGoSigPages(rulesDir string, postsDir string, clock Clock) error {
 				return
 			}
 
-			b, _ := ioutil.ReadFile(file)
+			b, _ := os.ReadFile(file)
 			r := strings.NewReplacer(`"`, ``)
 			rTitle := strings.NewReplacer("/", "-", `"`, "")
 
@@ -189,93 +183,6 @@ func getRegexMatch(regex, str string) string {
 	}
 
 	return strings.TrimSpace(parts[1])
-}
-
-func generateRegoSigPages(rulesDir string, postsDir string, clock Clock) error {
-	files, err := getAllFilesOfKind(rulesDir, "rego", "_test")
-	if err != nil {
-		log.Println("unable to get rego signature files: ", err)
-		return err
-	}
-
-	helpers, err := ioutil.ReadFile(filepath.Join(rulesDir, "rego", "helpers.rego"))
-	if err != nil {
-		log.Println("unable to read helpers.rego file: ", err)
-		return err
-	}
-
-	for _, file := range files {
-		if findSubstringsInString(file, []string{"helpers", "example", ".go", "aio", "disabled"}) { // TODO: This should be handled by a filter in GetAllFilesOfKind
-			continue
-		}
-
-		log.Printf("Processing Tracee rego signature file: %s", file)
-
-		b, err := ioutil.ReadFile(file)
-		if err != nil {
-			log.Printf("unable to read signature file: %s, %s\n", file, err)
-			return err
-		}
-
-		sig, err := regosig.NewRegoSignature("rego", false, string(b), string(helpers))
-		if err != nil {
-			log.Printf("unable to create new rego signature in file %s: %s\n", file, err)
-			return err
-		}
-		m, _ := sig.GetMetadata()
-
-		var severity int64
-		if m.Properties["Severity"] != nil {
-			severity, _ = m.Properties["Severity"].(json.Number).Int64()
-		}
-		var ma string
-		if m.Properties["MITRE ATT&CK"] != nil {
-			ma = m.Properties["MITRE ATT&CK"].(string)
-		}
-
-		topLevelIDName := strings.TrimSpace(strings.Split(ma, ":")[0])
-		topLevelID := strings.ToLower(strings.ReplaceAll(topLevelIDName, " ", "-"))
-		runTimeSecurityMenu.AddNode(topLevelID, strings.Title(topLevelIDName), postsDir, "tracee", []string{"runtime"}, []menu.BreadCrumb{
-			{Name: "Tracee", Url: "/tracee"},
-		}, "tracee", false)
-		parentID := topLevelID
-
-		outputFilepath := filepath.Join(postsDir, parentID, fmt.Sprintf("%s.md", strings.ReplaceAll(m.ID, "-", "")))
-		if err := os.MkdirAll(filepath.Dir(outputFilepath), 0755); err != nil {
-			log.Printf("error occurred while creating target directory: %s, %s", filepath.Dir(outputFilepath), err)
-		}
-
-		f, err := os.Create(outputFilepath)
-		if err != nil {
-			log.Printf("unable to create tracee markdown file: %s for sig: %s, skipping...\n", err, m.ID)
-			continue
-		}
-
-		if err = TraceePostToMarkdown(TraceePost{
-			Title:      util.Nicify(strings.Title(m.Name)),
-			ParentID:   parentID,
-			ParentName: strings.Title(topLevelIDName),
-			AliasID:    strings.ToLower(strings.ReplaceAll(m.ID, "-", "")),
-			TopLevelID: parentID,
-			Date:       clock.Now("2006-01-02"),
-			Signature: Signature{
-				ID:          m.ID,
-				Version:     m.Version,
-				Name:        strings.ReplaceAll(m.Name, " ", "-"),
-				Description: m.Description,
-				Severity:    SeverityNames[severity],
-				MitreAttack: ma,
-				RegoPolicy:  string(b),
-			},
-		}, f); err != nil {
-			log.Printf("unable to write tracee signature markdown: %s.md, err: %s", m.ID, err)
-			continue
-		}
-
-		// TODO: Add MITRE classification details
-		// TODO: Add ability to append custom aqua blog post from another markdown
-	}
-	return nil
 }
 
 const signaturePostTemplate = `---
