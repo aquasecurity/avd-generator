@@ -51,14 +51,39 @@ var funcMap = template.FuncMap{
 
 var registeredRulesSummaries = make(map[string]string)
 
+var checksFS = os.DirFS("../avd-repo/trivy-policies-repo/checks")
+
 func init() {
 	rules.Reset()
 
-	rego.LoadAndRegister()
+	modules := assign(
+		must(rego.LoadEmbeddedLibraries()),
+		must(rego.LoadPoliciesFromDirs(checksFS, ".")),
+	)
+
+	rego.RegisterRegoRules(modules)
 
 	for _, rule := range rules.GetRegistered(framework.ALL) {
 		registeredRulesSummaries[rule.GetRule().AVDID] = rule.GetRule().Summary
 	}
+}
+
+func assign[K comparable, V any, M map[K]V](maps ...M) M {
+	ret := make(M)
+	for i := range maps {
+		for k := range maps[i] {
+			ret[k] = maps[i][k]
+		}
+	}
+
+	return ret
+}
+
+func must[T any](v T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+	return v
 }
 
 func generateDefsecComplianceSpecPages(specDir, contentDir string) {
