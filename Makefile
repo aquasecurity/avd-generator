@@ -21,7 +21,7 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/chain-bench.git avd-repo/chain-bench-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 	git clone git@github.com:aquasecurity/tracee.git avd-repo/tracee-repo
-	git clone git@github.com:aquasecurity/trivy-policies.git avd-repo/trivy-policies-repo
+	git clone --branch go-dep-checks git@github.com:nikpivkin/trivy-policies.git avd-repo/trivy-policies-repo
 	git clone git@github.com:aquasecurity/cloudsploit.git avd-repo/cloudsploit-repo
 
 update-all-repos:
@@ -57,7 +57,11 @@ nginx-start:
 	-cd avd-repo/docs && nginx -p . -c ../../nginx.conf
 
 nginx-stop:
-	-cd avd-repo/docs && nginx -s stop -p . -c ../../nginx.conf
+	@if [ -f "/opt/homebrew/var/run/nginx.pid" ]; then \
+		cd avd-repo/docs && nginx -s stop -p . -c ../../nginx.conf; \
+	else \
+		echo "Nginx is not running."; \
+	fi
 
 nginx-restart:
 	make nginx-stop nginx-start

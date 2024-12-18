@@ -51,14 +51,39 @@ var funcMap = template.FuncMap{
 
 var registeredRulesSummaries = make(map[string]string)
 
+var checksFS = os.DirFS("../avd-repo/trivy-policies-repo/checks")
+
 func init() {
 	rules.Reset()
 
-	rego.LoadAndRegister()
+	modules := assign(
+		must(rego.LoadEmbeddedLibraries()),
+		must(rego.LoadPoliciesFromDirs(checksFS, ".")),
+	)
+
+	rego.RegisterRegoRules(modules)
 
 	for _, rule := range rules.GetRegistered(framework.ALL) {
 		registeredRulesSummaries[rule.GetRule().AVDID] = rule.GetRule().Summary
 	}
+}
+
+func assign[K comparable, V any, M map[K]V](maps ...M) M {
+	ret := make(M)
+	for i := range maps {
+		for k := range maps[i] {
+			ret[k] = maps[i][k]
+		}
+	}
+
+	return ret
+}
+
+func must[T any](v T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+	return v
 }
 
 func generateDefsecComplianceSpecPages(specDir, contentDir string) {
@@ -278,6 +303,7 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 		"Remediations":     remediationKeys,
 		"Frameworks":       frameworks,
 		"Source":           "Trivy",
+		"Deprecated":       rule.Deprecated,
 	}
 
 	if aliases := getCSPMAliasesForAVDID(rule.AVDID); len(aliases) > 0 {
@@ -322,8 +348,9 @@ Follow the appropriate remediation steps below to resolve the issue.
 }
 
 const defsecTemplate string = `---
-title: {{.ShortName}}
+title: {{.ShortName}}{{ if .Deprecated }} [Deprecated] {{ end }}
 id: {{ .AVDID }}
+deprecated: {{ .Deprecated }}
 
 aliases: [
 {{ if .AliasID}}	"/cspm/{{ .AliasID}}",
