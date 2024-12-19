@@ -45,7 +45,9 @@ func main() {
 	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/rules/specs/compliance", "../avd-repo/content/compliance")
 	generateKubeHunterPages("../avd-repo/kube-hunter-repo/docs/_kb", "../avd-repo/content/misconfig/kubernetes")
 	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
-	generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{})
+	if err := generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{}); err != nil {
+		fail(err)
+	}
 	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
 
 	nvdGenerator := NewNvdGenerator()

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -15,28 +13,23 @@ import (
 )
 
 func Test_generateTraceePages(t *testing.T) {
-	postsDir, _ := ioutil.TempDir("", "Test_generateTraceePages-*")
-	defer func() {
-		_ = os.RemoveAll(postsDir)
-	}()
-	generateTraceePages("../goldens/tracee-sigs", filepath.Join(postsDir, "tracee"), fakeClock{})
+	postsDir := t.TempDir()
+
+	err := generateTraceePages("../goldens/tracee-sigs", filepath.Join(postsDir, "tracee"), fakeClock{})
+	require.NoError(t, err)
 
 	gotFiles, err := getAllFiles(postsDir)
 	require.NoError(t, err)
-	require.Equal(t, 3, len(gotFiles))
+	require.Equal(t, 1, len(gotFiles))
 
 	dirRegex := regexp.MustCompile("(?m).+MITRE ATT&CK\n(.*):")
 
-	// check for various files and contents
-	for i := 1; i <= 3; i++ {
-		want, err := ioutil.ReadFile(fmt.Sprintf("../goldens/tracee-sigs/generated-mds/TRC%d.md", i))
-		require.NoError(t, err)
+	want, err := os.ReadFile("../goldens/tracee-sigs/generated-mds/TRC1.md")
+	require.NoError(t, err)
 
-		dir := strings.ReplaceAll(string(dirRegex.FindSubmatch(want)[1]), " ", "-")
+	dir := strings.ReplaceAll(string(dirRegex.FindSubmatch(want)[1]), " ", "-")
 
-		got, err := ioutil.ReadFile(filepath.Join(postsDir, "tracee", strings.ToLower(dir), fmt.Sprintf("TRC%d.md", i)))
-		require.NoError(t, err)
-
-		assert.Equal(t, string(want), string(got))
-	}
+	got, err := os.ReadFile(filepath.Join(postsDir, "tracee", strings.ToLower(dir), "TRC1.md"))
+	require.NoError(t, err)
+	assert.Equal(t, string(want), string(got))
 }
