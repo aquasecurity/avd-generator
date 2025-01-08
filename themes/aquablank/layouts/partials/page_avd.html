@@ -83,6 +83,12 @@
 								<div class="score_bar_label">{{ .Params.cspmID }}</div>
 							</div>
 							{{ end }}
+							{{ if .Params.deprecated }}
+							<div class="score_bar">
+								<div class="score_bar_name">Deprecated</div>
+								<div class="score_bar_label">{{ .Params.deprecated }}</div>
+							</div>
+							{{ end }}
 
 							{{ if .Params.frameworks}}
 							<div class="score_bar">

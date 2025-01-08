@@ -263,6 +263,7 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 
 	post := map[string]interface{}{
 		"AVDID":            rule.AVDID,
+		"Deprecated":       rule.IsDeprecated(),
 		"AVDID_Lowered":    strings.ToLower(rule.AVDID),
 		"LegacyID":         legacy,
 		"LegacyID_Lowered": strings.ToLower(legacy),
@@ -324,6 +325,7 @@ Follow the appropriate remediation steps below to resolve the issue.
 const defsecTemplate string = `---
 title: {{.ShortName}}
 id: {{ .AVDID }}
+deprecated: {{ .Deprecated }}
 
 aliases: [
 {{ if .AliasID}}	"/cspm/{{ .AliasID}}",
