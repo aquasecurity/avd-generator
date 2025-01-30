@@ -3,15 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/aquasecurity/avd-generator/menu"
 )
 
 var (
-	Years []string
-
 	misConfigurationMenu = menu.New("misconfig", "content/misconfig")
 	complianceMenu       = menu.New("compliance", "content/compliance")
 	runTimeSecurityMenu  = menu.New("runsec", "content/tracee")
@@ -33,13 +30,6 @@ func (realClock) Now(format ...string) string {
 }
 
 func main() {
-
-	firstYear := 1999
-
-	for y := firstYear; y <= time.Now().Year(); y++ {
-		Years = append(Years, strconv.Itoa(y))
-	}
-
 	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
 	generateKubeBenchPages("../avd-repo/kube-bench-repo/cfg", "../avd-repo/content/compliance")
 	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/rules/specs/compliance", "../avd-repo/content/compliance")
@@ -49,13 +39,7 @@ func main() {
 		fail(err)
 	}
 	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
-
-	nvdGenerator := NewNvdGenerator()
-	nvdGenerator.GenerateVulnPages()
-
-	for _, year := range Years {
-		nvdGenerator.GenerateReservedPages(year, realClock{})
-	}
+	GenerateNvdPages()
 
 	createTopLevelMenus()
 }
