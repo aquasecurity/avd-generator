@@ -104,6 +104,12 @@ const (
 	vulnListNvdDir = "vuln-list-nvd"
 )
 
+func GenerateNvdPages() {
+	nvdGenerator := NewNvdGenerator()
+	nvdGenerator.GenerateVulnPages()
+	nvdGenerator.GenerateReservedPages()
+}
+
 type options struct {
 	nvdPostsDirFormat string
 	cweDir            string
@@ -144,6 +150,8 @@ type Option func(*options)
 
 type NvdGenerator struct {
 	*options
+
+	years []string
 }
 
 func NewNvdGenerator(opts ...Option) *NvdGenerator {
@@ -163,14 +171,23 @@ func NewNvdGenerator(opts ...Option) *NvdGenerator {
 	for _, opt := range opts {
 		opt(o)
 	}
+
+	firstYear := 1999
+
+	var years []string
+	for y := firstYear; y <= time.Now().Year(); y++ {
+		years = append(years, strconv.Itoa(y))
+	}
+
 	return &NvdGenerator{
 		options: o,
+		years:   years,
 	}
 }
 
 func (g NvdGenerator) GenerateVulnPages() {
 	var wg sync.WaitGroup
-	for _, year := range Years {
+	for _, year := range g.years {
 		wg.Add(1)
 
 		log.Printf("generating vuln year: %s\n", year)
@@ -195,11 +212,11 @@ func (g NvdGenerator) GenerateVulnPages() {
 		WithCategory("vulnerabilities").
 		WithMenu("none")
 
-	years := &Years
+	years := make([]string, len(g.years))
+	copy(years, g.years)
+	slices.Reverse(years)
 
-	sort.Sort(sort.Reverse(sort.StringSlice(*years)))
-
-	for _, year := range Years {
+	for _, year := range years {
 		vulnIndex.WithTile(menu.Tile{
 			Heading: year,
 			Icon:    "cve",
@@ -269,7 +286,13 @@ func (g NvdGenerator) generateVulnerabilityPages(year string) {
 	}
 }
 
-func (g NvdGenerator) GenerateReservedPages(year string, clock Clock) {
+func (g NvdGenerator) GenerateReservedPages() {
+	for _, year := range g.years {
+		g.generateReservedPagesForYear(year, realClock{})
+	}
+}
+
+func (g NvdGenerator) generateReservedPagesForYear(year string, clock Clock) {
 	CVEMap = map[string]map[string]ReservedCVEInfo{}
 	vulnListNvdYearDir := filepath.Join(g.vulnListNvdApiDir, year)
 	files, _ := getAllFiles(vulnListNvdYearDir)

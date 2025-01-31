@@ -1,17 +1,16 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
-	"strconv"
+	"slices"
 	"time"
 
 	"github.com/aquasecurity/avd-generator/menu"
 )
 
 var (
-	Years []string
-
 	misConfigurationMenu = menu.New("misconfig", "content/misconfig")
 	complianceMenu       = menu.New("compliance", "content/compliance")
 	runTimeSecurityMenu  = menu.New("runsec", "content/tracee")
@@ -32,48 +31,76 @@ func (realClock) Now(format ...string) string {
 	return time.Now().Format(formatString)
 }
 
+type generatePagesFunc func()
+
+var generators = map[string]generatePagesFunc{
+	"chain-bench": func() {
+		generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
+	},
+	"kube-bench": func() {
+		generateKubeBenchPages("../avd-repo/kube-bench-repo/cfg", "../avd-repo/content/compliance")
+	},
+	"kube-hunter": func() {
+		generateKubeHunterPages("../avd-repo/kube-hunter-repo/docs/_kb", "../avd-repo/content/misconfig/kubernetes")
+	},
+	"trivy-compliance": func() {
+		generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/rules/specs/compliance", "../avd-repo/content/compliance")
+	},
+	"trivy-checks": func() {
+		generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
+	},
+	"cloudsploit": func() {
+		generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
+	},
+	"tracee": func() {
+		generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{})
+	},
+	"nvd": func() {
+		GenerateNvdPages()
+	},
+}
+
+func allSources() []string {
+	sources := make([]string, 0, len(generators))
+	for source := range generators {
+		sources = append(sources, source)
+	}
+	slices.Sort(sources)
+	return sources
+}
+
 func main() {
+	sources := stringSliceFlag(allSources())
+	flag.Var(&sources, "sources", "Comma-separated list of sources to generate documentation from")
+	flag.Parse()
 
-	firstYear := 1999
-
-	for y := firstYear; y <= time.Now().Year(); y++ {
-		Years = append(Years, strconv.Itoa(y))
-	}
-
-	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
-	generateKubeBenchPages("../avd-repo/kube-bench-repo/cfg", "../avd-repo/content/compliance")
-	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/rules/specs/compliance", "../avd-repo/content/compliance")
-	generateKubeHunterPages("../avd-repo/kube-hunter-repo/docs/_kb", "../avd-repo/content/misconfig/kubernetes")
-	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
-	if err := generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{}); err != nil {
-		fail(err)
-	}
-	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
-
-	nvdGenerator := NewNvdGenerator()
-	nvdGenerator.GenerateVulnPages()
-
-	for _, year := range Years {
-		nvdGenerator.GenerateReservedPages(year, realClock{})
+	for _, source := range sources {
+		generateFn, exists := generators[source]
+		if !exists {
+			fmt.Printf("Unknown source: %s\n", source)
+			os.Exit(1)
+		}
+		fmt.Printf("Generate docs for %s\n", source)
+		generateFn()
 	}
 
 	createTopLevelMenus()
 }
 
 func createTopLevelMenus() {
-	if err := menu.NewTopLevelMenu("Misconfiguration", "toplevel_page", "content/misconfig/_index.md").
+	if err := menu.NewTopLevelMenu("Misconfiguration", "toplevel_page", "../avd-repo/content/misconfig/_index.md").
 		WithHeading("Misconfiguration Categories").
 		WithIcon("aqua").
 		WithCategory("misconfig").Generate(); err != nil {
 		fail(err)
 	}
-	if err := menu.NewTopLevelMenu("Compliance", "toplevel_page", "content/compliance/_index.md").
+	if err := menu.NewTopLevelMenu("Compliance", "toplevel_page", "../avd-repo/content/compliance/_index.md").
 		WithHeading("Compliance").
 		WithIcon("aqua").
 		WithCategory("compliance").Generate(); err != nil {
 		fail(err)
 	}
-	if err := menu.NewTopLevelMenu("Tracee", "toplevel_page", "content/tracee/_index.md").
+	if err := menu.NewTopLevelMenu("Tracee", "toplevel_page", "../avd-repo/content/tracee/_index.md").
 		WithHeading("Runtime Security").
 		WithIcon("tracee").
 		WithCategory("runsec").

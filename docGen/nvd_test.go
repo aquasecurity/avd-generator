@@ -675,7 +675,7 @@ func TestGenerateReservedPages(t *testing.T) {
 		}
 		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(filepath.Join(goldenDir, "nvd")), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
 		for _, year := range []string{"2020"} {
-			nvdGenerator.GenerateReservedPages(year, fakeClock{})
+			nvdGenerator.generateReservedPagesForYear(year, fakeClock{})
 		}
 
 		// check for one expected file
@@ -741,7 +741,7 @@ QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugi
 		}
 		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(filepath.Join(goldenDir, "nvd")), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
 		for _, year := range []string{"2020"} {
-			nvdGenerator.GenerateReservedPages(year, fakeClock{})
+			nvdGenerator.generateReservedPagesForYear(year, fakeClock{})
 		}
 
 		// no new reserved page must be created as NVD already has info
