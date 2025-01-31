@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmp"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -233,8 +234,8 @@ func (g NvdGenerator) generateVulnerabilityPages(year string) {
 
 		_ = AddCWEInformation(&bp, g.cweDir)
 
-		for vendor, vendorDir := range g.vendorDirs {
-			_ = AddVendorInformation(&bp, vendor, filepath.Join(vendorDir, year))
+		for _, vendor := range sortedKeys(g.vendorDirs) {
+			_ = AddVendorInformation(&bp, vendor, filepath.Join(g.vendorDirs[vendor], year))
 		}
 
 		// check if file exists first, if does then open, if not create
@@ -279,7 +280,8 @@ func (g NvdGenerator) GenerateReservedPages(year string, clock Clock) {
 		}
 	}
 
-	for vendor, vendorDir := range g.vendorDirs {
+	for _, vendor := range sortedKeys(g.vendorDirs) {
+		vendorDir := g.vendorDirs[vendor]
 		vendorYearDir := filepath.Join(vendorDir, year)
 		vendorFiles, _ := getAllFiles(vendorYearDir)
 		for _, vendorFile := range vendorFiles {
@@ -729,3 +731,13 @@ Any vendor information available is shown as below.
 | {{$s.Name | capfirst}} | {{$s.Vendor | capfirst }} | {{$s.StartVersion}}|{{end}}
 {{end}}
 {{end}}`
+
+func sortedKeys[K cmp.Ordered, V any](m map[K]V) []K {
+	keys := make([]K, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+
+	slices.Sort(keys)
+	return keys
+}
