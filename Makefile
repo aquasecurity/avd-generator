@@ -57,7 +57,11 @@ nginx-start:
 	-cd avd-repo/docs && nginx -p . -c ../../nginx.conf
 
 nginx-stop:
-	-cd avd-repo/docs && nginx -s stop -p . -c ../../nginx.conf
+	@if pgrep nginx > /dev/null; then \
+		cd avd-repo/docs && nginx -s stop -p . -c ../../nginx.conf; \
+	else \
+		echo "Nginx is not running."; \
+	fi
 
 nginx-restart:
 	make nginx-stop nginx-start
