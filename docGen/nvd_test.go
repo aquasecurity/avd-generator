@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,12 +12,12 @@ import (
 
 func TestParseVulnerabilityJSONFile(t *testing.T) {
 	testCases := []struct {
-		fileName         string
-		expectedBlogPost VulnerabilityPost
+		file     string
+		expected VulnerabilityPost
 	}{
 		{
-			fileName: "../goldens/json/nvd/2020/CVE-2020-0001.json",
-			expectedBlogPost: VulnerabilityPost{
+			file: "../goldens/json/nvd/2020/CVE-2020-0001.json",
+			expected: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-0001",
 				By:     "NVD",
@@ -71,8 +70,8 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 			},
 		},
 		{
-			fileName: "../goldens/json/nvd/2020/CVE-2020-11932.json",
-			expectedBlogPost: VulnerabilityPost{
+			file: "../goldens/json/nvd/2020/CVE-2020-11932.json",
+			expected: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-11932",
 				By:     "NVD",
@@ -109,8 +108,8 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 			},
 		},
 		{
-			fileName: "../goldens/json/nvd/2020/CVE-2022-2788.json",
-			expectedBlogPost: VulnerabilityPost{
+			file: "../goldens/json/nvd/2020/CVE-2022-2788.json",
+			expected: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2022-2788",
 				By:     "NVD",
@@ -144,22 +143,24 @@ func TestParseVulnerabilityJSONFile(t *testing.T) {
 		},
 	}
 	for _, tc := range testCases {
-		actual, err := parseVulnerabilityJSONFile(tc.fileName)
-		require.NoError(t, err, tc.fileName)
-		assert.Equal(t, tc.expectedBlogPost, actual, tc.fileName)
+		t.Run(tc.file, func(t *testing.T) {
+			actual, err := parseVulnerabilityJSONFile(filepath.FromSlash(tc.file))
+			require.NoError(t, err)
+			assert.Equal(t, tc.expected, actual)
+		})
 	}
 }
 
 func TestVulnerabilityPostToMarkdown(t *testing.T) {
 	testCases := []struct {
-		name           string
-		inputBlogPost  VulnerabilityPost
-		customContent  string
-		expectedOutput string
+		name          string
+		input         VulnerabilityPost
+		customContent string
+		expected      string
 	}{
 		{
 			name: "happy path with no custom content",
-			inputBlogPost: VulnerabilityPost{
+			input: VulnerabilityPost{
 				Layout: "vulnerability",
 				Title:  "CVE-2020-11932",
 				By:     "NVD",
@@ -193,7 +194,7 @@ func TestVulnerabilityPostToMarkdown(t *testing.T) {
 					},
 				},
 			},
-			expectedOutput: `---
+			expected: `---
 title: "CVE-2020-11932"
 aliases: [
 	"/nvd/cve-2020-11932"
@@ -250,7 +251,7 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 		},
 		{
 			name: "happy path with custom content",
-			inputBlogPost: VulnerabilityPost{
+			input: VulnerabilityPost{
 				Layout:    "vulnerability",
 				Title:     "CVE-2020-1234",
 				ShortName: "foo cwe info name",
@@ -292,7 +293,7 @@ It was discovered that the Subiquity installer for Ubuntu Server logged the LUKS
 			customContent: `---
 		### foo heading
 		bar content`,
-			expectedOutput: `---
+			expected: `---
 title: "CVE-2020-1234"
 aliases: [
 	"/nvd/cve-2020-1234"
@@ -354,15 +355,16 @@ foo Description
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.inputBlogPost.Vulnerability.ID, func(t *testing.T) {
-			f, _ := ioutil.TempFile("", "TestBlogPostToMarkdownFile-*")
-			defer func() {
-				_ = os.RemoveAll(f.Name())
-			}()
+		t.Run(tc.input.Vulnerability.ID, func(t *testing.T) {
+			f, err := os.CreateTemp(t.TempDir(), "post-*")
+			require.NoError(t, err)
 
-			require.NoError(t, VulnerabilityPostToMarkdown(tc.inputBlogPost, f, tc.customContent), tc.name)
-			actual, _ := ioutil.ReadFile(f.Name())
-			assert.Equal(t, tc.expectedOutput, string(actual), tc.name)
+			err = VulnerabilityPostToMarkdown(tc.input, f, tc.customContent)
+			require.NoError(t, err)
+
+			actual, err := os.ReadFile(f.Name())
+			require.NoError(t, err)
+			assert.Equal(t, tc.expected, string(actual))
 		})
 	}
 
@@ -370,13 +372,13 @@ foo Description
 
 func TestGetCustomContentFromMarkdown(t *testing.T) {
 	testCases := []struct {
-		name            string
-		inputContents   string
-		expectedContent string
+		name     string
+		input    string
+		expected string
 	}{
 		{
 			name: "happy path",
-			inputContents: `---
+			input: `---
 title: "CVE-2020-0002"
 date: 2020-01-08 12:19:15 +0000
 draft: false
@@ -387,13 +389,13 @@ In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write 
 ---
 ### foo heading
 bar content`,
-			expectedContent: `---
+			expected: `---
 ### foo heading
 bar content`,
 		},
 		{
 			name: "sad path, no custom content",
-			inputContents: `---
+			input: `---
 title: "CVE-2020-0002"
 date: 2020-01-08 12:19:15 +0000
 draft: false
@@ -404,52 +406,61 @@ In ih264d_init_decoder of ih264d_api.c, there is a possible out of bounds write 
 
 
 `,
-			expectedContent: ``,
+			expected: ``,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			f, _ := ioutil.TempFile("", "TestGetCustomContentFromMarkdown-*")
-			defer func() {
-				_ = os.RemoveAll(f.Name())
-			}()
+			f, err := os.CreateTemp(t.TempDir(), "post-*")
+			require.NoError(t, err)
 
-			_, _ = f.WriteString(tc.inputContents)
-			gotCustomContent := GetCustomContentFromMarkdown(f.Name())
-			assert.Equal(t, tc.expectedContent, gotCustomContent, tc.name)
+			_, err = f.WriteString(tc.input)
+			require.NoError(t, err)
+
+			got := GetCustomContentFromMarkdown(f.Name())
+			assert.Equal(t, tc.expected, got)
 		})
 	}
 
 }
 
+func initNvdGenerator(t *testing.T, baseDir string, output string) *NvdGenerator {
+	testCweDir := filepath.Join("..", "goldens", "cwe")
+	// One test file within the golden directory
+	b, err := os.ReadFile(filepath.Join(testCweDir, "CWE-416.json"))
+	require.NoError(t, err)
+	var weaknesses WeaknessType
+	require.NoError(t, json.Unmarshal(b, &weaknesses))
+
+	vendorDirs := map[string]string{
+		"redhat": filepath.Join(baseDir, "redhat"),
+		"ubuntu": filepath.Join(baseDir, "ubuntu"),
+	}
+	nvdGenerator := NewNvdGenerator(
+		WithVulnListNvdApiDir(filepath.Join(baseDir, "nvd")),
+		WithCweDir(testCweDir),
+		WithNvdPostsDirFormat(output+"/%s"),
+		WithVendorDirs(vendorDirs),
+	)
+	return nvdGenerator
+}
+
 func TestGenerateVulnerabilityPages(t *testing.T) {
 	t.Run("happy path no file with custom content", func(t *testing.T) {
-		nvdApiDir := "../goldens/json/nvd"
-		postsDir, _ := ioutil.TempDir("", "TestGenerateVulnerabilityPages-*")
-		defer func() {
-			_ = os.RemoveAll(postsDir)
-		}()
-		testCweDir := "../goldens/cwe"
-		b, _ := ioutil.ReadFile(filepath.Join(testCweDir, "CWE-416.json")) // One test file within the golden directory
-		var weaknesses WeaknessType
-		err := json.Unmarshal(b, &weaknesses)
+		outputDir := t.TempDir()
+		generator := initNvdGenerator(t, filepath.Join("..", "goldens", "json"), outputDir)
+		generator.generateVulnerabilityPages("2020")
+
+		pages, err := getAllFiles(filepath.Join(outputDir, "2020"))
 		require.NoError(t, err)
 
-		vendorDirs := map[string]string{
-			"redhat": "../goldens/json/redhat",
-			"ubuntu": "../goldens/json/ubuntu",
-		}
-		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(nvdApiDir), WithCweDir(testCweDir), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
-		nvdGenerator.generateVulnerabilityPages("2020")
+		for _, page := range pages {
+			b, err := os.ReadFile(page)
+			require.NoError(t, err)
+			assert.NotEmpty(t, b, page)
 
-		gotFiles, err := getAllFiles(filepath.Join(postsDir, "2020"))
-		require.NoError(t, err)
-		for _, file := range gotFiles {
-			b, _ := ioutil.ReadFile(file)
-			assert.NotEmpty(t, b)
-
-			if filepath.Base(file) == "CVE-2020-0002.md" {
+			if filepath.Base(page) == "CVE-2020-0002.md" {
 				assert.Equal(t, `---
 title: "CVE-2020-0002"
 aliases: [
@@ -543,43 +554,42 @@ An attacker may use the contents of error messages to help launch another, more 
 	})
 
 	t.Run("happy path, one file with existing custom content", func(t *testing.T) {
-		nvdApiDir := "../goldens/json/nvd"
-		postsDir, _ := ioutil.TempDir("", "TestGenerate-*")
-		defer func() {
-			_ = os.RemoveAll(postsDir)
-		}()
-		testCweDir := "../goldens/cwe"
-		b, _ := ioutil.ReadFile(filepath.Join(testCweDir, "CWE-416.json")) // One test file within the golden directory
-		var weakness WeaknessType
-		err := json.Unmarshal(b, &weakness)
+		outputDir := t.TempDir()
+
+		customContent, err := os.ReadFile(filepath.Join("..", "goldens", "markdown", "CVE-2020-0002.md"))
 		require.NoError(t, err)
 
-		b1, _ := ioutil.ReadFile("../goldens/markdown/CVE-2020-0002.md")
-		_ = ioutil.WriteFile(filepath.Join(postsDir, "CVE-2020-0002.md"), b1, 0600)
-
-		vendorDirs := map[string]string{
-			"redhat": "../goldens/json/redhat",
-			"ubuntu": "../goldens/json/ubuntu",
-		}
-		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(nvdApiDir), WithCweDir(testCweDir), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
-		nvdGenerator.generateVulnerabilityPages("2020")
-
-		gotFiles, err := getAllFiles(filepath.Join(postsDir, "2020"))
+		os.MkdirAll(filepath.Join(outputDir, "2020"), os.ModePerm)
+		err = os.WriteFile(filepath.Join(outputDir, "2020", "CVE-2020-0002.md"), customContent, 0600)
 		require.NoError(t, err)
-		for _, file := range gotFiles {
-			b, _ := ioutil.ReadFile(file)
-			assert.NotEmpty(t, b, file)
 
-			if file == "CVE-2020-0002.md" {
+		generator := initNvdGenerator(t, filepath.Join("..", "goldens", "json"), outputDir)
+		generator.generateVulnerabilityPages("2020")
+
+		pages, err := getAllFiles(filepath.Join(outputDir, "2020"))
+		require.NoError(t, err)
+
+		for _, page := range pages {
+			b, err := os.ReadFile(page)
+			require.NoError(t, err)
+			assert.NotEmpty(t, b, page)
+
+			if filepath.Base(page) == "CVE-2020-0002.md" {
 				assert.Equal(t, `---
 title: "CVE-2020-0002"
-date: 2020-01-08 12:19:15 +0000
+aliases: [
+	"/nvd/cve-2020-0002"
+]
+
+shortName: "Generation of Error Message Containing Sensitive Information"
+date: 2020-01-08 07:15:12 +0000
+category: vulnerabilities
 draft: false
 
 avd_page_type: nvd_page
 
-date_published: 2020-01-08 12:19:15 +0000
-date_modified: 2020-01-29 12:21:15 +0000
+date_published: 2020-01-08 07:15:12 +0000
+date_modified: 2022-01-01 08:01:34 +0000
 
 header_subtitle: "Generation of Error Message Containing Sensitive Information"
 
@@ -615,10 +625,10 @@ The software generates an error message that includes sensitive information abou
 ### Affected Software {.with_icon .affected_software}
 | Name | Vendor           | Start Version | End Version |
 | ------------- |-------------|-----|----|
-| Android | Google | 1.1.1 | 1.1.1c|
-| Android | Google | 8.1 | 8.1|
-| Android | Google | 9.0 | 9.0|
-| Android | Google | 10.0 | 10.0|
+| Android | Google | 8.0 (including) | 8.0 (including)|
+| Android | Google | 8.1 (including) | 8.1 (including)|
+| Android | Google | 9.0-beta1 (including) | 9.0-beta1 (including)|
+| Android | Google | 10.0 (including) | 10.0 (including)|
 | Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
 | Tar | Ubuntu | bionic | *|
 | Tar | Ubuntu | cosmic | *|
@@ -663,23 +673,13 @@ bar content`, string(b))
 
 func TestGenerateReservedPages(t *testing.T) {
 	t.Run("no existing info from NVD", func(t *testing.T) {
-		postsDir, _ := ioutil.TempDir("", "TestGenerateReservedPages-postsDir-*")
-		defer func() {
-			_ = os.RemoveAll(postsDir)
-		}()
+		outputDir := t.TempDir()
 
-		goldenDir := "../goldens/reserved-no-existing-info"
-		vendorDirs := map[string]string{
-			"redhat": filepath.Join(goldenDir, "redhat"),
-			"ubuntu": filepath.Join(goldenDir, "ubuntu"),
-		}
-		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(filepath.Join(goldenDir, "nvd")), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
-		for _, year := range []string{"2020"} {
-			nvdGenerator.GenerateReservedPages(year, fakeClock{})
-		}
+		baseDir := filepath.Join("..", "goldens", "reserved-no-existing-info")
+		generator := initNvdGenerator(t, baseDir, outputDir)
+		generator.GenerateReservedPages("2020", fakeClock{})
 
-		// check for one expected file
-		got, err := ioutil.ReadFile(filepath.Join(postsDir, "2020", "CVE-2020-0569.md"))
+		got, err := os.ReadFile(filepath.Join(outputDir, "2020", "CVE-2020-0569.md"))
 		require.NoError(t, err)
 		assert.Equal(t, `---
 title: "CVE-2020-0569"
@@ -729,23 +729,13 @@ QPluginLoader in Qt versions 5.0.0 through 5.13.2 would search for certain plugi
 	})
 
 	t.Run("with existing info from NVD", func(t *testing.T) {
-		postsDir, _ := ioutil.TempDir("", "TestGenerateReservedPages-postsDir-*")
-		defer func() {
-			_ = os.RemoveAll(postsDir)
-		}()
+		outputDir := t.TempDir()
 
-		goldenDir := "../goldens/reserved-with-existing-info"
-		vendorDirs := map[string]string{
-			"redhat": filepath.Join(goldenDir, "redhat"),
-			"ubuntu": filepath.Join(goldenDir, "ubuntu"),
-		}
-		nvdGenerator := NewNvdGenerator(WithVulnListNvdApiDir(filepath.Join(goldenDir, "nvd")), WithNvdPostsDirFormat(postsDir+"/%s"), WithVendorDirs(vendorDirs))
-		for _, year := range []string{"2020"} {
-			nvdGenerator.GenerateReservedPages(year, fakeClock{})
-		}
+		baseDir := filepath.Join("..", "goldens", "reserved-with-existing-info")
+		generator := initNvdGenerator(t, baseDir, outputDir)
+		generator.GenerateReservedPages("2020", fakeClock{})
 
-		// no new reserved page must be created as NVD already has info
-		_, err := ioutil.ReadFile(filepath.Join(postsDir, "CVE-2020-0569.md"))
+		_, err := os.ReadFile(filepath.Join(outputDir, "CVE-2020-0569.md"))
 		require.Contains(t, err.Error(), "no such file or directory")
 	})
 }
