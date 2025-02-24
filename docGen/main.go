@@ -40,6 +40,10 @@ func main() {
 		Years = append(Years, strconv.Itoa(y))
 	}
 
+	if err := registerChecks(os.DirFS("../avd-repo/trivy-policies-repo")); err != nil {
+		fail(err)
+	}
+
 	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
 	generateKubeBenchPages("../avd-repo/kube-bench-repo/cfg", "../avd-repo/content/compliance")
 	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/rules/specs/compliance", "../avd-repo/content/compliance")
