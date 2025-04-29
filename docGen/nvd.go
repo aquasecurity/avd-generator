@@ -425,6 +425,21 @@ func AddVendorInformation(bp *VulnerabilityPost, vendor string, vendorDir string
 			})
 		}
 
+		pkgStates := v.GetArray("package_state")
+		for _, ps := range pkgStates {
+			status := strings.ToLower(string(ps.GetStringBytes("fix_state")))
+			if status == "fixed" || status == "not affected" {
+				continue
+			}
+
+			bp.Vulnerability.AffectedSoftware = append(bp.Vulnerability.AffectedSoftware, AffectedSoftware{
+				Name:         string(ps.GetStringBytes("product_name")),
+				Vendor:       "RedHat",
+				StartVersion: string(ps.GetStringBytes("package_name")),
+				EndVersion:   "*",
+			})
+		}
+
 	case "ubuntu":
 		b, err := ioutil.ReadFile(filepath.Join(vendorDir, fmt.Sprintf("%s.json", bp.Vulnerability.ID)))
 		if err != nil {
