@@ -44,7 +44,7 @@ func main() {
 	}
 
 	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
-	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/pkg/specs/compliance", "../avd-repo/content/compliance")
+	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/pkg/compliance", "../avd-repo/content/compliance")
 	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
 	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
 
