@@ -16,11 +16,8 @@ md-clone-all:
 	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
 	git clone git@github.com:aquasecurity/vuln-list-nvd.git avd-repo/vuln-list-nvd
 	git clone git@github.com:aquasecurity/vuln-list-redhat.git avd-repo/vuln-list-redhat
-	git clone git@github.com:aquasecurity/kube-hunter.git avd-repo/kube-hunter-repo
-	git clone git@github.com:aquasecurity/kube-bench.git avd-repo/kube-bench-repo
 	git clone git@github.com:aquasecurity/chain-bench.git avd-repo/chain-bench-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
-	git clone git@github.com:aquasecurity/tracee.git avd-repo/tracee-repo
 	git clone git@github.com:aquasecurity/trivy-policies.git avd-repo/trivy-policies-repo
 	git clone git@github.com:aquasecurity/cloudsploit.git avd-repo/cloudsploit-repo
 
@@ -28,11 +25,8 @@ update-all-repos:
 	cd avd-repo/vuln-list && git pull
 	cd avd-repo/vuln-list-nvd && git pull
 	cd avd-repo/vuln-list-redhat && git pull
-	cd avd-repo/kube-hunter-repo && git pull
-	cd avd-repo/kube-bench-repo && git pull
 	cd avd-repo/chain-bench-repo && git pull
 	cd avd-repo/remediations-repo && git pull
-	cd avd-repo/tracee-repo && git pull
 	cd avd-repo/trivy-policies-repo && git pull
 	cd avd-repo/cloudsploit-repo && git pull
 
@@ -40,10 +34,7 @@ remove-all-repos:
 	rm -rf avd-repo/vuln-list
 	rm -rf avd-repo/vuln-list-nvd
 	rm -rf avd-repo/vuln-list-redhat
-	rm -rf avd-repo/kube-hunter-repo
-	rm -rf avd-repo/kube-bench-repo
 	rm -rf avd-repo/chain-bench-repo
-	rm -rf avd-repo/tracee-repo
 	rm -rf avd-repo/trivy-policies-repo
 	rm -rf avd-repo/cloudsploit-repo
 

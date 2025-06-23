@@ -14,7 +14,6 @@ var (
 
 	misConfigurationMenu = menu.New("misconfig", "content/misconfig")
 	complianceMenu       = menu.New("compliance", "content/compliance")
-	runTimeSecurityMenu  = menu.New("runsec", "content/tracee")
 )
 
 type Clock interface {
@@ -45,13 +44,8 @@ func main() {
 	}
 
 	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
-	generateKubeBenchPages("../avd-repo/kube-bench-repo/cfg", "../avd-repo/content/compliance")
 	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/pkg/specs/compliance", "../avd-repo/content/compliance")
-	generateKubeHunterPages("../avd-repo/kube-hunter-repo/docs/_kb", "../avd-repo/content/misconfig/kubernetes")
 	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
-	if err := generateTraceePages("../avd-repo/tracee-repo/signatures", "../avd-repo/content/tracee", realClock{}); err != nil {
-		fail(err)
-	}
 	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
 
 	nvdGenerator := NewNvdGenerator()
@@ -77,18 +71,8 @@ func createTopLevelMenus() {
 		WithCategory("compliance").Generate(); err != nil {
 		fail(err)
 	}
-	if err := menu.NewTopLevelMenu("Tracee", "toplevel_page", "content/tracee/_index.md").
-		WithHeading("Runtime Security").
-		WithIcon("tracee").
-		WithCategory("runsec").
-		Generate(); err != nil {
-		fail(err)
-	}
 
 	if err := misConfigurationMenu.Generate(); err != nil {
-		fail(err)
-	}
-	if err := runTimeSecurityMenu.Generate(); err != nil {
 		fail(err)
 	}
 	if err := complianceMenu.Generate(); err != nil {
