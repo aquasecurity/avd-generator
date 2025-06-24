@@ -21,7 +21,7 @@ do
   fi
 done
 
-## build `compliance`, `misconfig`, `tracee` and `nvd/index.md` pages
+## build `compliance`, `misconfig`, and `nvd/index.md` pages
 printf "\n===Building the remaining content===\n"
 hugo --destination=docs
 

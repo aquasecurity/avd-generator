@@ -12,10 +12,8 @@ import (
 )
 
 var headingMap = map[string]string{
-	"iac":         "Misconfiguration",
-	"appshield":   "Misconfiguration",
-	"kube-hunter": "Misconfiguration",
-	"tracee":      "Runtime Security",
+	"iac":       "Misconfiguration",
+	"appshield": "Misconfiguration",
 }
 
 type BreadCrumb struct {

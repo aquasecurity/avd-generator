@@ -56,26 +56,12 @@ jobs:
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/vuln-list-redhat
 
-      - name: Checkout public kube-hunter-repo
-        uses: actions/checkout@v3
-        with:
-          repository: aquasecurity/kube-hunter
-          token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo/kube-hunter-repo
-
       - name: Checkout public cloud-security-remediation-guides-repo
         uses: actions/checkout@v3
         with:
           repository: aquasecurity/cloud-security-remediation-guides
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/remediations-repo
-
-      - name: Checkout public tracee-repo
-        uses: actions/checkout@v3
-        with:
-          repository: aquasecurity/tracee
-          token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo/tracee-repo
 
       - name: Checkout public cloudsploit-repo
         uses: actions/checkout@v3
@@ -90,13 +76,6 @@ jobs:
           repository: aquasecurity/trivy-policies
           token: ${{ secrets.ORG_REPO_TOKEN }}
           path: avd-repo/trivy-policies-repo
-
-      - name: Checkout public kube-bench-repo
-        uses: actions/checkout@v3
-        with:
-          repository: aquasecurity/kube-bench
-          token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo/kube-bench-repo
 
       - name: Checkout public chain-bench-repo
         uses: actions/checkout@v3

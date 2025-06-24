@@ -47,18 +47,6 @@ hasChildren = true
   url = "trivy"
   weight = 1
 
-  [[menu.main]]
-  parent = "projects"
-  name = "Kube Hunter"
-  url = "kube-hunter"
-  weight = 2
-
-  [[menu.main]]
-  parent = "projects"
-  name = "Kube Bench"
-  url = "kube-bench"
-  weight = 3
-
 [[menu.main]]
   parent = "projects"
   name = "Chain Bench"
