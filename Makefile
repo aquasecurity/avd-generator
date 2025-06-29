@@ -68,7 +68,7 @@ hugo-generate: hugo-clean
 	echo "avd.aquasec.com" > avd-repo/docs/CNAME
 
 simple-host:
-	cd avd-repo && python3 -m http.server
+	cd avd-repo/docs && python3 -m http.server
 
 copy-assets:
 	cp -R avd-repo/remediations-repo/resources avd-repo/docs/resources
