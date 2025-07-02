@@ -27,7 +27,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "0.126.1"
+          hugo-version: "0.147.9"
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
