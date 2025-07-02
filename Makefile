@@ -11,20 +11,30 @@ md-test:
 md-clean:
 	rm -f ./generator
 
-md-clone-all:
+
+md-clone-redhat-api:
+	@DIR="avd-repo/vuln-list-redhat"; \
+	git clone --no-checkout --depth=1 --filter=blob:none git@github.com:aquasecurity/vuln-list-redhat.git $$DIR; \
+	git -C "$$DIR" sparse-checkout init --cone; \
+	git -C "$$DIR" sparse-checkout set api; \
+	git -C "$$DIR" read-tree -mu HEAD
+
+md-clone-all: md-clone-redhat-api
 	# git clone git@github.com:aquasecurity/avd.git avd-repo/
 	git clone git@github.com:aquasecurity/vuln-list.git avd-repo/vuln-list
 	git clone git@github.com:aquasecurity/vuln-list-nvd.git avd-repo/vuln-list-nvd
-	git clone git@github.com:aquasecurity/vuln-list-redhat.git avd-repo/vuln-list-redhat
 	git clone git@github.com:aquasecurity/chain-bench.git avd-repo/chain-bench-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
 	git clone git@github.com:aquasecurity/trivy-policies.git avd-repo/trivy-policies-repo
 	git clone git@github.com:aquasecurity/cloudsploit.git avd-repo/cloudsploit-repo
 
-update-all-repos:
+update-redhat-api:
+	git -C avd-repo/vuln-list-redhat fetch --depth=1
+	git -C avd-repo/vuln-list-redhat reset --hard origin/main
+
+update-all-repos: update-redhat-api
 	cd avd-repo/vuln-list && git pull
 	cd avd-repo/vuln-list-nvd && git pull
-	cd avd-repo/vuln-list-redhat && git pull
 	cd avd-repo/chain-bench-repo && git pull
 	cd avd-repo/remediations-repo && git pull
 	cd avd-repo/trivy-policies-repo && git pull

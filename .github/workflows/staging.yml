@@ -40,11 +40,7 @@ jobs:
 
 
       - name: Checkout public vuln-list-redhat-repo
-        uses: actions/checkout@v3
-        with:
-          repository: aquasecurity/vuln-list-redhat
-          token: ${{ secrets.ORG_REPO_TOKEN }}
-          path: avd-repo/vuln-list-redhat
+        run: make md-clone-redhat-api
 
       - name: Checkout public cloud-security-remediation-guides-repo
         uses: actions/checkout@v3
