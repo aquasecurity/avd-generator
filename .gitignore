@@ -7,3 +7,4 @@ kube-hunter-repo
 .idea
 .DS_Store
 avd-repo
+.hugo_build.lock
