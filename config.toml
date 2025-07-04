@@ -16,8 +16,7 @@ summaryLength = 15
 disableKinds = ["RSS", "taxonomy", "sitemap"]
 ignoreErrors = ["error-disable-taxonomy"]
 publishDir = "docs"
-[pagination]
-  pagerSize = 100
+paginate = 100
 
 [outputFormats]
   [outputFormats.SearchIndex]

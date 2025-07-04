@@ -58,7 +58,7 @@ nginx-restart:
 	make nginx-stop nginx-start
 
 hugo-devel:
-	hugo server -D --logLevel debug
+	hugo server -D --debug
 
 hugo-clean:
 	cd avd-repo && rm -rf docs
