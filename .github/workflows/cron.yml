@@ -130,12 +130,3 @@ jobs:
           job: ${{ toJson(job) }}
           steps: ${{ toJson(steps) }}
 
-  keepalive-job:  # needed to keep GitHub from disabling the actions due to inactivity
-    name: Keepalive Workflow
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v2
-
