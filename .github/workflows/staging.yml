@@ -44,6 +44,8 @@ jobs:
         with:
           repository: aquasecurity/vuln-list-redhat
           token: ${{ secrets.ORG_REPO_TOKEN }}
+          sparse-checkout: |
+            api
           path: avd-repo/vuln-list-redhat
 
       - name: Checkout public cloud-security-remediation-guides-repo
