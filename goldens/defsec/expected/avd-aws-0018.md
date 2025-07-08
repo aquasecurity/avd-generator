@@ -24,7 +24,7 @@ keywords: "AVD-AWS-0018"
 breadcrumbs: 
   - name: AWS
     path: /misconfig/aws
-  - name: Codebuild
+  - name: Code Build
     path: /misconfig/aws/codebuild
 
 avd_page_type: avd_page
