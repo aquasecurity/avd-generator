@@ -18,12 +18,6 @@ jobs:
             remove-dotnet: "true"
             remove-haskell: "true"
 
-      - name: Set up Go 1.22
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.22'
-        id: go
-
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
@@ -31,6 +25,12 @@ jobs:
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: docGen/go.mod
+          cache-dependency-path: docGen/go.sum
       
       - name: Create build folder
         run:  mkdir avd-repo
