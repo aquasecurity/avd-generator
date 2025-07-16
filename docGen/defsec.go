@@ -15,21 +15,8 @@ import (
 
 	"github.com/aquasecurity/avd-generator/menu"
 	"github.com/aquasecurity/avd-generator/util"
-	"github.com/aquasecurity/trivy/pkg/iac/framework"
-	"github.com/aquasecurity/trivy/pkg/iac/rego"
-	"github.com/aquasecurity/trivy/pkg/iac/rules"
-	"github.com/aquasecurity/trivy/pkg/iac/scan"
+	"github.com/aquasecurity/trivy-checks/pkg/rego/metadata"
 )
-
-func registerChecks(fsys fs.FS) error {
-	rules.Reset()
-	modules, err := rego.LoadPoliciesFromDirs(fsys, "checks", "lib")
-	if err != nil {
-		return fmt.Errorf("load checks: %w", err)
-	}
-	rego.RegisterRegoRules(modules)
-	return nil
-}
 
 type DefsecComplianceSpec struct {
 	Spec struct {
@@ -53,11 +40,15 @@ type DefsecComplianceSpec struct {
 	} `yaml:"spec"`
 }
 
-func generateDefsecComplianceSpecPages(specDir, contentDir string) {
-
-	ruleSummaries := make(map[string]string)
-	for _, rule := range rules.GetRegistered(framework.ALL) {
-		ruleSummaries[rule.GetRule().AVDID] = rule.GetRule().Summary
+func generateDefsecComplianceSpecPages(specDir, contentDir string, checksFS fs.FS) {
+	checksMetadata, err := metadata.LoadChecksMetadata(checksFS)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	checksByID := make(map[string]metadata.Metadata)
+	for _, meta := range checksMetadata {
+		checksByID[meta.ID()] = meta
 	}
 
 	if err := filepath.Walk(specDir, func(path string, info fs.FileInfo, err error) error {
@@ -89,7 +80,7 @@ func generateDefsecComplianceSpecPages(specDir, contentDir string) {
 			[]menu.BreadCrumb{{Name: "Compliance", Url: "/compliance"},
 				{Name: strings.Title(spec.Spec.Category), Url: fmt.Sprintf("/compliance/%s", spec.Spec.Category)}}, spec.Spec.Category, true)
 
-		return generateDefsecComplianceSpecPage(spec, contentDir, ruleSummaries)
+		return generateDefsecComplianceSpecPage(spec, contentDir, checksByID)
 
 	}); err != nil {
 		fmt.Println(err)
@@ -97,7 +88,9 @@ func generateDefsecComplianceSpecPages(specDir, contentDir string) {
 
 }
 
-func generateDefsecComplianceSpecPage(spec DefsecComplianceSpec, contentDir string, ruleSummaries map[string]string) error {
+func generateDefsecComplianceSpecPage(
+	spec DefsecComplianceSpec, contentDir string, checksByID map[string]metadata.Metadata,
+) error {
 	for _, control := range spec.Spec.Controls {
 		outputFilePath := filepath.Join(contentDir, spec.Spec.Category, fmt.Sprintf("%s-%s", spec.Spec.Title, spec.Spec.Version), fmt.Sprintf("%s.md", control.ID))
 
@@ -115,10 +108,16 @@ func generateDefsecComplianceSpecPage(spec DefsecComplianceSpec, contentDir stri
 			"toUpper": strings.ToUpper,
 			"toTitle": strings.Title,
 			"getSummary": func(id string) string {
-				if summary, ok := ruleSummaries[id]; ok {
-					return fmt.Sprintf(" - %s", summary)
+				if meta, ok := checksByID[id]; ok {
+					return fmt.Sprintf(" - %s", meta.Title)
 				}
 				return ""
+			},
+			"getAVDID": func(id string) string {
+				if meta, ok := checksByID[id]; ok {
+					return meta.AVDID()
+				}
+				return id
 			},
 		}
 
@@ -141,15 +140,23 @@ func generateDefsecComplianceSpecPage(spec DefsecComplianceSpec, contentDir stri
 	return nil
 }
 
-func generateDefsecPages(remediationDir, contentDir string) {
-	for _, r := range rules.GetRegistered(framework.ALL) {
-		avdId := r.GetRule().AVDID
-		topLevelID := strings.ToLower(r.GetRule().Provider.ConstName())
-		branchID := r.GetRule().Service
+func generateDefsecPages(remediationDir, contentDir string, checksFS fs.FS) {
+	checksMetadata, err := metadata.LoadChecksMetadata(checksFS)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	for checkPath, meta := range checksMetadata {
+		topLevelID := strings.ToLower(meta.Provider().ConstName())
+		branchID := meta.Service()
 		branchID = util.RemapCategory(branchID)
 
-		log.Printf("Getting remediation markdown for %s", avdId)
-		remediationDir := filepath.Join(remediationDir, strings.ToLower(r.GetRule().Provider.ConstName()), strings.ReplaceAll(r.GetRule().Service, "-", ""), avdId)
+		log.Printf("Getting remediation markdown for %s: %s", meta.ID(), checkPath)
+		remediationDir := filepath.Join(
+			remediationDir,
+			strings.ToLower(meta.Provider().ConstName()), strings.ReplaceAll(meta.Service(), "-", ""),
+			meta.ID(),
+		)
 
 		remediations := make(map[string]string)
 		docsFile := filepath.Join(remediationDir, "docs.md")
@@ -178,19 +185,19 @@ func generateDefsecPages(remediationDir, contentDir string) {
 		}
 
 		if _, ok := remediations["Management Console"]; !ok {
-			if remediationFile, ok := crossOver[avdId]; ok {
+			if remediationFile, ok := crossOver[meta.AVDID()]; ok {
 				if remediationContent := getRemediationBodyWhereExists(fmt.Sprintf("remediations-repo/%s", remediationFile), true); remediationContent != "" {
-					log.Printf("Can use %s for %s\n", remediationFile, avdId)
+					log.Printf("Can use %s for %s\n", remediationFile, meta.AVDID())
 					remediations["Management Console"] = remediationContent
 				}
 			}
 		}
 
-		if err := generateDefsecCheckPage(r.GetRule(), remediations, contentDir, docsFile, branchID); err != nil {
-			log.Printf("an error occurred writing the page for %s. %v", r.GetRule().AVDID, err)
+		if err := generateDefsecCheckPage(meta, remediations, contentDir, docsFile, branchID); err != nil {
+			log.Printf("an error occurred writing the page for %s. %v", meta.AVDID(), err)
 		}
 
-		providerName := r.GetRule().Provider.DisplayName()
+		providerName := meta.Provider().DisplayName()
 		misConfigurationMenu.AddNode(topLevelID, providerName, contentDir, "", []string{},
 			[]menu.BreadCrumb{}, topLevelID, true)
 		misConfigurationMenu.AddNode(branchID, branchID, filepath.Join(contentDir, topLevelID),
@@ -203,11 +210,10 @@ func generateDefsecPages(remediationDir, contentDir string) {
 	}
 }
 
-func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, contentDir string, docsFile string, menuParent string) error {
-
-	providerPath := strings.ToLower(rule.Provider.ConstName())
+func generateDefsecCheckPage(meta metadata.Metadata, remediations map[string]string, contentDir string, docsFile string, menuParent string) error {
+	providerPath := strings.ToLower(meta.Provider().ConstName())
 	servicePath := strings.ToLower(menuParent)
-	ruleIDPath := strings.ToLower(rule.AVDID)
+	ruleIDPath := strings.ToLower(meta.AVDID())
 
 	outputFilePath := strings.ReplaceAll(filepath.Join(contentDir, providerPath, servicePath, strings.ToLower(fmt.Sprintf("%s.md", ruleIDPath))), " ", "-")
 	if err := os.MkdirAll(filepath.Dir(outputFilePath), 0777); err != nil {
@@ -241,48 +247,48 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 
 	sort.Strings(remediationKeys)
 
+	checkAliases := meta.Aliases()
+
 	var legacy string
 	// for Rego checks the last alias is the ID field from metadata
-	if len(rule.Aliases) > 0 && rule.Aliases[0] != rule.AVDID {
-		legacy = rule.Aliases[0]
+	if len(checkAliases) > 2 && checkAliases[1] != meta.ID() {
+		legacy = checkAliases[1]
 	}
 
 	var frameworks []string
-
-	if len(rule.Frameworks) > 0 {
-		for framework := range rule.Frameworks {
-			if framework == "default" {
-				continue
-			}
-			frameworks = append(frameworks, strings.ToUpper(strings.ReplaceAll(string(framework), "-", " ")))
+	for name := range meta.Frameworks() {
+		if name == "default" {
+			continue
 		}
+		frameworks = append(frameworks, strings.ToUpper(strings.ReplaceAll(name, "-", " ")))
 	}
+	sort.Strings(frameworks)
 
-	post := map[string]interface{}{
-		"AVDID":            rule.AVDID,
-		"Deprecated":       rule.IsDeprecated(),
-		"AVDID_Lowered":    strings.ToLower(rule.AVDID),
+	post := map[string]any{
+		"AVDID":            meta.AVDID(),
+		"Deprecated":       meta.Deprecated(),
+		"AVDID_Lowered":    strings.ToLower(meta.AVDID()),
 		"LegacyID":         legacy,
 		"LegacyID_Lowered": strings.ToLower(legacy),
-		"ShortName":        rule.ShortCodeDisplayName(),
-		"Provider":         strings.ToLower(rule.Provider.ConstName()),
-		"ProviderName":     rule.Provider.DisplayName(),
-		"ServiceName":      rule.ServiceDisplayName(),
-		"Service":          strings.ToLower(strings.ReplaceAll(rule.Service, " ", "-")),
-		"Summary":          rule.Summary,
+		"ShortName":        util.Nicify(checkAliases[len(checkAliases)-1]),
+		"Provider":         strings.ToLower(meta.Provider().ConstName()),
+		"ProviderName":     meta.Provider().DisplayName(),
+		"ServiceName":      util.Nicify(meta.Service()),
+		"Service":          strings.ToLower(strings.ReplaceAll(meta.Service(), " ", "-")),
+		"Summary":          meta.Title,
 		"Body":             documentBody.String(),
-		"Severity":         strings.ToLower(string(rule.Severity)),
+		"Severity":         strings.ToLower(meta.Severity()),
 		"ParentID":         strings.ReplaceAll(strings.ToLower(menuParent), " ", "-"),
 		"Remediations":     remediationKeys,
 		"Frameworks":       frameworks,
 		"Source":           "Trivy",
 	}
 
-	if aliases := getCSPMAliasesForAVDID(rule.AVDID); len(aliases) > 0 {
+	if aliases := getCSPMAliasesForAVDID(meta.AVDID()); len(aliases) > 0 {
 		post["AdditionalAliases"] = aliases
 	}
 
-	if remediationPath, ok := crossOver[rule.AVDID]; ok {
+	if remediationPath, ok := crossOver[meta.AVDID()]; ok {
 		id := strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(remediationPath, "en/", ""), ".md", ""))
 		post["AliasID"] = id
 		post["Source"] = "Trivy/CSPM"
@@ -397,7 +403,7 @@ avd_page_type: avd_page
 {{ .Description }}
 
 **Control Checks**
-{{ range .Checks }}* [{{ .ID }}](https://avd.aquasec.com/misconfig/{{ .ID | toLower }}){{ .ID | getSummary }}{{ end }}
+{{ range .Checks }}* [{{ .ID | getAVDID }}](https://avd.aquasec.com/misconfig/{{ .ID | getAVDID | toLower }}){{ .ID | getSummary }}{{ end }}
 
 
 `

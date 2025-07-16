@@ -25,7 +25,7 @@ md-clone-all: md-clone-redhat-api
 	git clone git@github.com:aquasecurity/vuln-list-nvd.git avd-repo/vuln-list-nvd
 	git clone git@github.com:aquasecurity/chain-bench.git avd-repo/chain-bench-repo
 	git clone git@github.com:aquasecurity/cloud-security-remediation-guides.git avd-repo/remediations-repo
-	git clone git@github.com:aquasecurity/trivy-policies.git avd-repo/trivy-policies-repo
+	git clone git@github.com:aquasecurity/trivy-checks.git avd-repo/trivy-policies-repo
 	git clone git@github.com:aquasecurity/cloudsploit.git avd-repo/cloudsploit-repo
 
 update-redhat-api:
