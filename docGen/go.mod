@@ -2,11 +2,9 @@ module github.com/aquasecurity/avd-generator
 
 go 1.24.4
 
-replace github.com/aquasecurity/trivy-checks => github.com/nikpivkin/trivy-checks v0.0.0-20250708133431-ca88b97abdb6
-
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/aquasecurity/trivy-checks v1.11.3-0.20250630145909-db2e49de5ff5
+	github.com/aquasecurity/trivy-checks v1.11.3-0.20250716064219-060f3e31d293
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
 	github.com/stretchr/testify v1.10.0
@@ -26,7 +24,7 @@ require (
 	github.com/elazarl/goproxy v1.7.2 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/open-policy-agent/opa v1.5.1 // indirect
+	github.com/open-policy-agent/opa v1.6.0 // indirect
 	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
@@ -38,7 +36,7 @@ require (
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240716161551-93cc26a95ae9 // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
 	moul.io/http2curl v1.0.0 // indirect
