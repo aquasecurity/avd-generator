@@ -6,7 +6,7 @@ toolchain go1.24.5
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/aquasecurity/trivy v0.64.1-0.20250723071058-5c155e34fb50
+	github.com/aquasecurity/trivy v0.65.1-0.20250806042108-298a9941f098
 	github.com/aquasecurity/vuln-list-update v0.0.0-20191016075347-3d158c2bf9a2
 	github.com/leekchan/gtf v0.0.0-20190214083521-5fba33c5b00b
 	github.com/stretchr/testify v1.10.0
@@ -42,7 +42,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.36.0 // indirect
 	go.opentelemetry.io/otel/trace v1.36.0 // indirect
 	golang.org/x/mod v0.26.0 // indirect
-	golang.org/x/tools v0.34.0 // indirect
+	golang.org/x/tools v0.34.1-0.20250610205101-c26dd3ba555e // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	sigs.k8s.io/yaml v1.5.0 // indirect
 )
