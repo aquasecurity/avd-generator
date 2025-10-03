@@ -258,7 +258,8 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 		}
 	}
 
-	post := map[string]interface{}{
+	post := map[string]any{
+		"ID":               rule.ID,
 		"AVDID":            rule.AVDID,
 		"Deprecated":       rule.IsDeprecated(),
 		"AVDID_Lowered":    strings.ToLower(rule.AVDID),
@@ -291,7 +292,9 @@ func generateDefsecCheckPage(rule scan.Rule, remediations map[string]string, con
 
 	}
 
-	t = template.Must(template.New("defsecPost").Parse(defsecTemplate))
+	t = template.Must(template.New("defsecPost").Funcs(template.FuncMap{
+		"toLower": strings.ToLower,
+	}).Parse(defsecTemplate))
 	return t.Execute(outputFile, post)
 }
 
@@ -326,6 +329,7 @@ deprecated: {{ .Deprecated }}
 
 aliases: [
 {{ if .AliasID}}	"/cspm/{{ .AliasID}}",
+{{ end }}{{ if .ID }}  "/misconfig/{{ .ID | toLower }}",
 {{ end }}{{ if .LegacyID }}  "/misconfig/{{ .Provider }}/{{ .LegacyID_Lowered }}",
 {{ end }}{{ if .LegacyID }}  "/misconfig/{{ .LegacyID_Lowered }}",
 {{ end }}  "/misconfig/{{ .AVDID_Lowered }}",
