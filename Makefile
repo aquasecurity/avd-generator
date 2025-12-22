@@ -1,3 +1,5 @@
+PY_PORT ?= 9011
+
 md-update-deps:
 	cd docGen && go get github.com/aquasecurity/defsec \
 	&& go mod tidy
@@ -49,23 +51,14 @@ remove-all-repos:
 	rm -rf avd-repo/cloudsploit-repo
 
 sync-all:
-	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=nginx.conf --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
+	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
 
 md-generate:
 	cd avd-repo && ./generator
 
-nginx-start:
-	-cd avd-repo/docs && nginx -p . -c ../../nginx.conf
-
-nginx-stop:
-	@if pgrep nginx > /dev/null; then \
-		cd avd-repo/docs && nginx -s stop -p . -c ../../nginx.conf; \
-	else \
-		echo "Nginx is not running."; \
-	fi
-
-nginx-restart:
-	make nginx-stop nginx-start
+serve:
+	@echo "Serving static site at http://localhost:${PY_PORT}"
+	@cd avd-repo/docs && python3 -m http.server ${PY_PORT}
 
 hugo-devel:
 	hugo server -D --debug
@@ -77,18 +70,13 @@ hugo-generate: hugo-clean
 	cd avd-repo && ./ci/nvd_pages_build.sh
 	echo "avd.aquasec.com" > avd-repo/docs/CNAME
 
-simple-host:
-	cd avd-repo/docs && python3 -m http.server
-
 copy-assets:
 	cp -R avd-repo/remediations-repo/resources avd-repo/docs/resources
 	touch avd-repo/docs/.nojekyll
 
-build-all-no-clone: md-clean md-build sync-all md-generate hugo-generate copy-assets nginx-restart
-	echo "Build Done, navigate to http://localhost:9011/ to browse"
+build-all-no-clone: md-clean md-build sync-all md-generate hugo-generate copy-assets serve
 
-build-all: md-clean md-build md-clone-all sync-all md-generate hugo-generate copy-assets nginx-restart
-	echo "Build Done, navigate to http://localhost:9011/ to browse"
+build-all: md-clean md-build md-clone-all sync-all md-generate hugo-generate copy-assets serve
 
 compile-theme-sass:
 	cd themes/aquablank/static/sass && sass avdblank.scss:../css/avdblank.css && sass avdblank.scss:../css/avdblank.min.css --style compressed
