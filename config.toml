@@ -118,3 +118,7 @@ pygmentsCodefences = true
   [markup.goldmark.renderHooks]
     [markup.goldmark.renderHooks.link]
       enableDefault = false
+
+
+[minify]
+  minifyOutput = true
