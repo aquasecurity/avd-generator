@@ -14,7 +14,7 @@ Note: Set `baseURL="/"` [here](https://github.com/aquasecurity/avd-generator/blo
 `make hugo-devel` and then navigate to `http://localhost:1313` to view the site.
 
 #### tl;dr for the full build with real content
-`make md-clean md-build sync-all md-generate hugo-generate nginx-restart`
+`make md-clean md-build sync-all md-generate hugo-generate serve`
 then navigate to `http://localhost:9011` to view the pages.
 
 If changes are made to the existing AVD page structure (removal of existing fields), the following must be done:
