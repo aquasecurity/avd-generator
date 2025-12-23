@@ -9,14 +9,15 @@ jobs:
     name: Build Website
     runs-on: ubuntu-22.04
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@v10
-        with:
-            root-reserve-mb: 32768 # The Go cache (`~/.cache/go-build` and `~/go/pkg`) requires a lot of storage space.
-            remove-android: "true"
-            remove-docker-images: "true"
-            remove-dotnet: "true"
-            remove-haskell: "true"
+      - name: Free up disk space
+        # The website content requires a large amount of free disk space.
+        run: |
+          [ -d /usr/local/lib/android ] && sudo rm -rf /usr/local/lib/android
+          [ -d /usr/share/dotnet ] && sudo rm -rf /usr/share/dotnet
+          [ -d /opt/ghc ] && sudo rm -rf /opt/ghc
+          [ -d /opt/hostedtoolcache/CodeQL ] && sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          df -h
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -104,6 +105,9 @@ jobs:
 
       - name: Copy assets
         run: make copy-assets
+
+      - name: Check available disk space
+        run: df -h
 
       - name: Deploy Search Index to MeiliSearch Instance
         run: |
