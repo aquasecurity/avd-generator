@@ -341,9 +341,9 @@ aliases: [
 {{ if .AliasID}}	"/cspm/{{ .AliasID}}",
 {{ end }}  "/misconfig/{{ .ID }}",
   "/misconfig/{{ .ID_Lowered }}",
-  "/misconfig/{{ .AVDID }}",
+{{ if .AVDID }}  "/misconfig/{{ .AVDID }}",
   "/misconfig/{{ .AVDID_Lowered }}",
-  "{{ .Provider }}/{{ .Service }}/{{ .ID_Lowered }}",
+{{ end }}  "{{ .Provider }}/{{ .Service }}/{{ .ID_Lowered }}",
   "/misconfig/{{ .Provider }}/{{ .Service }}/{{ .ID_Lowered }}",
 {{ if .Aliases }}{{ range $alias := .Aliases }}  "{{ $alias }}",
 {{end}}{{end}}

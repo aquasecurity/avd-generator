@@ -173,7 +173,7 @@ func init() {
 	}
 }
 
-func getAVDIDByCSPMPath(path string) string {
+func getIDByCSPMPath(path string) string {
 	if id, ok := reverseCrossOver[path]; ok {
 		return id
 	}
