@@ -175,8 +175,8 @@ func generateCloudSploitPages(inputPagesDir, outputPagesDir, remediationsDir str
 }
 
 func hasDefsecOverride(remediationFile string) bool {
-	if avdID := getAVDIDByCSPMPath(remediationFile); avdID != "" {
-		// log.Printf("Override detected: '%s' has been overridden by '%s'\n", remediationFile, avdID)
+	if id := getIDByCSPMPath(remediationFile); id != "" {
+		log.Printf("Override detected: '%s' has been overridden by '%s'\n", remediationFile, id)
 		return true
 	}
 	return false

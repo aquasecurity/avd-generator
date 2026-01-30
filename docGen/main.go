@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -32,6 +33,7 @@ func (realClock) Now(format ...string) string {
 }
 
 func main() {
+	log.SetOutput(os.Stdout)
 
 	firstYear := 1999
 
@@ -39,18 +41,14 @@ func main() {
 		Years = append(Years, strconv.Itoa(y))
 	}
 
-	if err := registerChecks(os.DirFS("../avd-repo/trivy-policies-repo")); err != nil {
-		fail(err)
-	}
-
+	checksFS := os.DirFS("../avd-repo/trivy-policies-repo/checks")
 	generateChainBenchPages("../avd-repo/chain-bench-repo/internal/checks", "../avd-repo/content/compliance")
-	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/pkg/compliance", "../avd-repo/content/compliance")
+	generateDefsecComplianceSpecPages("../avd-repo/trivy-policies-repo/pkg/compliance", "../avd-repo/content/compliance", checksFS)
 	generateCloudSploitPages("../avd-repo/cloudsploit-repo/plugins", "../avd-repo/content/misconfig", "../avd-repo/remediations-repo/en")
-	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig")
+	generateDefsecPages("../avd-repo/trivy-policies-repo/avd_docs", "../avd-repo/content/misconfig", checksFS)
 
 	nvdGenerator := NewNvdGenerator()
 	nvdGenerator.GenerateVulnPages()
-
 	for _, year := range Years {
 		nvdGenerator.GenerateReservedPages(year, realClock{})
 	}
