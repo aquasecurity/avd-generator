@@ -3,7 +3,7 @@ md-update-deps:
 	&& go mod tidy
 
 md-build: 
-	cd docGen && go build -o ../generator .
+	cd docGen && CGO_ENABLED=0 go build -o ../generator .
 
 md-test:
 	cd docGen && go test -v ./...
