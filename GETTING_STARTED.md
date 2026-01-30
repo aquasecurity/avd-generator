@@ -156,16 +156,15 @@ This cleans, build docGen, makes sure all the files are available in `avd-repo`,
 
 ### Running Locally
 
-the [README.md](README.md) has a section on using `nginx` to host locally, I didn't find that much fun to use - good luck if you choose to. 
-
-I find the easiest and most reliable (assuming you have `python3` installed) way is
+The easiest and most reliable way to serve the site locally (assuming you have python3 installed) is to use the Makefile target:
 
 ```bash
-cd avd-repo/docs
-python3 -m http.server
+make serve
 ```
 
-This will make the whole site available locally at `http://localhost:8000`
+This will start a local HTTP server and make the entire site available at http://localhost:9011.
+
+Simply open that URL in your browser to browse the site locally. Press Ctrl+C in the terminal to stop the server.
 
 You are unlikely to need to be using search locally, but if you are, the next section should work out for you!!
 
