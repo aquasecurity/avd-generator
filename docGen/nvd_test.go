@@ -516,6 +516,9 @@ The software generates an error message that includes sensitive information abou
 | Android | Google | 9.0-beta1 (including) | 9.0-beta1 (including)|
 | Android | Google | 10.0 (including) | 10.0 (including)|
 | Red Hat Enterprise Linux 6 Supplementary | RedHat | chromium-browser-80.0.3987.87-1.el6_10 | *|
+| Red Hat Enterprise Linux 5 | RedHat | openssl | *|
+| Red Hat Enterprise Linux 5 | RedHat | openssl097a | *|
+| Red Hat Enterprise Linux 6 | RedHat | openssl | *|
 | Tar | Ubuntu | bionic | *|
 | Tar | Ubuntu | cosmic | *|
 | Tar | Ubuntu | devel | *|
