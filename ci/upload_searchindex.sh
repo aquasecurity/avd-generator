@@ -34,6 +34,7 @@ upload_chunks() {
     chunk=${chunks[$i]}
     info="chunk $((i + 1))/${#chunks[@]}: $(jq length "$chunk") documents, $(wc -c < "$chunk" | tr -d ' ') bytes"
     if ! response=$(curl --fail-with-body -sS \
+      --connect-timeout 10 --max-time 300 \
       -H 'Content-Type: application/json' \
       -H "X-Meili-API-Key: $MEILI_API_KEY" \
       -X POST "$MEILI_HOST/indexes/avd/documents?primaryKey=title" \
@@ -60,6 +61,7 @@ wait_for_updates() {
   for id in "${update_ids[@]}"; do
     while true; do
       if ! update=$(curl --fail-with-body -sS \
+        --connect-timeout 10 --max-time 30 \
         -H "X-Meili-API-Key: $MEILI_API_KEY" \
         "$MEILI_HOST/indexes/avd/updates/$id"); then
         echo "failed to get update $id: $update" >&2
