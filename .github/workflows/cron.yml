@@ -109,11 +109,6 @@ jobs:
       - name: Check available disk space
         run: df -h
 
-      - name: Deploy Search Index to MeiliSearch Instance
-        run: |
-          cd avd-repo
-          curl -H 'Content-Type: application/json' -H 'X-Meili-API-Key: ${{ secrets.SEARCHAPITOKEN }}' -X POST ${{ secrets.SEARCHAPIHOST }}/indexes/avd/documents?primaryKey=title --data @docs/searchindex.json
-
       - name: Install AWS CLI
         run: |
           python3 -m venv .venv
@@ -126,6 +121,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AVD_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AVD_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
+
+      - name: Deploy Search Index to MeiliSearch Instance
+        env:
+          MEILI_HOST: ${{ secrets.SEARCHAPIHOST }}
+          MEILI_API_KEY: ${{ secrets.SEARCHAPITOKEN }}
+        run: ./ci/upload_searchindex.sh avd-repo/docs/searchindex.json
 
       - name: Slack Notification
         uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
