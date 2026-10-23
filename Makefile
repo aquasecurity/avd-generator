@@ -51,7 +51,7 @@ remove-all-repos:
 	rm -rf avd-repo/cloudsploit-repo
 
 sync-all:
-	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=content --exclude=docs --exclude=Makefile --exclude=goldens
+	rsync -av ./ avd-repo/ --exclude=.idea --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=main_test.go --exclude=README.md --exclude=avd-repo --exclude=.git --exclude=.gitignore --exclude=.github --exclude=docs --exclude=Makefile --exclude=goldens
 
 md-generate:
 	cd avd-repo && ./generator
