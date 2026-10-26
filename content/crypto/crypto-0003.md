@@ -42,4 +42,4 @@ The finding refers to the EC algorithm asset rather than each individual key. Se
 
 - [NIST SP 800-131A Rev. 2, Section 3: Digital Signatures](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf#page=14)
 - [NIST SP 800-131A Rev. 2, Section 5: Key Agreement Using Diffie-Hellman and MQV](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf#page=18)
-- [NIST SP 800-57 Part 1 Rev. 5, Section 5.6: Security Strength](https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final)
+- [NIST SP 800-57 Part 1 Rev. 5, Section 5.6.1.1, Table 2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf#page=67)
