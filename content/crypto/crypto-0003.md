@@ -22,9 +22,7 @@ Trivy reports an EC algorithm asset whose estimated classical security level is 
 
 Classical security strength describes estimated resistance to attacks using classical computers. It is different from the curve's key size: for example, Trivy assigns P-256 a classical security level of 128 bits.
 
-The default severity is **HIGH**.
-
-## Why it matters
+## Impact
 
 Curves with lower security strength offer less resistance to attacks against the underlying discrete logarithm problem. Depending on their use, this can undermine digital signatures or key agreement. The 112-bit threshold follows the baseline strength in NIST SP 800-131A Rev. 2 for generating elliptic curve signatures and for approved elliptic curve key agreement.
 
@@ -42,5 +40,6 @@ The finding refers to the EC algorithm asset rather than each individual key. Se
 
 ## References
 
-- [NIST SP 800-131A Rev. 2, Sections 3 and 5: Digital Signatures and Elliptic Curve Key Agreement](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf)
+- [NIST SP 800-131A Rev. 2, Section 3: Digital Signatures](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf#page=14)
+- [NIST SP 800-131A Rev. 2, Section 5: Key Agreement Using Diffie-Hellman and MQV](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf#page=18)
 - [NIST SP 800-57 Part 1 Rev. 5, Section 5.6: Security Strength](https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final)

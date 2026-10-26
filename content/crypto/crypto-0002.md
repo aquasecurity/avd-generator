@@ -20,9 +20,9 @@ avd_page_type: avd_page
 
 Trivy reports an RSA key with a known, positive key size of **less than 2048 bits**. For example, 1024-bit and 1536-bit RSA keys match this rule; 2048-bit and larger keys do not.
 
-The finding belongs to the key asset, including when the public key was extracted from a certificate. The default severity is **HIGH**.
+The finding belongs to the key asset, including when the public key was extracted from a certificate.
 
-## Why it matters
+## Impact
 
 Smaller RSA keys offer less resistance to factoring attacks, which can allow an attacker to recover the private key and undermine signatures or encrypted communications that depend on it. NIST SP 800-131A Rev. 2 uses 2048 bits as the minimum RSA modulus size for generating new digital signatures, corresponding to approximately 112 bits of classical security strength.
 

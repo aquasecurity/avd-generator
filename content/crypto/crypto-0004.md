@@ -20,9 +20,7 @@ avd_page_type: avd_page
 
 Trivy reports an X.509 certificate whose expiry timestamp, `notAfter`, is **before the time the findings are evaluated**. The comparison uses the full timestamp, not just its calendar date.
 
-The default severity is **MEDIUM**.
-
-## Why it matters
+## Impact
 
 Clients that require a currently valid certificate can reject an expired certificate, causing failed connections or other service disruptions. An expired certificate found in an image may also be an unused copy, so review where it is deployed before deciding on remediation.
 

@@ -20,9 +20,7 @@ avd_page_type: avd_page
 
 Trivy reports an X.509 certificate whose signature algorithm identifies SHA-1 with RSA, DSA, or ECDSA. The finding concerns the signature on the certificate, which was created by its issuer. It does not describe the algorithm of the certificate's own public key.
 
-The default severity is **MEDIUM**.
-
-## Why it matters
+## Impact
 
 SHA-1 has weaknesses in its collision resistance, a property needed for digital signatures to reliably protect the signed content. NIST recommends transitioning away from SHA-1 and restricts its use for generating new digital signatures. A certificate's impact depends on how it is used and trusted; finding it in an image does not establish that an application uses it.
 
