@@ -20,15 +20,15 @@ jobs:
           df -h
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@v3.2.1
         with:
           hugo-version: "0.126.1"
 
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v5.6.0
         with:
           go-version-file: docGen/go.mod
           cache-dependency-path: docGen/go.sum
@@ -37,21 +37,21 @@ jobs:
         run:  mkdir avd-repo
 
       - name: Checkout public vuln-list-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/vuln-list
           token: ${{ secrets.GITHUB_TOKEN }}
           path: avd-repo/vuln-list
 
       - name: Checkout public vuln-list-nvd-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/vuln-list-nvd
           token: ${{ secrets.GITHUB_TOKEN }}
           path: avd-repo/vuln-list-nvd
 
       - name: Checkout public vuln-list-redhat-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/vuln-list-redhat
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -60,28 +60,28 @@ jobs:
           path: avd-repo/vuln-list-redhat
 
       - name: Checkout public cloud-security-remediation-guides-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/cloud-security-remediation-guides
           token: ${{ secrets.GITHUB_TOKEN }}
           path: avd-repo/remediations-repo
 
       - name: Checkout public cloudsploit-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/cloudsploit
           token: ${{ secrets.GITHUB_TOKEN }}
           path: avd-repo/cloudsploit-repo
 
       - name: Checkout public trivy-checks-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/trivy-checks
           token: ${{ secrets.GITHUB_TOKEN }}
           path: avd-repo/trivy-policies-repo
 
       - name: Checkout public chain-bench-repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.7.0
         with:
           repository: aquasecurity/chain-bench
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -129,7 +129,7 @@ jobs:
         run: ./ci/upload_searchindex.sh avd-repo/docs/searchindex.json
 
       - name: Slack Notification
-        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+        uses: slackapi/slack-github-action@v4.0.0
         if: failure()
         with:
           webhook: ${{ secrets.TRIVY_SLACK_WEBHOOK }}
