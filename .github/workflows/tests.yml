@@ -35,4 +35,4 @@ jobs:
           hugo-version: "0.126.1"
 
       - name: Build authored pages
-        run: hugo --baseURL / --destination "${{ runner.temp }}/avd-build"
+        run: hugo --baseURL / --destination "${{ runner.temp }}/avd-build" --panicOnWarning --printPathWarnings
