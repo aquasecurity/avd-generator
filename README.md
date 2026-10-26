@@ -13,14 +13,6 @@ Note: Set `baseURL="/"` [here](https://github.com/aquasecurity/avd-generator/blo
 #### tl;dr for just the UI
 `make hugo-devel` and then navigate to `http://localhost:1313` to view the site.
 
-#### Cryptographic rule documentation
-
-The pages in `content/crypto/` are maintained as Markdown rather than generated from another repository. Keep their rule IDs, titles, severities, and detection conditions consistent with [Trivy's built-in crypto rules](https://github.com/aquasecurity/trivy/blob/3a0164d6cd627645220730d48d51dc71e10e7156/pkg/crypto/check/rules.go).
-
-Run `make hugo-devel` to preview these pages at `http://localhost:1313/crypto/` without downloading the vulnerability or policy repositories. The other sections require the full build described below. The search box uses the deployed MeiliSearch index, so unpublished pages will not appear in search results. Hugo still generates their entries in the local `searchindex.json`.
-
-The `Tests` pull request workflow runs the Go tests and builds the authored pages with Hugo. Use the local preview described above to check their appearance.
-
 #### tl;dr for the full build with real content
 `make md-clean md-build sync-all md-generate hugo-generate serve`
 then navigate to `http://localhost:9011` to view the pages.
