@@ -19,7 +19,7 @@ The pages in `content/crypto/` are maintained as Markdown rather than generated 
 
 Run `make hugo-devel` to preview these pages at `http://localhost:1313/crypto/` without downloading the vulnerability or policy repositories. The other sections require the full build described below. The search box uses the deployed MeiliSearch index, so unpublished pages will not appear in search results. Hugo still generates their entries in the local `searchindex.json`.
 
-The Hugo pull request workflow builds the authored pages and makes the generated site available as the `avd-preview` artifact. To view a downloaded artifact, extract it, run `python3 -m http.server 9011` in that directory, and open `http://localhost:9011/crypto/`.
+The `Tests` pull request workflow runs the Go tests and builds the authored pages with Hugo. Use the local preview described above to check their appearance.
 
 #### tl;dr for the full build with real content
 `make md-clean md-build sync-all md-generate hugo-generate serve`

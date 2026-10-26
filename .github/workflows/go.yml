@@ -1,8 +1,8 @@
-name: Go
+name: Tests
 on: [pull_request]
 jobs:
   test:
-    name: Test
+    name: Go tests
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -22,3 +22,17 @@ jobs:
       - name: Test
         run: |
           make md-test
+
+  hugo:
+    name: Hugo build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.126.1"
+
+      - name: Build authored pages
+        run: hugo --baseURL / --destination "${{ runner.temp }}/avd-build"
