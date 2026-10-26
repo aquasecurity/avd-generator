@@ -39,7 +39,7 @@ The general flow is this;
 
 ### Previewing Cryptographic Rule Pages
 
-The pages in `content/crypto/` are maintained as Markdown. Keep their metadata and detection conditions aligned with [Trivy's built-in crypto rules](https://github.com/aquasecurity/trivy/blob/3a0164d6cd627645220730d48d51dc71e10e7156/pkg/crypto/check/rules.go).
+The pages in `content/crypto/` are maintained as Markdown. Keep their metadata and detection conditions aligned with [Trivy's built-in crypto rules](https://github.com/aquasecurity/trivy/blob/main/pkg/crypto/check/rules.go).
 
 Run `make hugo-devel` and open `http://localhost:1313/crypto/` to preview them without downloading the source repositories. The search box uses the deployed MeiliSearch index, so unpublished pages are not searchable.
 
