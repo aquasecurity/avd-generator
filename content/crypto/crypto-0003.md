@@ -34,7 +34,7 @@ Curves with lower security strength offer less resistance to attacks against the
 
 ## Scope and limitations
 
-The rule can only evaluate curves that Trivy can parse and for which it can estimate a classical security level. A missing estimate does not produce a finding. See the [scanner documentation](https://github.com/aquasecurity/trivy/blob/3a0164d6cd627645220730d48d51dc71e10e7156/docs/guide/scanner/crypto.md) for supported algorithms and parsing limitations.
+The rule can only evaluate curves that Trivy can parse and for which it can estimate a classical security level. A missing estimate does not produce a finding. See the [scanner documentation](https://github.com/aquasecurity/trivy/blob/0bd8831e5d74eeea62ee9f11a95ba35f79b0cb49/docs/guide/scanner/crypto.md) for supported algorithms and parsing limitations.
 
 The finding refers to the EC algorithm asset rather than each individual key. Several keys using the same curve in one file may therefore share one finding. This rule does not assess the complete strength of a certificate signature or determine whether an application uses the algorithm.
 

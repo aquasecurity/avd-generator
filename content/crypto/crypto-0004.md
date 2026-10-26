@@ -35,6 +35,8 @@ Clients that require a currently valid certificate can reject an expired certifi
 
 The check covers certificates in system trust stores as well as application files. It does not establish whether an application uses or trusts a certificate.
 
+You can suppress selected findings using `CRYPTO-0004` and optional file paths in the `crypto` section of [`.trivyignore.yaml`](https://github.com/aquasecurity/trivy/blob/0bd8831e5d74eeea62ee9f11a95ba35f79b0cb49/docs/guide/configuration/filtering.md#trivyignoreyaml). Specify the file with `--ignorefile .trivyignore.yaml`; the certificates remain in the inventory.
+
 Certificates with an unknown expiry timestamp do not produce a finding. This rule does not report certificates that are merely close to expiry, check the `notBefore` timestamp, or perform revocation or certificate-chain validation. Its result can change as time passes even when the scanned image is unchanged.
 
 ## References

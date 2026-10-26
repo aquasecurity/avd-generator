@@ -34,6 +34,8 @@ SHA-1 has weaknesses in its collision resistance, a property needed for digital 
 
 Certificates in system trust stores are checked too, including self-signed roots. Trivy does not validate certificate chains or determine whether a root is used as a trust anchor.
 
+You can suppress selected findings using `CRYPTO-0001` and optional file paths in the `crypto` section of [`.trivyignore.yaml`](https://github.com/aquasecurity/trivy/blob/0bd8831e5d74eeea62ee9f11a95ba35f79b0cb49/docs/guide/configuration/filtering.md#trivyignoreyaml). Specify the file with `--ignorefile .trivyignore.yaml`; the certificates remain in the inventory.
+
 RSA-PSS certificate signatures are not covered by this check because Trivy does not inspect their hash parameters. A SHA-1 fingerprint or a separate use of SHA-1 elsewhere in a file is not the certificate signature checked by this rule.
 
 ## References
