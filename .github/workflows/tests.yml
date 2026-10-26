@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1.2.0
+        uses: actions/checkout@v7.0.1
 
       - name: Set up Go
-        uses: actions/setup-go@v5.6.0
+        uses: actions/setup-go@v7.0.0
         with:
           go-version-file: docGen/go.mod
           cache-dependency-path: docGen/go.sum
@@ -27,7 +27,7 @@ jobs:
     name: Hugo build
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3.2.1
