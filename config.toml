@@ -99,7 +99,7 @@ copyright = "Aqua Vulnerability DB is a copyright © of Aqua Security Software L
 # banner
 [Languages.en.params.banner]
 title = "Aqua Vulnerability Database"
-placeholder = "Search by Keyword or CVE-ID..."
+placeholder = "Search by keyword or ID..."
 
 ################################ Markdown ###############################
 

@@ -12,7 +12,7 @@ There is the accompanying [PowerPoint](https://aquasecurity-my.sharepoint.com/:p
 
 Local development and running is generally very easy because Hugo is used to generate static web sites. 
 
-To do anything, you need a populated `avd-repo` folder. If it doesn't already exist you can do 
+To generate pages from the source repositories, you need a populated `avd-repo` folder. If it doesn't already exist, run:
 
 ```bash
 make md-clone-all
@@ -36,6 +36,12 @@ The general flow is this;
 1. You need [Hugo installed](https://gohugo.io/getting-started/installing/)
 
 2. If you're doing anything with CSS, you need [sass installed](https://sass-lang.com/install)
+
+### Previewing Cryptographic Rule Pages
+
+The pages in `content/crypto/` are maintained as Markdown. Keep their metadata and detection conditions aligned with [Trivy's built-in crypto rules](https://github.com/aquasecurity/trivy/blob/main/pkg/crypto/check/rules.go).
+
+Run `make hugo-devel` and open `http://localhost:1313/crypto/` to preview them without downloading the source repositories. The search box uses the deployed MeiliSearch index, so unpublished pages are not searchable.
 
 ### Adding New Data
 

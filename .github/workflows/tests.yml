@@ -1,0 +1,38 @@
+name: Tests
+on: [pull_request]
+jobs:
+  test:
+    name: Go tests
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: docGen/go.mod
+          cache-dependency-path: docGen/go.sum
+
+      - name: Install GolangCI-Lint
+        run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s $version
+        env:
+          version: v1.44.0
+
+      - name: Test
+        run: |
+          make md-test
+
+  hugo:
+    name: Hugo build
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3.2.1
+        with:
+          hugo-version: "0.126.1"
+
+      - name: Build authored pages
+        run: hugo --baseURL / --destination "${{ runner.temp }}/avd-build" --panicOnWarning --printPathWarnings
