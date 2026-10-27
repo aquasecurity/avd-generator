@@ -146,15 +146,17 @@
 
 	<div class="avd_sidebar_widget avdcve_info_wrap">
 		<div class="sidebar_widget_title">Vulnerability-free packages from our partners</div>
-		<a style="display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; padding: 1em;" href="https://root.io" target="_blank" class="projectLink fadeInUp animationDelay_6">
-			<img src="/svg/rootio.svg" alt="root.io logo">
-		</a>
-		<a  style="display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; padding: 1em;" href="https://minimus.io" target="_blank" class="projectLink fadeInUp animationDelay_6">
-			<img src="/svg/minimusio.svg" alt="minimus.io logo">
-		</a>
-		<a  style="display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; padding: 1em;"  href="https://echo.ai" target="_blank" class="projectLink fadeInUp animationDelay_6">
-			<img src="/svg/echoai.svg" alt="echo.ai logo">
-		</a>
+		<div class="partner-list partner-list--compact">
+			<a class="partner-link" href="https://sealsecurity.io/" target="_blank" rel="noopener noreferrer">
+				<img class="partner-logo" src="/images/sealsecurity.avif" alt="Seal Security logo" width="330" height="41">
+			</a>
+			<a class="partner-link" href="https://www.rapidfort.com/" target="_blank" rel="noopener noreferrer">
+				<img class="partner-logo" src="/svg/rapidfort.svg" alt="RapidFort logo" width="208" height="30">
+			</a>
+			<a class="partner-link" href="https://echo.ai" target="_blank" rel="noopener noreferrer">
+				<img class="partner-logo" src="/svg/echoai.svg" alt="Echo logo" width="214" height="63">
+			</a>
+		</div>
 				</div><!-- avdcve_info_wrap -->
 
 				{{ if or (.Params.sidebar_additional_info_nvd) (.Params.sidebar_additional_info_cwe) }}

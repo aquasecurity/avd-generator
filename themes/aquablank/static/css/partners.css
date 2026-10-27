@@ -1,0 +1,44 @@
+.partner-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  container-type: inline-size;
+}
+
+.partner-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 0;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+
+.partner-logo {
+  width: auto;
+  height: clamp(10px, 3.5cqw, 32px);
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.partner-list--compact {
+  padding: 20px 12px;
+}
+
+.partner-list--compact .partner-link {
+  padding: 0;
+}
+
+.partner-list--compact .partner-logo {
+  height: clamp(8px, 3.4cqw, 14px);
+}
+
+@media (max-width: 767px) {
+  .partner-link {
+    gap: 16px;
+    padding: 24px 0;
+    font-size: 0.875rem;
+  }
+}
