@@ -8,3 +8,4 @@ kube-hunter-repo
 .DS_Store
 avd-repo
 .hugo_build.lock
+docs
