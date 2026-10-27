@@ -1,6 +1,6 @@
 .partner-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   container-type: inline-size;
 }
@@ -18,12 +18,17 @@
 
 .partner-logo {
   width: auto;
-  height: clamp(10px, 3.5cqw, 32px);
+  height: clamp(10px, 2.7cqw, 32px);
   max-width: 100%;
   object-fit: contain;
 }
 
+.partner-logo--activestate {
+  transform: scale(1.5);
+}
+
 .partner-list--compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   padding: 20px 12px;
 }
 
@@ -32,10 +37,18 @@
 }
 
 .partner-list--compact .partner-logo {
-  height: clamp(8px, 3.4cqw, 14px);
+  height: clamp(10px, 4.6cqw, 16px);
 }
 
 @media (max-width: 767px) {
+  .partner-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .partner-logo {
+    height: clamp(16px, 5cqw, 24px);
+  }
+
   .partner-link {
     gap: 16px;
     padding: 24px 0;
