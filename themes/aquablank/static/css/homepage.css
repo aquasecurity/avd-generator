@@ -1,0 +1,38 @@
+.homepage_hero .columns {
+  align-items: center;
+}
+
+.avd_hero_wrap.homepage_hero .hero .hero-body .header_title_wrap {
+  max-width: 100%;
+}
+
+.homepage_hero #fastSearch {
+  max-width: 600px;
+}
+
+.homepage_hero .home-buttons ul {
+  display: grid;
+  gap: 16px;
+}
+
+.homepage_hero .home-button {
+  margin: 0;
+  padding: 0;
+  font-size: 1.125rem;
+}
+
+.homepage_hero .home-button a {
+  display: block;
+  padding: 18px 16px;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .avd_hero_wrap.homepage_hero .hero .hero-body .header_title_wrap .page_title {
+    font-size: 2rem;
+  }
+
+  .avd_hero_wrap.homepage_hero .hero .hero-body .header_title_wrap .page_subtitle {
+    font-size: 1.25rem;
+  }
+}
