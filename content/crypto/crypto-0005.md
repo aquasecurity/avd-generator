@@ -20,7 +20,7 @@ avd_page_type: avd_page
 
 Trivy reports a P-256, P-384 or P-521 key whose public point equals `k*G` for a private key `k` from **1 to 255**, where `G` is the base point of the curve. The rule applies to both public and private keys, because the public point is enough to see that the private key is small.
 
-A private key of a healthy EC key is a random number close to the size of the curve order. A value below 256 can be found by trying every candidate. The upper limit of 255 comes from the eMudhra incident, where all eight affected intermediate CA keys used values up to 255.
+A healthy EC private key is a random number from 1 to `n - 1`, where `n` is the curve order (SEC 1, Section 3.2.1). Such a number is almost never below 256, and a value that small can be found by trying every candidate. The upper limit of 255 comes from the eMudhra incident, where all eight affected intermediate CA keys used values up to 255.
 
 ## Impact
 
@@ -29,7 +29,7 @@ Anyone who has the public key can recover the private key in at most 255 attempt
 ## Recommended actions
 
 - Generate a new key pair with a trusted random number generator and replace the affected key.
-- Reissue certificates for the affected public key and deploy them wherever the old certificates are used.
+- Reissue the affected certificates using the new public key and deploy them wherever the old certificates are used.
 - Revoke the certificates that were issued for the affected key.
 - Treat anything that was signed with the key as untrusted.
 
